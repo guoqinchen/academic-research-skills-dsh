@@ -182,7 +182,7 @@ Upstream's `PreToolUse` hook is ported to a DSH `ctx.tools.guard`:
 ## Verification
 
 ```sh
-node --test test/*.test.mjs          # 207 tests, all pass
+node --test test/*.test.mjs          # 211 tests, all pass
 node tools/verify-install.mjs        # 46 PASS, 0 FAIL, 3 WARN, 1 SKIP*
 node tools/check-payload.mjs         # 0 errors, 4 upstream-doc warnings
 ```
@@ -193,7 +193,7 @@ reports 0 FAIL.
 
 Verification (see [`docs/verification.md`](docs/verification.md) for the dated record):
 
-- **207/207** tests pass across frontmatter, adaptation, inventory/reference policy,
+- **211/211** tests pass across frontmatter, adaptation, inventory/reference policy,
   model profile, environment, guard, tools, registration, payload, and end-to-end suites.
 - **`verify-install`**: 46 PASS / 0 FAIL / 3 WARN / 1 SKIP — package manifest,
   locales, icon, registration surfaces, raw JSON Schemas validated by the

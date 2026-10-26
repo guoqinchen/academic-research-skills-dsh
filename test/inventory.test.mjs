@@ -7,11 +7,14 @@
  */
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { dirname, join, normalize, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { createPaths } from '../lib/paths.js'
+import { loadInventory } from '../index.js'
+import { createRegistrationReport } from '../lib/registration.js'
 import {
   AGENT_ROLE_SPECS,
   SKILL_NAMES,
@@ -43,6 +46,45 @@ test('inventory derives exactly 5 skills, 16 commands, and 4 mirrored agent role
     assert.ok(role.mirror.length > 0, `${role.agentType} has a derived mirror`)
     assert.ok(role.file.endsWith(`/${role.agentType}.md`))
   }
+})
+
+test('non-strict inventory degrades one malformed skill instead of throwing', () => {
+  const root = mkdtempSync(join(tmpdir(), 'ars-inventory-degrade-'))
+  const tempPaths = createPaths(root)
+  for (const skill of SKILL_NAMES) {
+    const frontmatter = skill === 'academic-paper'
+      ? '---\nnot a pair\n---\nbody\n'
+      : `---\nname: ${skill}\ndescription: ${skill}\n---\nbody\n`
+    mkdirSync(join(tempPaths.payloadRoot, skill), { recursive: true })
+    writeFileSync(join(tempPaths.payloadRoot, skill, 'SKILL.md'), frontmatter)
+  }
+  mkdirSync(tempPaths.commandsRoot, { recursive: true })
+  mkdirSync(tempPaths.agentsRoot, { recursive: true })
+
+  assert.throws(() => createInventory({ paths: tempPaths }), /frontmatter/u)
+  const degraded = createInventory({ paths: tempPaths, strict: false })
+  assert.deepEqual(
+    degraded.skills.map((entry) => entry.name),
+    SKILL_NAMES.filter((skill) => skill !== 'academic-paper'),
+  )
+  assert.ok(
+    degraded.errors.some((issue) => issue.kind === 'skill' && issue.name === 'academic-paper'),
+    'the malformed skill is reported, not silently dropped',
+  )
+
+  const report = createRegistrationReport()
+  const warnings = []
+  const mounted = loadInventory({
+    paths: tempPaths,
+    logger: { warn: (message) => warnings.push(message) },
+    report,
+  })
+  assert.deepEqual(
+    mounted.skills.map((entry) => entry.name),
+    SKILL_NAMES.filter((skill) => skill !== 'academic-paper'),
+  )
+  assert.ok(report.warnings.some((message) => message.includes('inventory degraded')))
+  assert.ok(warnings.some((message) => message.includes('academic-paper')))
 })
 
 test('the runtime modules re-export the one inventory list, not private copies', () => {

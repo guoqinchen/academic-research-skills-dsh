@@ -213,6 +213,57 @@ test('parseFrontmatter parses a "- key: value" sequence entry', () => {
   ])
 })
 
+test('parseFrontmatter accepts indentationless block sequences', () => {
+  const parsed = parseFrontmatter([
+    '---',
+    'items:',
+    '- one',
+    '- two',
+    'metadata:',
+    '  tags:',
+    '  - alpha',
+    '  - beta',
+    '---',
+    'body',
+  ].join('\n'))
+  assert.deepEqual(parsed.data, {
+    items: ['one', 'two'],
+    metadata: { tags: ['alpha', 'beta'] },
+  })
+})
+
+test('parseFrontmatter treats URL list entries as scalars, not maps', () => {
+  const parsed = parseFrontmatter([
+    '---',
+    'links:',
+    '  - https://example.com/a',
+    '  - ftp://example.org/b',
+    '---',
+    'body',
+  ].join('\n'))
+  assert.deepEqual(parsed.data, { links: ['https://example.com/a', 'ftp://example.org/b'] })
+})
+
+test('parseFrontmatter strips inline comments but preserves hashes in quotes', () => {
+  const parsed = parseFrontmatter([
+    '---',
+    'title: "A title" # note',
+    'plain: value # note',
+    'hash: "a # b"',
+    "single: 'c # d'",
+    'bare: a#b',
+    '---',
+    'body',
+  ].join('\n'))
+  assert.deepEqual(parsed.data, {
+    title: 'A title',
+    plain: 'value',
+    hash: 'a # b',
+    single: 'c # d',
+    bare: 'a#b',
+  })
+})
+
 test('parseFrontmatter rejects inconsistent indentation', () => {
   assert.throws(
     () => parseFrontmatter('---\nname: demo\n  stray: value\n---\nbody'),

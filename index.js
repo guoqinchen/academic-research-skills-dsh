@@ -45,16 +45,42 @@ export const inject = ['skills', 'commands', 'tools', 'systemPrompt']
  * @param {import('@deepseek-ai/cordis').Context} ctx
  * @param {Record<string, unknown>} [rawConfig] row config from cordis.patch.yml
  */
+/**
+ * Build the inventory, degrading to a non-strict read when one malformed file
+ * would otherwise abort the whole mount. Every issue is logged and recorded in
+ * the registration report; invalid entries are skipped by their registrars.
+ *
+ * @param {{paths: object, logger?: object, report: object}} options
+ */
+export function loadInventory({ paths, logger, report }) {
+  let inventory
+  try {
+    inventory = createInventory({ paths })
+  } catch (error) {
+    const message = `inventory degraded: ${error instanceof Error ? error.message : String(error)}`
+    logger?.warn?.(`academic-research-skills: ${message}`)
+    report.warn(message)
+    inventory = createInventory({ paths, strict: false })
+  }
+  for (const issue of inventory.errors ?? []) {
+    const name = issue.name ? ` ${issue.name}` : ''
+    const message = `${issue.kind}${name}: ${issue.message}`
+    logger?.warn?.(`academic-research-skills: ${message}`)
+    report.warn(message)
+  }
+  return inventory
+}
+
 export function apply(ctx, rawConfig) {
   const config = normalizeConfig(rawConfig)
   const paths = createPaths()
-  const inventory = createInventory({ paths })
+  const report = createRegistrationReport()
+  const logger = ctx.logger
+  const inventory = loadInventory({ paths, logger, report })
   const policy = createReferencePolicy({ paths, inventory })
   const adapter = createAdapter({ paths, inventory, policy, webSearch: config.webSearch })
   const intake = createIntake({ paths, adapter, inventory })
   const env = createPythonEnv({ paths, config })
-  const report = createRegistrationReport()
-  const logger = ctx.logger
   if (process.platform === 'win32') {
     logger?.warn?.(
       '[ars] Windows is not supported yet: the interpreter wrapper is POSIX sh. ' +
