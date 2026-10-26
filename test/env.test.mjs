@@ -586,3 +586,55 @@ test('JS and shell resolution agree for the default and a custom envDir', (t) =>
     else process.env.PYTHONPATH = savedPythonPath
   }
 })
+
+test('ensure serializes concurrent setup calls behind one lock', async () => {
+  const home = tempDir()
+  const paths = makePaths(home)
+  const config = makeConfig(home)
+  writeFileSync(paths.requirementsPath, 'pyyaml\n')
+  const run = fakeRuntime({ missing: [...DEPENDENCY_MODULES] })
+  const env = createPythonEnv({ paths, config, run })
+
+  const [first, second] = await Promise.all([env.ensure(), env.ensure()])
+  assert.equal(first.ok, true)
+  assert.equal(second.ok, true)
+  const venvCalls = run.state.calls.filter((call) => call.command === 'uv' && call.args[0] === 'venv')
+  const installCalls = run.state.calls.filter((call) => call.command === 'uv' && call.args[0] === 'pip')
+  assert.equal(venvCalls.length, 1, 'concurrent ensure must create the venv once')
+  assert.equal(installCalls.length, 1, 'concurrent ensure must install once')
+  assert.equal(existsSync(config.envDir + '.lock'), false, 'the lock file is released')
+})
+
+test('ensure force rebuilds a broken managed virtualenv', async () => {
+  const home = tempDir()
+  const paths = makePaths(home)
+  const config = makeConfig(home)
+  writeFileSync(paths.requirementsPath, 'pyyaml\n')
+  createFakeVenvPython(config.envDir)
+  const run = fakeRuntime({ missing: ['yaml'] })
+  const env = createPythonEnv({ paths, config, run })
+
+  const result = await env.ensure({ force: true })
+  assert.equal(result.ok, true)
+  assert.match(result.log, /force: removing the existing managed virtualenv/)
+  assert.ok(
+    hasCall(run, (call) => call.command === 'uv' && call.args[0] === 'venv'),
+    'force must recreate the venv',
+  )
+})
+
+test('scriptEnv drops an inherited ARS_DSH_VENV when no managed venv exists', async () => {
+  const home = tempDir()
+  const paths = makePaths(home)
+  const config = makeConfig(home, { pythonPath: '/usr/bin/python3' })
+  const run = fakeRuntime({ missing: ['yaml'] })
+  const env = createPythonEnv({ paths, config, run })
+  const previous = process.env.ARS_DSH_VENV
+  process.env.ARS_DSH_VENV = join(home, 'not-our-venv')
+  try {
+    assert.equal(env.scriptEnv().ARS_DSH_VENV, undefined)
+  } finally {
+    if (previous === undefined) delete process.env.ARS_DSH_VENV
+    else process.env.ARS_DSH_VENV = previous
+  }
+})

@@ -1,5 +1,7 @@
 # Academic Research Skills for DeepSeek Harness
 
+[![CI](https://github.com/guoqinchen/academic-research-skills-dsh/actions/workflows/ci.yml/badge.svg)](https://github.com/guoqinchen/academic-research-skills-dsh/actions/workflows/ci.yml)
+
 A complete DeepSeek Harness (DSH) port of
 [`academic-research-skills`](https://github.com/Imbad0202/academic-research-skills):
 contract-audited academic research, paper writing, simulated peer review,
@@ -51,18 +53,27 @@ SR screening scripts are all included and reachable.
 
 ## Install
 
-Install the bundle into the current DSH profile:
+**Requirements:** DSH `>= 0.2.1-rc.3` (Node ships with DSH), Python
+`>= 3.11` on `PATH`, and network access for the first `ars_env_setup`
+(PyPI). Supported platforms: **macOS and Linux**; Windows is not supported yet
+because the interpreter wrapper is POSIX `sh`.
 
-```text
-plugin_manager install_bundle target=<absolute path to this directory>
-```
+1. Open the **Plugins** page in the DSH sidebar.
+2. Choose **Add plugin** and enter the absolute path to this checkout
+   (a Git URL or a tarball also works).
+3. Install, then click **Enable now**. Closing the dialog leaves the plugin
+   installed but disabled.
+4. In a session, call `ars_env_setup` once (or ask the model to), then confirm
+   with `ars_status` that `python.ready` is `true`.
 
-or select the local directory in **Settings → Plugins**. The bundle patch
-inserts one Host row (`academic-research-skills`) that registers everything.
-The row is enabled by default; disable it to switch the whole feature off.
+The bundle patch inserts one Host row (`academic-research-skills`) that
+registers everything. The row is enabled by default; disable it to switch the
+whole feature off.
 
-The package has **no npm dependencies**. It is a plain ESM host bundle and can
-be linked from any workspace checkout.
+Creator-mode agents can also run
+`plugin_manager install_bundle target=<absolute path>`; the default presets
+disable that tool, so the Plugins page is the normal path. The package has
+**no npm dependencies** and is a plain ESM host bundle.
 
 ## Use
 
@@ -171,7 +182,7 @@ Upstream's `PreToolUse` hook is ported to a DSH `ctx.tools.guard`:
 ## Verification
 
 ```sh
-node --test test/*.test.mjs          # 197 tests, all pass
+node --test test/*.test.mjs          # 204 tests, all pass
 node tools/verify-install.mjs        # 46 PASS, 0 FAIL, 3 WARN, 1 SKIP*
 node tools/check-payload.mjs         # 0 errors, 4 upstream-doc warnings
 ```
@@ -182,7 +193,7 @@ reports 0 FAIL.
 
 Verification (see [`docs/verification.md`](docs/verification.md) for the dated record):
 
-- **197/197** tests pass across frontmatter, adaptation, inventory/reference policy,
+- **204/204** tests pass across frontmatter, adaptation, inventory/reference policy,
   model profile, environment, guard, tools, registration, payload, and end-to-end suites.
 - **`verify-install`**: 46 PASS / 0 FAIL / 3 WARN / 1 SKIP — package manifest,
   locales, icon, registration surfaces, raw JSON Schemas validated by the

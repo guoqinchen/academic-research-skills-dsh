@@ -6,6 +6,7 @@
   "description": "DeepSeek Harness port of the Academic Research Skills plugin: 5 skills, 16 /ars-* commands, 4 agent roles, write-scope guard, and deterministic Python gates.",
   "license": "CC-BY-NC-4.0",
   "engines": {
+    "node": ">=22",
     "dsh": ">=0.2.1-rc.3"
   },
   "exports": {
@@ -26,7 +27,10 @@
     "README.md",
     "NOTICE.md",
     "LICENSE",
-    "docs/**/*.md"
+    "CITATION.cff",
+    "docs/compat-report.md",
+    "tools/**",
+    "test/**"
   ],
   "scripts": {
     "test": "node --test test/*.test.mjs",
@@ -39,5 +43,26 @@
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
-  }
+  },
+  "author": {
+    "name": "Guoqin Chen",
+    "url": "https://github.com/guoqinchen"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guoqinchen/academic-research-skills-dsh.git"
+  },
+  "homepage": "https://github.com/guoqinchen/academic-research-skills-dsh#readme",
+  "bugs": {
+    "url": "https://github.com/guoqinchen/academic-research-skills-dsh/issues"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "academic-research",
+    "literature-review",
+    "peer-review",
+    "systematic-review",
+    "research-automation"
+  ]
 }

@@ -479,7 +479,10 @@ test('ars_script rejects escapes and unsupported targets before spawning', async
   await assert.rejects(tool.execute({}, {}), /non-empty string/u)
   const realScript = 'scripts/check_skill_description_length.py'
   await assert.rejects(tool.execute({ script: realScript, args: 'nope' }, {}), /array of strings/u)
-  await assert.rejects(tool.execute({ script: realScript, cwd: 'no-such-directory' }, {}), /cwd does not exist/u)
+  await assert.rejects(
+    tool.execute({ script: realScript, cwd: 'no-such-directory' }, {}),
+    /cwd (does not exist|not found under the payload root)/u,
+  )
   await assert.rejects(tool.execute({ script: realScript, timeoutMs: 0 }, {}), /positive integer/u)
 })
 

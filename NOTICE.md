@@ -1,5 +1,8 @@
 # NOTICE — Academic Research Skills for DeepSeek Harness
 
+Copyright (c) 2026 Guoqin Chen (DeepSeek Harness adapter).
+The vendored upstream content is copyright (c) 2026 Cheng-I Wu.
+
 This package is a port of **Academic Research Skills** (`academic-research-skills`)
 by Cheng-I Wu:
 
@@ -7,7 +10,8 @@ by Cheng-I Wu:
 - Upstream commit ported: `1ec249df98728682dfbbdfb940a658338bfd6f80`
 - Upstream plugin version: `3.23.2`
 - Upstream license: Creative Commons Attribution-NonCommercial 4.0 International
-  (CC-BY-NC-4.0), reproduced verbatim in `LICENSE`.
+  (CC-BY-NC-4.0). The upstream text is reproduced in `payload/LICENSE`; the
+  root `LICENSE` contains the same terms with both copyright holders.
 
 The `payload/` directory contains 1,199 upstream files copied byte-for-byte
 from the pinned commit; they are not modified. It is not a complete repository
@@ -30,9 +34,11 @@ its reason.
 
 The DeepSeek Harness adapter (everything outside `payload/`: `index.js`,
 `lib/`, `bin/`, `tools/`, `locale/`, `README.md`, tests) is an original
-derivative work by the plugin author and is distributed under the same
-CC-BY-NC-4.0 terms to match the upstream license. It may not be used for
-commercial purposes without permission from the upstream author.
+derivative work by Guoqin Chen (https://github.com/guoqinchen), copyright
+(c) 2026, and is distributed under the same CC-BY-NC-4.0 terms to match the
+upstream license. It may not be used for commercial purposes without permission
+from both authors (Cheng-I Wu for the upstream content; Guoqin Chen for the
+adapter).
 
 Porting changes are confined to registration-time text adaptation (paths,
 DeepSeek Harness tool names, skill names, and interpreter invocation). The

@@ -54,6 +54,8 @@ const SCRIPT_FILES = [
   'fail.py',
   'big.py',
   'slow.py',
+  'unicode.py',
+  'hang.sh',
   'noext.txt',
   'shell.sh',
 ]
@@ -103,6 +105,8 @@ function makeFixture() {
   write(join(paths.scriptsRoot, 'fail.py'), 'import sys\nprint("bad", file=sys.stderr)\nsys.exit(3)\n')
   write(join(paths.scriptsRoot, 'big.py'), 'import sys\nsys.stdout.write("x" * 5000)\n')
   write(join(paths.scriptsRoot, 'slow.py'), 'import time\nprint("start", flush=True)\ntime.sleep(10)\n')
+  write(join(paths.scriptsRoot, 'unicode.py'), 'import sys\nsys.stdout.write("€" * 3000)\n')
+  write(join(paths.scriptsRoot, 'hang.sh'), '#!/bin/sh\nsh -c "sleep 10" & wait\n')
   write(join(paths.scriptsRoot, 'noext.txt'), 'not a script\n')
   write(join(paths.scriptsRoot, 'shell.sh'), '#!/bin/sh\necho "shell:$1"\n')
   write(join(paths.payloadRoot, 'work', 'marker.txt'), 'work dir\n')
@@ -473,6 +477,56 @@ test('ars_script enforces the timeout', { skip: !PYTHON_AVAILABLE && 'python3 no
   assert.equal(result.exitCode, null)
   assert.match(result.stderr, /timed out after 150ms/)
   assert.ok(Date.now() - started < 5000, 'timeout should kill the child promptly')
+})
+
+test('ars_script truncates UTF-8 without splitting a code point', { skip: !PYTHON_AVAILABLE && 'python3 not available' }, async () => {
+  const fixture = makeFixture()
+  const { ctx, registered } = makeCtx()
+  registerTools(ctx, { paths: fixture.paths, config: fixture.config, env: makeFakeEnv(fixture.paths) })
+  const scriptTool = registered.find((tool) => tool.name === 'ars_script')
+  const result = await scriptTool.execute({ script: 'scripts/unicode.py' }, {})
+  assert.equal(result.exitCode, 0)
+  assert.equal(result.truncated, true)
+  assert.ok(Buffer.byteLength(result.stdout, 'utf8') <= 4096, 'capped output stays within the byte cap')
+  assert.ok(!result.stdout.includes('\uFFFD'), 'no replacement character at the cut point')
+})
+
+test('ars_script rejects a cwd outside the payload root', async () => {
+  const fixture = makeFixture()
+  const { ctx, registered } = makeCtx()
+  registerTools(ctx, { paths: fixture.paths, config: fixture.config, env: makeFakeEnv(fixture.paths) })
+  const scriptTool = registered.find((tool) => tool.name === 'ars_script')
+  await assert.rejects(
+    () => scriptTool.execute({ script: 'scripts/hello.py', cwd: fixture.root }),
+    /escapes the payload root/,
+  )
+  await assert.rejects(
+    () => scriptTool.execute({ script: 'scripts/hello.py', cwd: '../outside' }),
+    /escapes the payload root|not found under the payload root/,
+  )
+})
+
+test('ars_script timeout kills the whole process tree', { skip: !BASH_AVAILABLE && 'bash not available' }, async () => {
+  const fixture = makeFixture()
+  const { ctx, registered } = makeCtx()
+  registerTools(ctx, { paths: fixture.paths, config: fixture.config, env: makeFakeEnv(fixture.paths) })
+  const scriptTool = registered.find((tool) => tool.name === 'ars_script')
+  const started = Date.now()
+  const result = await scriptTool.execute({ script: 'scripts/hang.sh', timeoutMs: 150 }, {})
+  assert.equal(result.exitCode, null)
+  assert.match(result.stderr, /timed out after 150ms/)
+  assert.ok(Date.now() - started < 5000, 'timeout must settle even when a grandchild holds the pipe')
+})
+
+test('ars_script rejects an out-of-range timeout', async () => {
+  const fixture = makeFixture()
+  const { ctx, registered } = makeCtx()
+  registerTools(ctx, { paths: fixture.paths, config: fixture.config, env: makeFakeEnv(fixture.paths) })
+  const scriptTool = registered.find((tool) => tool.name === 'ars_script')
+  await assert.rejects(
+    () => scriptTool.execute({ script: 'scripts/hello.py', timeoutMs: 2 ** 32 }),
+    /timeoutMs.*2147483647/,
+  )
 })
 
 test('ars_env_setup delegates to env.ensure with force and signal', async () => {
