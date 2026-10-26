@@ -1,6 +1,6 @@
 {
   "name": "academic-research-skills-dsh",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "type": "module",
   "description": "DeepSeek Harness port of the Academic Research Skills plugin: 5 skills, 16 /ars-* commands, 4 agent roles, write-scope guard, and deterministic Python gates.",
@@ -27,6 +27,7 @@
     "README.md",
     "NOTICE.md",
     "ASSET-LICENSES.md",
+    "UPGRADING.md",
     "LICENSE",
     "CITATION.cff",
     "docs/compat-report.md",
@@ -38,7 +39,8 @@
     "build:payload": "node tools/build-payload.mjs",
     "check:payload": "node tools/check-payload.mjs",
     "build:python-wrapper": "node tools/build-python-wrapper.mjs",
-    "check:python-wrapper": "node tools/build-python-wrapper.mjs --check"
+    "check:python-wrapper": "node tools/build-python-wrapper.mjs --check",
+    "check:upstream": "node tools/check-upstream.mjs"
   },
   "dsh": {
     "bundle": {

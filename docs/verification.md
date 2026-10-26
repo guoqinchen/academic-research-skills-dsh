@@ -6,7 +6,7 @@ Independent verifier record for the DSH port of
 
 > **Status: historical record (2026-10-26).** The output below is the
 > pre-P0-fix verification snapshot. Current gates after the fixes:
-> `node --test test/*.test.mjs` → **211/211**; `node tools/verify-install.mjs` →
+> `node --test test/*.test.mjs` → **214/214**; `node tools/verify-install.mjs` →
 > **46 PASS / 0 FAIL / 3 WARN / 1 SKIP** (the SKIP is upstream-clone parity;
 > set `ARS_UPSTREAM_ROOT` to a pinned checkout for **51 PASS / 0 SKIP**);
 > `node tools/check-payload.mjs` → **0 errors / 4 warnings**; payload

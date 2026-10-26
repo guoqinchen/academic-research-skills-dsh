@@ -182,7 +182,7 @@ Upstream's `PreToolUse` hook is ported to a DSH `ctx.tools.guard`:
 ## Verification
 
 ```sh
-node --test test/*.test.mjs          # 211 tests, all pass
+node --test test/*.test.mjs          # 214 tests, all pass
 node tools/verify-install.mjs        # 46 PASS, 0 FAIL, 3 WARN, 1 SKIP*
 node tools/check-payload.mjs         # 0 errors, 4 upstream-doc warnings
 ```
@@ -193,7 +193,7 @@ reports 0 FAIL.
 
 Verification (see [`docs/verification.md`](docs/verification.md) for the dated record):
 
-- **211/211** tests pass across frontmatter, adaptation, inventory/reference policy,
+- **214/214** tests pass across frontmatter, adaptation, inventory/reference policy,
   model profile, environment, guard, tools, registration, payload, and end-to-end suites.
 - **`verify-install`**: 46 PASS / 0 FAIL / 3 WARN / 1 SKIP — package manifest,
   locales, icon, registration surfaces, raw JSON Schemas validated by the
@@ -220,6 +220,21 @@ The `/ars-*` composer interaction itself is a host/UI path and was not typed
 into the Web composer during verification; the handler code and the live
 follow-up message delivery were verified separately.
 
+## Upgrading the upstream payload
+
+The payload is pinned; upgrades are deliberate and read-only until you rebuild.
+Check a target checkout or ref first:
+
+```sh
+node tools/check-upstream.mjs --upstream ../repo
+node tools/check-upstream.mjs --ref <branch-or-commit> --json
+```
+
+Exit codes are `0` clean, `1` drift, `2` error. `--print-snapshot` prints the
+`PAYLOAD_SNAPSHOT` / `BY_TOP_LEVEL` values needed before rebuilding. See
+[`UPGRADING.md`](UPGRADING.md) for the full procedure (identity, pins,
+distribution exclusions, rebuild, gates, release).
+
 ## Known limitations
 
 - **Command UI execution**: `/ars-*` handlers are unit-tested with a fake
@@ -229,7 +244,8 @@ follow-up message delivery were verified separately.
   `agent_type` on tool executions; `ars_status` reports the mode and reason
   instead of pretending the fence is active.
 - **Update checker**: upstream's `/plugin update` reminder is not ported; the
-  payload is pinned to a commit and updated by reinstalling the bundle.
+  pinned payload is upgraded with `tools/check-upstream.mjs` and a rebuild (see
+  [`UPGRADING.md`](UPGRADING.md)), not in place.
 - **Claude Code hooks file**: `payload/hooks/hooks.json` is kept for provenance
   but not executed; its two behaviors are replaced by the announce section and
   the tool guard.

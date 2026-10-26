@@ -372,7 +372,7 @@ async function verifyEnvironment() {
 function verifyPackage() {
   const manifest = readJson(join(PLUGIN_ROOT, 'package.json'), 'package.json')
   equal(manifest.name, 'academic-research-skills-dsh', 'package name')
-  equal(manifest.version, '1.0.2', 'package version')
+  equal(manifest.version, '1.0.3', 'package version')
   equal(manifest.private, true, 'package private')
   equal(manifest.type, 'module', 'package type')
   equal(manifest.engines?.dsh, '>=0.2.1-rc.3', 'engines.dsh')
