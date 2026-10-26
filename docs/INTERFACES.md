@@ -35,8 +35,10 @@ normalizeConfig(raw?, {home?}?) -> {
 
 ## `lib/frontmatter.js` (compat-adapter owns)
 
-Dependency-free parser for the YAML frontmatter used by the upstream repository
-(simple scalars, quoted scalars, nested maps, `- item` lists). It must not need a full YAML engine.
+Dependency-free parser for the YAML frontmatter used by the upstream repository:
+plain/quoted scalars, nested maps, `- item` lists (indented or indentationless),
+URL list entries, and inline comments (`#` outside quotes; a quoted `#` is
+preserved). It must not need a full YAML engine.
 
 ```js
 parseFrontmatter(text) -> { data: object, body: string } | null
@@ -49,6 +51,11 @@ parseMarkdownFile(text) -> { data: object, body: string }
 Must parse all 5 upstream `*/SKILL.md`, all 16 `commands/*.md`, and all `agents/*.md`
 without throwing; nested `metadata:` blocks and lists are required for skills.
 Unknown scalar values stay strings (do not coerce dates/numbers except obvious booleans).
+
+Malformed frontmatter still throws from the parser. `index.js#loadInventory` catches
+a strict-read failure, retries with `strict:false`, records every issue in the
+registration report, and the skill/command/agent registrars skip `valid:false`
+entries instead of aborting the whole mount.
 
 ## `lib/adapt.js` (compat-adapter owns)
 

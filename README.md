@@ -285,7 +285,12 @@ payload/                 1,199 included upstream files, byte-for-byte
 tools/build-payload.mjs  deterministic payload builder
 tools/check-payload.mjs  payload integrity checker
 tools/build-python-wrapper.mjs  wrapper generator/checker
+tools/check-upstream.mjs upstream payload diff checker
 test/                    node:test suites
+
+UPGRADING.md             upgrade procedure
+ASSET-LICENSES.md        PDF/font asset inventory
+CITATION.cff             citation metadata
 ```
 
 ## Provenance and license

@@ -4,8 +4,9 @@ Independent verifier record for the DSH port of
 [`academic-research-skills`](https://github.com/Imbad0202/academic-research-skills)
 (upstream commit `1ec249df98728682dfbbdfb940a658338bfd6f80`, plugin version `3.23.2`).
 
-> **Status: historical record (2026-10-26).** The output below is the
-> pre-P0-fix verification snapshot. Current gates after the fixes:
+> **Status: historical record (v1.0.0 baseline, 2026-10-26).** The output below
+> records the 1.0.0 snapshot (196 tests, 1,203 payload files, 51 PASS / 0 SKIP).
+> Current release is v1.0.3:
 > `node --test test/*.test.mjs` → **214/214**; `node tools/verify-install.mjs` →
 > **46 PASS / 0 FAIL / 3 WARN / 1 SKIP** (the SKIP is upstream-clone parity;
 > set `ARS_UPSTREAM_ROOT` to a pinned checkout for **51 PASS / 0 SKIP**);
