@@ -272,5 +272,9 @@ test/                    node:test suites
 
 Upstream: https://github.com/Imbad0202/academic-research-skills
 (commit `1ec249df98728682dfbbdfb940a658338bfd6f80`, version `3.23.2`),
-by Cheng-I Wu, CC-BY-NC-4.0. See [`NOTICE.md`](NOTICE.md) and
-[`LICENSE`](LICENSE), plus `payload/PROVENANCE.json`.
+by Cheng-I Wu, CC-BY-NC-4.0. The DSH adapter is copyright (c) 2026 Guoqin Chen.
+See [`NOTICE.md`](NOTICE.md), [`LICENSE`](LICENSE), and [`CITATION.cff`](CITATION.cff),
+plus `payload/PROVENANCE.json`.
+
+GitHub's license detector reports `NOASSERTION` for CC-BY-NC-4.0; the SPDX
+identifier is declared in [`package.json`](package.json) and [`NOTICE.md`](NOTICE.md).
