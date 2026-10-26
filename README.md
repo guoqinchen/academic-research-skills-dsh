@@ -71,6 +71,15 @@ The bundle patch inserts one Host row (`academic-research-skills`) that
 registers everything. The row is enabled by default; disable it to switch the
 whole feature off.
 
+The bundle is published as `academic-research-skills-dsh` on npm. From a terminal:
+
+```sh
+dsh plugin --profile <profile> add academic-research-skills-dsh
+```
+
+or enter that package name in **Add plugin**. The Desktop profile requires the
+Desktop-installed `dsh` CLI.
+
 Creator-mode agents can also run
 `plugin_manager install_bundle target=<absolute path>`; the default presets
 disable that tool, so the Plugins page is the normal path. The package has

@@ -1,7 +1,7 @@
 # Refactor plan — architecture review 2026-10-26
 
 > **Historical record (v1.0.0 baseline).** This plan was completed before the
-> 1.0.1–1.0.4 fixes. Current numbers: 214 tests; payload 1,199 files /
+> 1.0.1–1.0.5 fixes. Current numbers: 214 tests; payload 1,199 files /
 > 24,118,122 bytes. Keep this file as history; README and `UPGRADING.md` describe
 > the current state.
 

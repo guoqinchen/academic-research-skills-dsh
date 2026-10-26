@@ -403,7 +403,7 @@ test('ars_status reports the live registration state, payload counts, and Python
   const status = await tool.execute({}, { agent, signal: new AbortController().signal })
 
   assert.equal(status.plugin.name, 'academic-research-skills-dsh')
-  assert.equal(status.plugin.version, '1.0.4')
+  assert.equal(status.plugin.version, '1.0.5')
   assert.equal(status.plugin.pluginRoot, PLUGIN_ROOT)
   assert.equal(status.plugin.payloadRoot, paths.payloadRoot)
 
