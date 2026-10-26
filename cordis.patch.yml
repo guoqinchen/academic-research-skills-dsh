@@ -1,0 +1,15 @@
+# Academic Research Skills for DeepSeek Harness.
+# One Host row registers the skill provider, the /ars-* commands, the agent
+# roles, the deterministic script tools, the write-scope guard, and the
+# session announce section. Disable the row to switch the feature off.
+- insert:
+    - id: academic-research-skills
+      name: academic-research-skills-dsh
+      config:
+        announce: true
+        commands: true
+        tools: true
+        guard: true
+        guardInfra: true
+        modelProfile: deepseek-flash
+        webSearch: true

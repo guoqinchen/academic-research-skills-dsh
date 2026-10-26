@@ -1,0 +1,433 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "academic-research-skills-dsh/payload-builder",
+  "toolVersion": "1.0.0",
+  "generatedAt": "2026-10-26T01:10:36.000Z",
+  "generatedAtSource": "git-commit-date",
+  "upstream": {
+    "repository": "https://github.com/Imbad0202/academic-research-skills",
+    "repositoryGit": "https://github.com/Imbad0202/academic-research-skills.git",
+    "commit": "1ec249df98728682dfbbdfb940a658338bfd6f80",
+    "commitDate": "2026-10-26T09:10:36+08:00",
+    "pluginName": "academic-research-skills",
+    "pluginVersion": "3.23.2",
+    "license": "CC-BY-NC-4.0",
+    "author": "Cheng-I Wu",
+    "homepage": "https://github.com/Imbad0202/academic-research-skills",
+    "checkout": "../repo"
+  },
+  "payload": {
+    "layout": "upstream repository layout preserved; four third-party page mirrors are excluded (see excluded[]); skills live at <payload>/<skill>/",
+    "generated": [
+      "PROVENANCE.json",
+      "REFERENCE-INDEX.json"
+    ],
+    "skillOrder": [
+      "deep-research",
+      "academic-paper",
+      "academic-paper-reviewer",
+      "academic-pipeline",
+      "sr-screener"
+    ],
+    "included": {
+      "directories": [
+        "deep-research",
+        "academic-paper",
+        "academic-paper-reviewer",
+        "academic-pipeline",
+        "sr-screener",
+        "commands",
+        "agents",
+        "shared",
+        "scripts",
+        "hooks",
+        "docs",
+        "examples",
+        "tools"
+      ],
+      "files": [
+        "MODE_REGISTRY.md",
+        "POSITIONING.md",
+        "QUICKSTART.md",
+        "README.md",
+        "LICENSE",
+        "NOTICE.md",
+        "CITATION.cff",
+        "THIRD_PARTY.md",
+        ".command-invariants.toml"
+      ],
+      "fileCount": 1199
+    },
+    "pinned": {
+      "contentSha256": "a7ebfc03ee9f2e0c448a2aaf6101c85580595262c8af61023f132bb007ed2929",
+      "pathListSha256": "aaa3cc71648b2b9db916f1c096c228afe94b4daad5a436fd241b6ac6da882e41"
+    },
+    "excluded": [
+      {
+        "path": ".claude",
+        "kind": "directory",
+        "reason": "Claude Code local configuration"
+      },
+      {
+        "path": ".claude-plugin",
+        "kind": "directory",
+        "reason": "upstream Claude Code plugin manifest; read for provenance metadata only"
+      },
+      {
+        "path": ".git",
+        "kind": "directory",
+        "reason": "version-control metadata"
+      },
+      {
+        "path": ".gitattributes",
+        "kind": "file",
+        "reason": "repository metadata, not runtime content"
+      },
+      {
+        "path": ".github",
+        "kind": "directory",
+        "reason": "repository CI workflows and automation"
+      },
+      {
+        "path": ".gitignore",
+        "kind": "file",
+        "reason": "repository metadata, not runtime content"
+      },
+      {
+        "path": ".gitleaks.toml",
+        "kind": "file",
+        "reason": "repository security scanner config, not runtime content"
+      },
+      {
+        "path": ".gitleaksignore",
+        "kind": "file",
+        "reason": "repository security scanner config, not runtime content"
+      },
+      {
+        "path": "CHANGELOG.md",
+        "kind": "file",
+        "reason": "release history, excluded from the runtime payload"
+      },
+      {
+        "path": "CONTRIBUTING.md",
+        "kind": "file",
+        "reason": "contribution guide, not runtime content"
+      },
+      {
+        "path": "GOVERNANCE.md",
+        "kind": "file",
+        "reason": "project governance, not runtime content"
+      },
+      {
+        "path": "README.es-ES.md",
+        "kind": "file",
+        "reason": "localized README excluded; only the English README.md is bundled"
+      },
+      {
+        "path": "README.ja-JP.md",
+        "kind": "file",
+        "reason": "localized README excluded; only the English README.md is bundled"
+      },
+      {
+        "path": "README.ko-KR.md",
+        "kind": "file",
+        "reason": "localized README excluded; only the English README.md is bundled"
+      },
+      {
+        "path": "README.zh-CN.md",
+        "kind": "file",
+        "reason": "localized README excluded; only the English README.md is bundled"
+      },
+      {
+        "path": "README.zh-TW.md",
+        "kind": "file",
+        "reason": "localized README excluded; only the English README.md is bundled"
+      },
+      {
+        "path": "SECURITY.md",
+        "kind": "file",
+        "reason": "security policy, not runtime content"
+      },
+      {
+        "path": "audits",
+        "kind": "directory",
+        "reason": "repository audit snapshots, not runtime content"
+      },
+      {
+        "path": "docs/design/snapshots/2026-05-13-ai-disclosure-discovery/icmje.html",
+        "kind": "file",
+        "reason": "third-party page mirror; ICMJE reserves all rights, not covered by the upstream CC-BY-NC grant"
+      },
+      {
+        "path": "docs/design/snapshots/2026-05-13-ai-disclosure-discovery/ieee.html",
+        "kind": "file",
+        "reason": "third-party page mirror; IEEE reserves all rights, not covered by the upstream CC-BY-NC grant"
+      },
+      {
+        "path": "docs/design/snapshots/2026-05-13-ai-disclosure-discovery/nature.html",
+        "kind": "file",
+        "reason": "third-party page mirror; Springer Nature reserves all rights, not covered by the upstream CC-BY-NC grant"
+      },
+      {
+        "path": "docs/design/snapshots/2026-05-13-ai-disclosure-discovery/prisma-trAIce.html",
+        "kind": "file",
+        "reason": "third-party page mirror; CC BY 4.0 content whose attribution notice is not shipped with the payload"
+      },
+      {
+        "path": "evals",
+        "kind": "directory",
+        "reason": "evaluation corpus, not runtime content"
+      },
+      {
+        "path": "package.json",
+        "kind": "file",
+        "reason": "upstream npm wrapper metadata, not runtime content"
+      },
+      {
+        "path": "pi",
+        "kind": "directory",
+        "reason": "upstream Pi distribution wrapper, not runtime content"
+      },
+      {
+        "path": "plugin-evals",
+        "kind": "directory",
+        "reason": "plugin evaluation harness, not runtime content"
+      },
+      {
+        "path": "plugin-evals-citation-check",
+        "kind": "directory",
+        "reason": "plugin evaluation harness, not runtime content"
+      },
+      {
+        "path": "plugin-evals-citation-locale",
+        "kind": "directory",
+        "reason": "plugin evaluation harness, not runtime content"
+      },
+      {
+        "path": "pyproject.toml",
+        "kind": "file",
+        "reason": "upstream Python project metadata, not runtime content"
+      },
+      {
+        "path": "requirements-dev.txt",
+        "kind": "file",
+        "reason": "upstream development requirements; runtime subset lives in requirements-runtime.txt"
+      },
+      {
+        "path": "requirements-pdf-content-classifier.txt",
+        "kind": "file",
+        "reason": "upstream optional opt-in dependency for a non-runtime classifier worker"
+      },
+      {
+        "path": "skills",
+        "kind": "directory",
+        "reason": "symlink-only aliases for the five top-level skill directories; symlinks are refused"
+      },
+      {
+        "path": "tests",
+        "kind": "directory",
+        "reason": "test suite, not runtime content"
+      }
+    ],
+    "symlinksRefused": [
+      {
+        "path": "skills/academic-paper",
+        "target": "../academic-paper",
+        "reason": "symlink refused; the target top-level skill directory is copied directly"
+      },
+      {
+        "path": "skills/academic-paper-reviewer",
+        "target": "../academic-paper-reviewer",
+        "reason": "symlink refused; the target top-level skill directory is copied directly"
+      },
+      {
+        "path": "skills/academic-pipeline",
+        "target": "../academic-pipeline",
+        "reason": "symlink refused; the target top-level skill directory is copied directly"
+      },
+      {
+        "path": "skills/deep-research",
+        "target": "../deep-research",
+        "reason": "symlink refused; the target top-level skill directory is copied directly"
+      },
+      {
+        "path": "skills/sr-screener",
+        "target": "../sr-screener",
+        "reason": "symlink refused; the target top-level skill directory is copied directly"
+      }
+    ],
+    "generatedArtifactsSkipped": []
+  },
+  "totals": {
+    "files": 1199,
+    "bytes": 24118122,
+    "directories": 151,
+    "modes": {
+      "644": 1171,
+      "755": 28
+    }
+  },
+  "pathListSha256": "aaa3cc71648b2b9db916f1c096c228afe94b4daad5a436fd241b6ac6da882e41",
+  "contentSha256": "a7ebfc03ee9f2e0c448a2aaf6101c85580595262c8af61023f132bb007ed2929",
+  "executableFiles": [
+    "hooks/run_guard.sh",
+    "scripts/adapters/folder_scan.py",
+    "scripts/adapters/obsidian.py",
+    "scripts/adapters/zotero.py",
+    "scripts/announce-ars-loaded.sh",
+    "scripts/ars_update_check.sh",
+    "scripts/audit_snapshot.py",
+    "scripts/bootstrap_timeline_yaml.py",
+    "scripts/check_630_codex_subscription_transport.py",
+    "scripts/check_audit_artifact_consistency.py",
+    "scripts/check_compliance_report.py",
+    "scripts/check_corpus_consumer_protocol.py",
+    "scripts/check_evals_gold_set.py",
+    "scripts/check_literature_corpus_schema.py",
+    "scripts/check_prisma_trAIce_freshness.py",
+    "scripts/check_tools_allowlist.py",
+    "scripts/check_v3_6_6_ab_manifest.py",
+    "scripts/check_v3_9_4_temporal_verification.py",
+    "scripts/cross_model_codex_transport.py",
+    "scripts/cross_model_codex_verify.sh",
+    "scripts/cross_model_smoke_test.sh",
+    "scripts/cross_model_smoke_test_codex.sh",
+    "scripts/parse_audit_verdict.py",
+    "scripts/run_codex_audit.sh",
+    "scripts/sync_adapter_docs.py",
+    "scripts/temporal_integrity_audit.py",
+    "scripts/validate_compliance_fixtures.py",
+    "tools/release-discipline/scripts/sync-toolkit.sh"
+  ],
+  "byTopLevel": {
+    "deep-research": {
+      "files": 53,
+      "bytes": 786607,
+      "pathListSha256": "7775247329b969c8c46d60f31b0d8b9897851369e4352f6e22ef7766093e538d",
+      "contentSha256": "292ada213ea4e3473fe488c360a262ccdb1f7dde30e4de89a1cda4b410ca82f5",
+      "modes": {
+        "644": 53
+      }
+    },
+    "academic-paper": {
+      "files": 63,
+      "bytes": 1058429,
+      "pathListSha256": "9a5fc8e076fcc15eb6f2ac44e45bb3c93c811301f4e63e9078214267f0b46a10",
+      "contentSha256": "5e47b443c24bbff76dd58a645b2fcf8e1b0b371a3726e7ec9fe3b3ae2d650578",
+      "modes": {
+        "644": 63
+      }
+    },
+    "academic-paper-reviewer": {
+      "files": 28,
+      "bytes": 631601,
+      "pathListSha256": "520aaf80a41e08147c1cf13904f0bc0376ec41f4f1fd1ba0cfabce93895c5c31",
+      "contentSha256": "0b79a08f747c623aa2632d4c0eaf1f9b0ffdec95f2f12a037bbe89635b90ab82",
+      "modes": {
+        "644": 28
+      }
+    },
+    "academic-pipeline": {
+      "files": 30,
+      "bytes": 671811,
+      "pathListSha256": "2f8c8344fdbf776f5b3ec37f46c26451067f617e4bfb7d6cc8882f37607445d2",
+      "contentSha256": "608f4ca6b2aa8505f7a9f7c4c9e8a3603df813d403ae83586ec19ff0e348de68",
+      "modes": {
+        "644": 30
+      }
+    },
+    "sr-screener": {
+      "files": 25,
+      "bytes": 262200,
+      "pathListSha256": "5eee4e68a37744f92ae10a8bfb948b620288f9d3c3371cbab62d8bfc49c93052",
+      "contentSha256": "d9c2668b79eb6cb456c9f9e61ea9058cb7fe61700406c6bfd7fda893f55159fd",
+      "modes": {
+        "644": 25
+      }
+    },
+    "commands": {
+      "files": 16,
+      "bytes": 20904,
+      "pathListSha256": "a2eb8300a81832ba73362fd00e0370c0c5aa28943082e280eea392a03220457d",
+      "contentSha256": "35e3d429de6761eb63f87905ec62c61222104c686b9d574a48c459b063e93781",
+      "modes": {
+        "644": 16
+      }
+    },
+    "agents": {
+      "files": 4,
+      "bytes": 86358,
+      "pathListSha256": "76422002dcffc62863eff110c197a5c2de761294decec0de228b5e48015346c9",
+      "contentSha256": "32d48e75badfcc7700a6ae818e83d0ec2236ef4a4c7f3f3bccb418df95c75e95",
+      "modes": {
+        "644": 4
+      }
+    },
+    "shared": {
+      "files": 155,
+      "bytes": 1722614,
+      "pathListSha256": "e5ae257c9379b5abff8bb9e2452f4037655d1968d4379de6062ce3d4cbdd82b3",
+      "contentSha256": "96bbf917fbfeaefdb6b7db637bdad932ccd3a0e3d800aac8317b62806beced15",
+      "modes": {
+        "644": 155
+      }
+    },
+    "scripts": {
+      "files": 642,
+      "bytes": 11879784,
+      "pathListSha256": "2a27683aa52934d5cc1af62628d765cf9aa9a5a2cc14a58abf7918cd819859b6",
+      "contentSha256": "d6da5bc3a12eb05f22fff9e7b903f05b10b132dbea01220eee24efaf4c773615",
+      "modes": {
+        "644": 616,
+        "755": 26
+      }
+    },
+    "hooks": {
+      "files": 2,
+      "bytes": 17708,
+      "pathListSha256": "eadc13f293173012f0c1dfb32e71baa452b40ddbdaebcaeb847fcfbfe989c7de",
+      "contentSha256": "414f281eb3c1a44196edf9e543d3983811fbf85581fae4e453591fa6d0b9fcda",
+      "modes": {
+        "644": 1,
+        "755": 1
+      }
+    },
+    "docs": {
+      "files": 121,
+      "bytes": 4068513,
+      "pathListSha256": "e0add06d089b8b76cd594d3223fdbdfac91a2300d9e931c40951ead233adabfa",
+      "contentSha256": "e28c839c5ad36ec012ce159031b8f73d9ddd764897781bea00315be17fc74a29",
+      "modes": {
+        "644": 121
+      }
+    },
+    "examples": {
+      "files": 45,
+      "bytes": 2741686,
+      "pathListSha256": "04959334048f9a7282642b625e6db8c22ffe710099aa6d51992f372128680069",
+      "contentSha256": "652f12d8af0f384adb87208f43820897bc9909b414a7d78a172303a24ca3cf7d",
+      "modes": {
+        "644": 45
+      }
+    },
+    "tools": {
+      "files": 6,
+      "bytes": 68792,
+      "pathListSha256": "36727413a909d6ab931231908de6b175059b5dc5c37a492fc031dd24671eba12",
+      "contentSha256": "08aef087219edda39b3252a2650d8ede8ba7c690861d79609d3163286c04c75f",
+      "modes": {
+        "644": 5,
+        "755": 1
+      }
+    },
+    ".": {
+      "files": 9,
+      "bytes": 101115,
+      "pathListSha256": "ee9cd83117e90f0107be0ae7b9ea4806bdeb849ba428fc4c9b98cf820006aeb8",
+      "contentSha256": "80c7932357c9d5214639e274bf2676dcb11102c7f49c61b7cf03a5fdd789b51b",
+      "modes": {
+        "644": 9
+      }
+    }
+  }
+}

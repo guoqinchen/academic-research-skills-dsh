@@ -1,0 +1,43 @@
+{
+  "name": "academic-research-skills-dsh",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DeepSeek Harness port of the Academic Research Skills plugin: 5 skills, 16 /ars-* commands, 4 agent roles, write-scope guard, and deterministic Python gates.",
+  "license": "CC-BY-NC-4.0",
+  "engines": {
+    "dsh": ">=0.2.1-rc.3"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "lib/**/*.js",
+    "bin/**",
+    "payload/**",
+    "locale/*.json",
+    "icon.svg",
+    "requirements-runtime.txt",
+    "README.md",
+    "NOTICE.md",
+    "LICENSE",
+    "docs/**/*.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "build:payload": "node tools/build-payload.mjs",
+    "check:payload": "node tools/check-payload.mjs",
+    "build:python-wrapper": "node tools/build-python-wrapper.mjs",
+    "check:python-wrapper": "node tools/build-python-wrapper.mjs --check"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+# Runtime Python dependencies for the bundled Academic Research Skills payload.
+#
+# These are the packages the ported scripts import at runtime. Version floors are
+# copied verbatim from the pinned upstream `repo/requirements-dev.txt`; entries
+# with no upstream floor stay unpinned.
+#
+# Test-only packages from requirements-dev.txt (pytest, coverage helpers, ...)
+# are intentionally omitted: the DSH plugin runs gates, not the upstream test
+# suite. The optional `requirements-pdf-content-classifier.txt` dependency is
+# also omitted because that classifier is opt-in and never imported by the
+# structural preflight path.
+
+pyyaml
+ruamel.yaml>=0.17
+jsonschema[format]>=4.17
+pypdf
+defusedxml
+openpyxl>=3.1
+markdown-it-py>=3.0
+linkify-it-py>=2.0.3

@@ -1,0 +1,68 @@
+#!/bin/sh
+# Managed Python interpreter for Academic Research Skills scripts.
+#
+# GENERATED FILE - do not edit by hand.
+# Source of truth: lib/python-contract.js (renderWrapper)
+# Regenerate: node tools/build-python-wrapper.mjs
+# Verify:     node tools/build-python-wrapper.mjs --check
+#
+# Resolution order (first usable interpreter wins):
+#   1. $ARS_DSH_VENV/bin/python                       explicit override
+#   2. the envDir on line 1 of $HOME/.cache/ars-dsh/runtime-state
+#      (written by env.writeRuntimeState() for a custom configured envDir)
+#   3. $HOME/.cache/ars-dsh/venv/bin/python   default managed venv
+#   4. python3 on PATH
+#
+# The payload root is prepended to PYTHONPATH and exported as ARS_PAYLOAD_ROOT
+# so upstream scripts resolve sibling modules from the payload. Bytecode writing
+# is disabled because the payload is a read-only provenance snapshot; CPython
+# would otherwise create __pycache__ directories inside it. All arguments are
+# forwarded verbatim.
+set -eu
+
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
+plugin_root=$(CDPATH= cd -- "$script_dir/.." && pwd -P)
+if [ -d "$plugin_root/payload" ]; then
+  payload_root="$plugin_root/payload"
+else
+  payload_root="$plugin_root"
+fi
+
+# A custom envDir is recorded in a plain-text file under the default cache
+# root, so a model-issued `bash bin/ars-python` resolves it even though that
+# shell does not inherit the ars_script child environment.
+venv_dir="${ARS_DSH_VENV:-}"
+if [ -z "$venv_dir" ] && [ -n "${HOME:-}" ] && [ -f "$HOME/.cache/ars-dsh/runtime-state" ]; then
+  stated_venv=""
+  IFS= read -r stated_venv < "$HOME/.cache/ars-dsh/runtime-state" || true
+  venv_dir="$stated_venv"
+fi
+
+if [ -n "$venv_dir" ] && [ -x "$venv_dir/bin/python" ]; then
+  python="$venv_dir/bin/python"
+  ARS_DSH_VENV="$venv_dir"
+  export ARS_DSH_VENV
+elif [ -n "${HOME:-}" ] && [ -x "$HOME/.cache/ars-dsh/venv/bin/python" ]; then
+  python="$HOME/.cache/ars-dsh/venv/bin/python"
+  ARS_DSH_VENV="$HOME/.cache/ars-dsh/venv"
+  export ARS_DSH_VENV
+elif command -v python3 >/dev/null 2>&1; then
+  python="python3"
+else
+  echo "ars-python: no Python interpreter found" >&2
+  echo "ars-python: set ARS_DSH_VENV, run ars_env_setup, or install python3" >&2
+  exit 127
+fi
+
+if [ -n "${PYTHONPATH:-}" ]; then
+  PYTHONPATH="$payload_root:$PYTHONPATH"
+else
+  PYTHONPATH="$payload_root"
+fi
+export PYTHONPATH
+PYTHONDONTWRITEBYTECODE=1
+export PYTHONDONTWRITEBYTECODE
+ARS_PAYLOAD_ROOT="$payload_root"
+export ARS_PAYLOAD_ROOT
+
+exec "$python" "$@"
