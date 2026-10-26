@@ -39,7 +39,8 @@
     "check:payload": "node tools/check-payload.mjs",
     "build:python-wrapper": "node tools/build-python-wrapper.mjs",
     "check:python-wrapper": "node tools/build-python-wrapper.mjs --check",
-    "check:upstream": "node tools/check-upstream.mjs"
+    "check:upstream": "node tools/check-upstream.mjs",
+    "publish:github": "node tools/publish-github-package.mjs"
   },
   "dsh": {
     "bundle": {

@@ -80,6 +80,18 @@ dsh plugin --profile <profile> add academic-research-skills-dsh
 or enter that package name in **Add plugin**. The Desktop profile requires the
 Desktop-installed `dsh` CLI.
 
+A scoped mirror is published to GitHub Packages as
+`@guoqinchen/academic-research-skills-dsh` by
+[`.github/workflows/publish-github-package.yml`](.github/workflows/publish-github-package.yml).
+Installing it requires an authenticated npm client:
+
+```ini
+@guoqinchen:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+The npmjs package remains the canonical install path.
+
 Creator-mode agents can also run
 `plugin_manager install_bundle target=<absolute path>`; the default presets
 disable that tool, so the Plugins page is the normal path. The package has
