@@ -1,6 +1,6 @@
 {
   "name": "academic-research-skills-dsh",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "description": "DeepSeek Harness port of the Academic Research Skills plugin: 5 skills, 16 /ars-* commands, 4 agent roles, write-scope guard, and deterministic Python gates.",
@@ -26,6 +26,7 @@
     "requirements-runtime.txt",
     "README.md",
     "NOTICE.md",
+    "ASSET-LICENSES.md",
     "LICENSE",
     "CITATION.cff",
     "docs/compat-report.md",
@@ -64,5 +65,9 @@
     "peer-review",
     "systematic-review",
     "research-automation"
+  ],
+  "os": [
+    "darwin",
+    "linux"
   ]
 }

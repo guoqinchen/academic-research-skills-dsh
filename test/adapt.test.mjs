@@ -1,6 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { existsSync, readFileSync, readdirSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, symlinkSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -444,12 +445,35 @@ test('python3 scripts/ invocations use the managed interpreter and absolute path
 
 test('sr-screener routes its six skill-local scripts through $S and the wrapper', () => {
   const sr = adaptDocument(documents.find((document) => document.name === 'sr-screener')).text
-  assert.ok(sr.includes(`S="${join(corpusRoot, 'sr-screener', 'scripts')}"`), '$S assignment absolute and quoted')
+  const scriptDir = join(corpusRoot, 'sr-screener', 'scripts')
+  assert.ok(
+    sr.includes('S=' + scriptDir) || sr.includes('S="' + scriptDir + '"'),
+    '$S assignment absolute and quoted',
+  )
   for (const script of ['prepare_records.py', 'build_workflow.py', 'merge_decisions.py', 'build_outputs.py']) {
     assert.ok(sr.includes(`"$S/${script}"`), `$S invocation for ${script}`)
   }
   assert.ok(!/python3?\s+\$S\//u.test(sr), 'no bare python $S invocation')
   assert.ok(!sr.includes('python $S/'))
+})
+
+test('shell paths escape substitutions and quotes', (t) => {
+  const evilRoot = join(mkdtempSync(join(tmpdir(), 'ars-shell-')), 'ars$(touch /tmp/ARS_PWNED)')
+  mkdirSync(evilRoot, { recursive: true })
+  const evilPayload = join(evilRoot, 'payload')
+  try {
+    symlinkSync(join(pluginRoot, 'payload'), evilPayload, 'dir')
+  } catch {
+    t.skip('symlinks unavailable; cannot build a readable hostile path')
+    return
+  }
+  const evilAdapter = createAdapter({ paths: createTestPaths(evilPayload) })
+  const body = evilAdapter.adaptSkillBody('Run bash scripts/check.sh now.', { skill: 'deep-research' })
+  assert.ok(body.includes('bash "'), 'script path stays double-quoted')
+  assert.ok(body.includes('ars\\$(touch /tmp/ARS_PWNED)/payload/scripts/check.sh'), 'dollar is escaped')
+  assert.ok(!body.includes('"$('), 'no unescaped command substitution')
+  const rooted = evilAdapter.adaptSkillBody('Then bash ${CLAUDE_PLUGIN_ROOT}/scripts/check.sh.', { skill: 'deep-research' })
+  assert.ok(rooted.includes('ars\\$(touch /tmp/ARS_PWNED)/payload/scripts/check.sh'), 'absolute rewrite is escaped')
 })
 
 test('the PYTHONPATH module invocation uses the managed interpreter', () => {

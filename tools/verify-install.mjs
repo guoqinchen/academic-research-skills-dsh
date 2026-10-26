@@ -372,10 +372,11 @@ async function verifyEnvironment() {
 function verifyPackage() {
   const manifest = readJson(join(PLUGIN_ROOT, 'package.json'), 'package.json')
   equal(manifest.name, 'academic-research-skills-dsh', 'package name')
-  equal(manifest.version, '1.0.0', 'package version')
+  equal(manifest.version, '1.0.1', 'package version')
   equal(manifest.private, true, 'package private')
   equal(manifest.type, 'module', 'package type')
   equal(manifest.engines?.dsh, '>=0.2.1-rc.3', 'engines.dsh')
+  equal(JSON.stringify(manifest.os), JSON.stringify(['darwin', 'linux']), 'package os support')
   equal(manifest.license, 'CC-BY-NC-4.0', 'package license')
   record('package', 'manifest identity', 'PASS', `${manifest.name}@${manifest.version}, engines.dsh ${manifest.engines.dsh}`)
 
@@ -591,7 +592,7 @@ async function verifyRegistration({ dshTools }) {
     equal(entry.registered, true, `status reports ${entry.name} registered`)
   }
   deepEqual(status.payload.missing, [], 'status payload.missing')
-  deepEqual(status.payload.counts, { skills: 5, commands: 16, agentDefinitions: 4, agentFiles: 47, scripts: 455, hooks: 2 }, 'status payload counts')
+  deepEqual(status.payload.counts, { skills: 5, commands: 16, agentDefinitions: 4, agentFiles: 47, scripts: 642, hooks: 2 }, 'status payload counts')
   deepEqual(status.lint.warnings, [], 'status lint warnings')
   ensure(status.model !== null && typeof status.model === 'object', 'status.model object')
   ensure(status.webSearch !== null && typeof status.webSearch === 'object', 'status.webSearch object')

@@ -1,7 +1,7 @@
 # Internal interfaces (Lead-owned, change only by agreement)
 
-Plugin root: `/Users/max/Projects/Academic Research/academic-research-skills-dsh`
-Upstream clone: `/Users/max/Projects/Academic Research/repo` (commit 1ec249df98728682dfbbdfb940a658338bfd6f80, plugin version 3.23.2)
+Plugin root: `<plugin-root>`
+Upstream clone: `<upstream-checkout>` (commit 1ec249df98728682dfbbdfb940a658338bfd6f80, plugin version 3.23.2)
 
 All modules are plain ESM JavaScript with **no external npm dependencies**. Node built-ins only
 (`node:fs`, `node:path`, `node:process`, `node:os`, `node:crypto`, `node:child_process`, `node:url`, `node:test`).

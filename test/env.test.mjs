@@ -66,7 +66,7 @@ function enoent(message = 'spawn ENOENT') {
  * Injected process runner: models uv, venv creation, pip, and the dependency
  * probe without touching the network or the user's cache.
  */
-function fakeRuntime({ uvAvailable = true, missing = [...DEPENDENCY_MODULES], probeFails = false, installSucceeds = true } = {}) {
+function fakeRuntime({ uvAvailable = true, missing = [...DEPENDENCY_MODULES], probeFails = false, installSucceeds = true, pythonVersion = '3.11.9' } = {}) {
   const state = {
     calls: [],
     missing: [...missing],
@@ -79,11 +79,11 @@ function fakeRuntime({ uvAvailable = true, missing = [...DEPENDENCY_MODULES], pr
     state.calls.push({ command, args, options })
     if (args[0] === '--version') {
       if (command === 'uv') return state.uvAvailable ? ok('uv 0.11.27\n') : enoent('spawn uv ENOENT')
-      return ok('Python 3.11.9\n')
+      return ok(`Python ${pythonVersion}\n`)
     }
     if (args[0] === '-c') {
       if (state.probeFails) return enoent('spawn python ENOENT')
-      return ok(`${JSON.stringify({ version: '3.11.9', missing: state.missing })}\n`)
+      return ok(`${JSON.stringify({ version: pythonVersion, missing: state.missing })}\n`)
     }
     // uv venv / python -m venv
     const creatingVenv =
@@ -637,4 +637,29 @@ test('scriptEnv drops an inherited ARS_DSH_VENV when no managed venv exists', as
     if (previous === undefined) delete process.env.ARS_DSH_VENV
     else process.env.ARS_DSH_VENV = previous
   }
+})
+
+test('status reports not ready for Python below 3.11', async () => {
+  const home = tempDir()
+  const paths = makePaths(home)
+  const config = makeConfig(home, { pythonPath: '/usr/bin/python3' })
+  const run = fakeRuntime({ missing: [], pythonVersion: '3.10.13' })
+  const env = createPythonEnv({ paths, config, run })
+  const status = await env.status()
+  assert.equal(status.pythonVersion, '3.10.13')
+  assert.equal(status.mode, 'system')
+  assert.equal(status.ready, false)
+})
+
+test('ensure refuses to build on Python below 3.11', async () => {
+  const home = tempDir()
+  const paths = makePaths(home)
+  const config = makeConfig(home, { pythonPath: '/usr/bin/python3' })
+  writeFileSync(paths.requirementsPath, 'pyyaml\n')
+  const run = fakeRuntime({ missing: [...DEPENDENCY_MODULES], pythonVersion: '3.10.13' })
+  const env = createPythonEnv({ paths, config, run })
+  const result = await env.ensure()
+  assert.equal(result.ok, false)
+  assert.match(result.log, /below the required minimum 3\.11/)
+  assert.ok(!hasCall(run, (call) => call.command === 'uv' && call.args[0] === 'venv'))
 })

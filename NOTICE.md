@@ -46,6 +46,8 @@ upstream instructions, workflows, modes, agent roles, thresholds, and
 deterministic scripts are preserved. See `docs/compat-report.md` for the exact
 token inventory and rules.
 
-If you redistribute this plugin, keep `LICENSE`, this `NOTICE.md`, the
-`payload/PROVENANCE.json` provenance record, and the upstream notice files under
-`payload/` intact.
+PDF/font asset coverage is listed in `ASSET-LICENSES.md`.
+
+If you redistribute this plugin, keep `LICENSE`, this `NOTICE.md`,
+`ASSET-LICENSES.md`, the `payload/PROVENANCE.json` provenance record, and the
+upstream notice files under `payload/` intact.

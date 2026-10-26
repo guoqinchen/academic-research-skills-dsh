@@ -55,6 +55,12 @@ export function apply(ctx, rawConfig) {
   const env = createPythonEnv({ paths, config })
   const report = createRegistrationReport()
   const logger = ctx.logger
+  if (process.platform === 'win32') {
+    logger?.warn?.(
+      '[ars] Windows is not supported yet: the interpreter wrapper is POSIX sh. ' +
+        'Supported platforms are macOS and Linux.',
+    )
+  }
 
   // The contract with the session shell: a model-issued `bash bin/ars-python`
   // must see the same envDir as `ars_script`. The wrapper reads this file.

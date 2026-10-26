@@ -1,6 +1,6 @@
 # Refactor plan — architecture review 2026-10-26
 
-Status: **complete** (2026-10-26). Baseline copy: `/tmp/ars-refactor-baseline` (payload excluded; PROVENANCE copied).
+Status: **complete** (2026-10-26). Baseline copy: `<temp-baseline>` (payload excluded; PROVENANCE copied).
 
 ## Hard constraints
 

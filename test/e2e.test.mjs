@@ -242,7 +242,7 @@ test('the three tools declare object-rooted schemas with top-level required arra
             plugin: { name: 'x', version: '1', pluginRoot: '/p', payloadRoot: '/p/payload' },
             payload: {
               present: true,
-              counts: { skills: 5, commands: 16, agentDefinitions: 4, agentFiles: 47, scripts: 455, hooks: 2 },
+              counts: { skills: 5, commands: 16, agentDefinitions: 4, agentFiles: 47, scripts: 642, hooks: 2 },
               provenance: null,
               missing: [],
             },
@@ -403,7 +403,7 @@ test('ars_status reports the live registration state, payload counts, and Python
   const status = await tool.execute({}, { agent, signal: new AbortController().signal })
 
   assert.equal(status.plugin.name, 'academic-research-skills-dsh')
-  assert.equal(status.plugin.version, '1.0.0')
+  assert.equal(status.plugin.version, '1.0.1')
   assert.equal(status.plugin.pluginRoot, PLUGIN_ROOT)
   assert.equal(status.plugin.payloadRoot, paths.payloadRoot)
 
@@ -413,7 +413,7 @@ test('ars_status reports the live registration state, payload counts, and Python
     commands: 16,
     agentDefinitions: 4,
     agentFiles: 47,
-    scripts: 455,
+    scripts: 642,
     hooks: 2,
   })
   assert.deepEqual(status.payload.missing, [])
