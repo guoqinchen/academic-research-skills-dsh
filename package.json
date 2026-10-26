@@ -73,5 +73,6 @@
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
-  }
+  },
+  "private": false
 }
