@@ -1,6 +1,7 @@
 # Academic Research Skills for DeepSeek Harness
 
 [![CI](https://github.com/guoqinchen/academic-research-skills-dsh/actions/workflows/ci.yml/badge.svg)](https://github.com/guoqinchen/academic-research-skills-dsh/actions/workflows/ci.yml)
+[![Upstream check](https://github.com/guoqinchen/academic-research-skills-dsh/actions/workflows/upstream-check.yml/badge.svg)](https://github.com/guoqinchen/academic-research-skills-dsh/actions/workflows/upstream-check.yml)
 
 A complete DeepSeek Harness (DSH) port of
 [`academic-research-skills`](https://github.com/Imbad0202/academic-research-skills):
@@ -229,6 +230,9 @@ Check a target checkout or ref first:
 node tools/check-upstream.mjs --upstream ../repo
 node tools/check-upstream.mjs --ref <branch-or-commit> --json
 ```
+
+A scheduled `Upstream check` workflow runs weekly and files an `upstream-drift`
+issue when the pinned payload no longer matches upstream.
 
 Exit codes are `0` clean, `1` drift, `2` error. `--print-snapshot` prints the
 `PAYLOAD_SNAPSHOT` / `BY_TOP_LEVEL` values needed before rebuilding. See

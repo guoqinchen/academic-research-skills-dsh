@@ -35,6 +35,12 @@ report. The report lists added/removed/changed files, contract drift, and the
 registered documents (`*/SKILL.md`, `commands/*.md`, `agents/*.md`) that need
 adapter review.
 
+A scheduled workflow ([`.github/workflows/upstream-check.yml`](.github/workflows/upstream-check.yml))
+runs every Monday: it resolves the latest upstream release, runs this check, files
+or updates an `upstream-drift` issue when the payload differs, and closes that
+issue when it is clean again. Run it manually with a specific ref from the
+Actions tab (or `gh workflow run upstream-check.yml -f ref=<ref>`).
+
 For a real bump, print the pins the new upstream requires:
 
 ```sh

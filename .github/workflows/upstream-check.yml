@@ -1,0 +1,115 @@
+name: Upstream check
+
+on:
+  schedule:
+    # Mondays 06:00 UTC (14:00 Asia/Shanghai)
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Upstream ref (tag, branch, or commit); empty = latest release"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+
+      - name: Resolve upstream ref
+        id: ref
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          REF="${{ inputs.ref }}"
+          if [ -z "$REF" ]; then
+            REF="$(gh api repos/Imbad0202/academic-research-skills/releases/latest --jq .tag_name 2>/dev/null || true)"
+          fi
+          if [ -z "$REF" ] || [ "$REF" = "null" ]; then
+            REF="main"
+          fi
+          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout upstream
+        run: |
+          set -euo pipefail
+          UP="$RUNNER_TEMP/upstream"
+          git init -q "$UP"
+          git -C "$UP" remote add origin https://github.com/Imbad0202/academic-research-skills.git
+          git -C "$UP" fetch --depth 1 origin "${{ steps.ref.outputs.ref }}"
+          git -C "$UP" checkout -q FETCH_HEAD
+          git -C "$UP" rev-parse HEAD
+
+      - name: Compare payload
+        id: diff
+        run: |
+          set +e
+          node tools/check-upstream.mjs --upstream "$RUNNER_TEMP/upstream" --json > "$RUNNER_TEMP/report.json" 2>&1
+          EXIT=$?
+          node tools/check-upstream.mjs --upstream "$RUNNER_TEMP/upstream" > "$RUNNER_TEMP/report.txt" 2>&1
+          echo "exit=$EXIT" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Upstream check: `${{ steps.ref.outputs.ref }}`"
+            echo
+            echo '```'
+            cat "$RUNNER_TEMP/report.txt"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+
+      - name: File or update drift issue
+        if: steps.diff.outputs.exit == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REF: ${{ steps.ref.outputs.ref }}
+        run: |
+          set -euo pipefail
+          gh label create upstream-drift --color FBCA04 --description "Upstream payload drift" 2>/dev/null || true
+          NUMBER="$(gh issue list --label upstream-drift --state open --json number --jq '.[0].number // empty')"
+          {
+            echo "Upstream ref: `$REF`"
+            echo
+            echo "The scheduled `check-upstream` comparison found drift against the pinned payload."
+            echo
+            echo '```'
+            cat "$RUNNER_TEMP/report.txt"
+            echo '```'
+            echo
+            echo "Follow `UPGRADING.md` to review and bump."
+          } > "$RUNNER_TEMP/issue.md"
+          if [ -n "$NUMBER" ]; then
+            gh issue comment "$NUMBER" --body-file "$RUNNER_TEMP/issue.md"
+          else
+            gh issue create --title "Upstream drift: $REF" --body-file "$RUNNER_TEMP/issue.md" --label upstream-drift
+          fi
+
+      - name: Close resolved drift issue
+        if: steps.diff.outputs.exit == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REF: ${{ steps.ref.outputs.ref }}
+        run: |
+          set -euo pipefail
+          NUMBER="$(gh issue list --label upstream-drift --state open --json number --jq '.[0].number // empty' 2>/dev/null || true)"
+          if [ -n "$NUMBER" ]; then
+            gh issue close "$NUMBER" --comment "Resolved: upstream `$REF` matches the pinned payload."
+          fi
+
+      - name: Fail on checker error
+        if: steps.diff.outputs.exit != '0' && steps.diff.outputs.exit != '1'
+        run: |
+          echo "check-upstream failed with exit ${{ steps.diff.outputs.exit }}"
+          exit 1
