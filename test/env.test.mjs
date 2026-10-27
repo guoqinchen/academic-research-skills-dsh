@@ -3,12 +3,14 @@ import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
 import {
   chmodSync,
+  closeSync,
   copyFileSync,
   existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
   realpathSync,
+  unlinkSync,
   writeFileSync,
 } from 'node:fs'
 import { tmpdir } from 'node:os'
@@ -17,11 +19,13 @@ import { fileURLToPath } from 'node:url'
 
 import { normalizeConfig } from '../lib/config.js'
 import { createPaths } from '../lib/paths.js'
-import { DEPENDENCY_MODULES, createPythonEnv, venvPythonPath } from '../lib/env.js'
+import { DEPENDENCY_MODULES, acquireLock, createPythonEnv, venvPythonPath } from '../lib/env.js'
 import {
   buildScriptEnv,
   defaultCacheRoot,
   defaultEnvDir,
+  parseStateText,
+  renderStateText,
   renderWrapper,
   resolvePythonExecutable,
   runtimeStatePath,
@@ -457,18 +461,52 @@ test('bin/ars-python is generated from the contract template', () => {
   assert.match(check.stdout, /up to date/u)
 })
 
-test('writeRuntimeState records the configured envDir under the default cache root', () => {
+test('writeRuntimeState records one entry per plugin root under the default cache root', () => {
   const home = tempDir('ars-state-home-')
   const customEnvDir = join(tempDir('ars-state-venv-'), 'custom', 'venv')
   const paths = createPaths()
-  const config = normalizeConfig({ envDir: customEnvDir }, { home })
+  const config = normalizeConfig(
+    { envDir: customEnvDir, pythonPath: '/opt/py/bin/python' },
+    { home },
+  )
   const env = createPythonEnv({ paths, config, run: enoent, home })
   const stateFile = runtimeStatePath(home)
 
   assert.equal(existsSync(stateFile), false)
   assert.equal(env.writeRuntimeState(), true)
-  assert.equal(readFileSync(stateFile, 'utf8'), `${customEnvDir}\n`)
+  // The key is the canonical plugin root: the wrapper derives it with `pwd -P`.
+  const stateKey = realpathSync.native(paths.pluginRoot)
+  const entries = parseStateText(readFileSync(stateFile, 'utf8'))
+  assert.deepEqual(entries.get(stateKey), {
+    envDir: customEnvDir,
+    python: '/opt/py/bin/python',
+  })
+
+  // A second plugin install keeps its own row instead of overwriting this one.
+  const otherRoot = join(tempDir('ars-state-other-'), 'plugin')
+  const otherEnvDir = join(tempDir('ars-state-other-venv-'), 'venv')
+  const other = createPythonEnv({
+    paths: createPaths(otherRoot),
+    config: normalizeConfig({ envDir: otherEnvDir }, { home }),
+    run: enoent,
+    home,
+  })
+  assert.equal(other.writeRuntimeState(), true)
+  const both = parseStateText(readFileSync(stateFile, 'utf8'))
+  assert.equal(both.size, 2)
+  assert.deepEqual(both.get(otherRoot), { envDir: otherEnvDir, python: '' })
+
   assert.equal(env.writeRuntimeState(), true, 'rewriting is idempotent')
+  const rewritten = parseStateText(readFileSync(stateFile, 'utf8'))
+  assert.equal(rewritten.size, 2)
+  assert.deepEqual(rewritten.get(stateKey), {
+    envDir: customEnvDir,
+    python: '/opt/py/bin/python',
+  })
+
+  // A legacy v1 file (one bare envDir line) is ignored rather than misread.
+  writeFileSync(stateFile, `${customEnvDir}\n`)
+  assert.equal(parseStateText(readFileSync(stateFile, 'utf8')).size, 0)
 
   // Never throws: an unwritable state path reports false instead.
   const blocker = join(tempDir('ars-state-blocker-'), 'not-a-directory')
@@ -480,6 +518,18 @@ test('writeRuntimeState records the configured envDir under the default cache ro
     home: blocker,
   })
   assert.equal(failing.writeRuntimeState(), false)
+})
+
+test('renderStateText is deterministic and round-trips through parseStateText', () => {
+  const entries = new Map([
+    ['/b/plugin', { envDir: '/b/venv', python: 'python3.12' }],
+    ['/a/plugin', { envDir: '/a/venv', python: '' }],
+  ])
+  const text = renderStateText(entries)
+  assert.ok(text.startsWith('# ars-dsh runtime state v2\n'), text)
+  assert.deepEqual([...parseStateText(text).keys()], ['/a/plugin', '/b/plugin'])
+  assert.deepEqual(parseStateText(text).get('/b/plugin'), { envDir: '/b/venv', python: 'python3.12' })
+  assert.equal(renderStateText(parseStateText(text)), text, 'render(parse(x)) is stable')
 })
 
 test('JS and shell resolution agree for the default and a custom envDir', (t) => {
@@ -581,6 +631,23 @@ test('JS and shell resolution agree for the default and a custom envDir', (t) =>
     const explicit = runWrapper(customHome, { ARS_DSH_VENV: explicitEnvDir })
     assert.equal(explicit.MARKER, 'EXPLICIT')
     assert.equal(explicit.SELF, explicitPython)
+
+    // config.pythonPath: recorded in this plugin's state entry and used when no
+    // managed venv exists, so `ars_script` and `ars_status` agree (P1-1).
+    const pythonHome = tempDir('ars-parity-python-home-')
+    const pythonConfig = normalizeConfig(
+      { envDir: join(pythonHome, 'missing-venv'), pythonPath: '/usr/bin/false' },
+      { home: pythonHome },
+    )
+    const pythonEnv = createPythonEnv({ paths, config: pythonConfig, run: enoent, home: pythonHome })
+    assert.equal(pythonEnv.pythonExecutable(), '/usr/bin/false')
+    assert.equal(pythonEnv.writeRuntimeState(), true)
+    const shellPython = spawnSync('sh', [wrapper, 'gate.py'], {
+      encoding: 'utf8',
+      env: { ...process.env, HOME: pythonHome, ARS_DSH_VENV: '' },
+    })
+    assert.equal(shellPython.status, 1, 'wrapper must exec the configured pythonPath (false → 1)')
+    assert.equal(shellPython.stdout, '')
   } finally {
     if (savedPythonPath === undefined) delete process.env.PYTHONPATH
     else process.env.PYTHONPATH = savedPythonPath
@@ -603,6 +670,38 @@ test('ensure serializes concurrent setup calls behind one lock', async () => {
   assert.equal(venvCalls.length, 1, 'concurrent ensure must create the venv once')
   assert.equal(installCalls.length, 1, 'concurrent ensure must install once')
   assert.equal(existsSync(config.envDir + '.lock'), false, 'the lock file is released')
+})
+
+test('acquireLock steals a lock whose owner process is gone', async () => {
+  const lockPath = join(tempDir('ars-lock-dead-'), 'venv.lock')
+  writeFileSync(lockPath, JSON.stringify({ pid: 2147483646, startedAt: Date.now() }))
+  const started = Date.now()
+  const fd = await acquireLock(lockPath, { timeoutMs: 2000, staleMs: 60000, pollMs: 10 })
+  closeSync(fd)
+  unlinkSync(lockPath)
+  assert.ok(Date.now() - started < 1000, 'a dead owner must not consume the full timeout')
+})
+
+test('acquireLock steals a lock older than the stale threshold', async () => {
+  const lockPath = join(tempDir('ars-lock-old-'), 'venv.lock')
+  writeFileSync(lockPath, JSON.stringify({ pid: process.pid, startedAt: Date.now() - 3600000 }))
+  const fd = await acquireLock(lockPath, { timeoutMs: 2000, staleMs: 60000, pollMs: 10 })
+  closeSync(fd)
+  unlinkSync(lockPath)
+})
+
+test('acquireLock times out with an actionable message for a live owner', async () => {
+  const lockPath = join(tempDir('ars-lock-live-'), 'venv.lock')
+  writeFileSync(lockPath, JSON.stringify({ pid: process.pid, startedAt: Date.now() }))
+  await assert.rejects(
+    () => acquireLock(lockPath, { timeoutMs: 60, staleMs: 60000, pollMs: 10 }),
+    /timed out waiting for env setup lock/u,
+  )
+  const message = await acquireLock(lockPath, { timeoutMs: 30, staleMs: 60000, pollMs: 10 })
+    .then(() => 'unexpected success')
+    .catch((error) => error.message)
+  assert.match(message, /remove it if no ars_env_setup is running/u)
+  unlinkSync(lockPath)
 })
 
 test('ensure force rebuilds a broken managed virtualenv', async () => {
