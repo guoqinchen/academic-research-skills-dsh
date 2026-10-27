@@ -61,10 +61,13 @@ import {
   TOOL_NAME,
   TOOL_VERSION,
   UPSTREAM,
+  contractDrift,
   distributionFileExclusionReason,
   exclusionReason,
+  formatBytes,
   localizedReadmeReason,
 } from '../lib/payload-contract.js'
+import { PAYLOAD_ROOT_PREFIXES, SKILL_LOCAL_PREFIXES } from '../lib/reference-rules.js'
 
 // Re-exported for compatibility; lib/payload-contract.js is the single owner of
 // the upstream identity, the include/exclude declarations, and the pins.
@@ -90,20 +93,14 @@ export const DEFAULT_UPSTREAM_ROOT = process.env.ARS_UPSTREAM_ROOT
   ? resolve(process.env.ARS_UPSTREAM_ROOT)
   : fileURLToPath(new URL('../../repo', import.meta.url))
 
-/** Prefixes that may resolve against a skill directory (own-skill-relative). */
-const SKILL_LOCAL_PREFIXES = Object.freeze(['references', 'agents', 'templates', 'examples'])
+/**
+ * Prefixes that may resolve against a skill directory (own-skill-relative),
+ * imported from `lib/reference-rules.js`: the runtime prelude and the reference
+ * index must encode the same conventions, and a second copy here would drift.
+ */
 
-/** Every path prefix scanned in Markdown (see the task interface). */
-const REFERENCE_PREFIXES = Object.freeze([
-  'references',
-  'templates',
-  'examples',
-  'agents',
-  'shared',
-  'scripts',
-  'docs',
-  'tools',
-])
+/** Every path prefix scanned in Markdown: the union of both conventions. */
+const REFERENCE_PREFIXES = Object.freeze([...SKILL_LOCAL_PREFIXES, ...PAYLOAD_ROOT_PREFIXES])
 
 // Excluded top-level entries, localized README handling, and ignored
 // working-tree artifacts are declared in lib/payload-contract.js.
@@ -150,18 +147,16 @@ export function sha256Text(text) {
   return createHash('sha256').update(text, 'utf8').digest('hex')
 }
 
+export function sha256Buffer(buffer) {
+  return createHash('sha256').update(buffer).digest('hex')
+}
+
 export function sha256File(path) {
   return createHash('sha256').update(readFileSync(path)).digest('hex')
 }
 
 export function modeString(mode) {
   return (mode & 0o777).toString(8).padStart(3, '0')
-}
-
-function formatBytes(bytes) {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
 /** Fail unless `target` is strictly inside `root`. */
@@ -546,8 +541,22 @@ export function prunePayload(payloadRoot = PAYLOAD_ROOT, keepPaths = []) {
  * Inventory, digests and PROVENANCE
  * ------------------------------------------------------------------------- */
 
-/** Walk the payload and describe every regular file (excluding generated files). */
-export function collectPayloadInventory(payloadRoot = PAYLOAD_ROOT, exclude = GENERATED_FILES) {
+/**
+ * Walk one payload tree once and return the file/symlink/unsupported inventory.
+ *
+ * `onFile(relPath, buffer)` lets the verification tool scan file content (the
+ * build-machine-marker check) during the same walk instead of re-reading the
+ * tree, so the two tools share one traversal implementation.
+ *
+ * @param {string} [payloadRoot]
+ * @param {readonly string[]} [exclude] top-level generated files to skip
+ * @param {{onFile?: (relPath: string, buffer: Buffer) => void}} [options]
+ * @returns {{files: Array<{path: string, bytes: number, mode: number, sha256: string}>,
+ *   symlinks: Array<{path: string, target: string}>,
+ *   unsupported: Array<{path: string, reason: string}>}}
+ */
+export function collectPayloadInventory(payloadRoot = PAYLOAD_ROOT, exclude = GENERATED_FILES, options = {}) {
+  const { onFile } = options
   const excluded = new Set(exclude)
   const files = []
   const symlinks = []
@@ -573,11 +582,13 @@ export function collectPayloadInventory(payloadRoot = PAYLOAD_ROOT, exclude = GE
         unsupported.push({ path: childRel, reason: 'not a regular file' })
         continue
       }
+      const buffer = readFileSync(child)
+      onFile?.(childRel, buffer)
       files.push({
         path: childRel,
-        bytes: stat.size,
+        bytes: buffer.length,
         mode: stat.mode & 0o777,
-        sha256: sha256File(child),
+        sha256: sha256Buffer(buffer),
       })
     }
   }
@@ -1132,37 +1143,24 @@ export function buildReferenceIndex({
  * deliberate upstream bump updates the contract and regenerates the payload.
  */
 export function verifyContractSnapshot({ inventory, generatedAt, generatedAtSource }) {
-  const failures = []
-  const compare = (label, actual, expected) => {
-    if (JSON.stringify(actual) !== JSON.stringify(expected)) {
-      failures.push(`${label}: expected ${JSON.stringify(expected)}, found ${JSON.stringify(actual)}`)
-    }
-  }
-  compare('payload file count', inventory.totals.files, PAYLOAD_SNAPSHOT.files)
-  compare('payload byte count', inventory.totals.bytes, PAYLOAD_SNAPSHOT.bytes)
-  compare('payload directory count', inventory.totals.directories, PAYLOAD_SNAPSHOT.directories)
-  compare('payload mode counts', inventory.totals.modes, PAYLOAD_SNAPSHOT.modes)
-  compare('payload contentSha256', inventory.contentSha256, PAYLOAD_SNAPSHOT.contentSha256)
-  compare('payload pathListSha256', inventory.pathListSha256, PAYLOAD_SNAPSHOT.pathListSha256)
-  for (const [key, expected] of Object.entries(BY_TOP_LEVEL)) {
-    const actual = inventory.byTopLevel[key]
-    if (actual === undefined) {
-      failures.push(`payload group missing: ${key}`)
-      continue
-    }
-    compare(`${key} file count`, actual.files, expected.files)
-    compare(`${key} byte count`, actual.bytes, expected.bytes)
-  }
-  for (const key of Object.keys(inventory.byTopLevel)) {
-    if (BY_TOP_LEVEL[key] === undefined) failures.push(`unexpected payload group: ${key}`)
-  }
+  const failures = contractDrift({
+    ...inventory.totals,
+    contentSha256: inventory.contentSha256,
+    pathListSha256: inventory.pathListSha256,
+    byTopLevel: inventory.byTopLevel,
+  })
   if (generatedAtSource === PAYLOAD_SNAPSHOT.generatedAtSource) {
-    compare('generatedAt', generatedAt, PAYLOAD_SNAPSHOT.generatedAt)
+    if (generatedAt !== PAYLOAD_SNAPSHOT.generatedAt) {
+      failures.push({ label: 'generatedAt', expected: PAYLOAD_SNAPSHOT.generatedAt, actual: generatedAt })
+    }
   }
   if (failures.length > 0) {
+    const detail = failures
+      .map((entry) => `${entry.label}: expected ${JSON.stringify(entry.expected)}, found ${JSON.stringify(entry.actual)}`)
+      .join('\n - ')
     throw new Error(
       'built payload does not match lib/payload-contract.js' +
-        ` (${UPSTREAM.commit}); update the contract after a deliberate upstream bump:\n - ${failures.join('\n - ')}`,
+        ` (${UPSTREAM.commit}); update the contract after a deliberate upstream bump:\n - ${detail}`,
     )
   }
   return true

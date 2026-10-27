@@ -25,9 +25,8 @@ import {
   readHeadCommit,
 } from './build-payload.mjs'
 import {
-  BY_TOP_LEVEL,
-  PAYLOAD_SNAPSHOT,
   UPSTREAM,
+  contractDrift,
 } from '../lib/payload-contract.js'
 
 const PAYLOAD_ROOT = join(PLUGIN_ROOT, 'payload')
@@ -81,34 +80,15 @@ function currentSnapshot(inventory) {
 
 /** @returns {Array<{label: string, expected: unknown, actual: unknown}>} */
 export function compareContract(inventory) {
-  const actual = currentSnapshot(inventory)
-  const failures = []
-  for (const key of ['files', 'bytes', 'directories', 'modes', 'contentSha256', 'pathListSha256']) {
-    const expected = PAYLOAD_SNAPSHOT[key]
-    if (JSON.stringify(actual[key]) !== JSON.stringify(expected)) {
-      failures.push({ label: `payload.${key}`, expected, actual: actual[key] })
-    }
-  }
-  for (const [group, expected] of Object.entries(BY_TOP_LEVEL)) {
-    const found = inventory.byTopLevel[group]
-    if (found === undefined) {
-      failures.push({ label: `byTopLevel.${group}`, expected, actual: null })
-      continue
-    }
-    if (found.files !== expected.files || found.bytes !== expected.bytes) {
-      failures.push({
-        label: `byTopLevel.${group}`,
-        expected: { files: expected.files, bytes: expected.bytes },
-        actual: { files: found.files, bytes: found.bytes },
-      })
-    }
-  }
-  for (const group of Object.keys(inventory.byTopLevel)) {
-    if (BY_TOP_LEVEL[group] === undefined) {
-      failures.push({ label: `byTopLevel.${group}`, expected: null, actual: inventory.byTopLevel[group] })
-    }
-  }
-  return failures
+  return contractDrift({
+    files: inventory.totals.files,
+    bytes: inventory.totals.bytes,
+    directories: inventory.totals.directories,
+    modes: inventory.totals.modes,
+    contentSha256: inventory.contentSha256,
+    pathListSha256: inventory.pathListSha256,
+    byTopLevel: inventory.byTopLevel,
+  })
 }
 
 function registeredChanges(diff) {

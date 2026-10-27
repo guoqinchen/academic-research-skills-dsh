@@ -24,8 +24,8 @@ system-prompt announcement.
 | Adaptation point | registration time, in memory (`lib/adapt.js`); the payload is never modified |
 | Parser | `lib/frontmatter.js` — dependency-free YAML subset parser |
 | Compat code | `lib/frontmatter.js`, `lib/adapt.js`, `lib/announce.js` |
-| Tests | `test/frontmatter.test.mjs` (47 tests), `test/adapt.test.mjs` (53 tests) |
-| Result | **100/100 tests pass; 0 lint findings across all 25 adapted documents** |
+| Tests | `test/frontmatter.test.mjs` (47 tests), `test/adapt.test.mjs` (54 tests) |
+| Result | **101/101 tests pass; 0 lint findings across all 25 adapted documents** |
 
 The four root `payload/agents/*.md` files are byte-identical mirrors of a skill-local role file:
 `synthesis_agent`, `research_architect_agent`, and `report_compiler_agent` mirror
@@ -287,7 +287,7 @@ Coverage asserted by the tests:
   `metadata.version` / `last_updated` / `status` / `data_access_level` / `task_type` /
   `related_skills` for all 5 skills; `depends_on`; 13 boolean command flags; 4 agent `tools`
   allowlists.
-- **Adapter (53 tests):** the 5+16+4 surface counts; every adapted document lint-clean, rooted,
+- **Adapter (54 tests):** the 5+16+4 surface counts; every adapted document lint-clean, rooted,
   heading-preserving, fence-preserving, deterministic, and payload-immutable; prelude contents
   (roots, prefix classes, all 16 tool mappings, wrapper, read-only rule); 13 lead-in rewrites;
   41 plugin-root substitutions; `$ARGUMENTS` inline substitution in 3 commands and

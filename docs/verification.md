@@ -6,13 +6,61 @@ Independent verifier record for the DSH port of
 
 > **Status: historical record (v1.0.0 baseline, 2026-10-26).** The output below
 > records the 1.0.0 snapshot (196 tests, 1,203 payload files, 51 PASS / 0 SKIP).
-> Current release is v1.0.5:
-> `node --test test/*.test.mjs` → **214/214**; `node tools/verify-install.mjs` →
-> **46 PASS / 0 FAIL / 3 WARN / 1 SKIP** (the SKIP is upstream-clone parity;
-> set `ARS_UPSTREAM_ROOT` to a pinned checkout for **51 PASS / 0 SKIP**);
-> `node tools/check-payload.mjs` → **0 errors / 4 warnings**; payload
-> **1,199 files / 24,118,122 bytes** after four third-party page mirrors were
-> withheld (see `NOTICE.md`).
+> For the current state see **§0 (2026-10-27)**, which supersedes every count in
+> this document: 224 tests (222 pass / 2 skipped locally), `verify-install`
+> 44 PASS / 0 FAIL / 4 WARN / 2 SKIP, `check-payload` 0 errors / 4 warnings,
+> payload **1,199 files / 24,118,122 bytes** after four third-party page mirrors
+> were withheld (see `NOTICE.md`).
+
+## 0. 2026-10-27 re-verification (v2.0.0 + code-review fixes)
+
+This run re-verifies the repository after the review in
+[`code-review-2026-10-27.md`](code-review-2026-10-27.md) was executed, and is
+the release gate for **2.0.0**. The breaking change is the `ars_status` field
+rename `payload.contract.matches` → `countsMatch`; see `CHANGELOG.md`.
+
+- Host: macOS (`darwin arm64`), Node `v24.x`, Python 3.12 managed venv
+- Plugin root: this checkout; no upstream clone at `../repo` (affects only the
+  clone-parity SKIP below)
+
+| Command | Result |
+|---|---|
+| `node --test test/*.test.mjs` | **224 tests, 222 pass, 0 fail, 2 skipped** |
+| `node tools/verify-install.mjs` | **44 PASS, 0 FAIL, 4 WARN, 2 SKIP** |
+| `node tools/check-payload.mjs` | **0 errors, 4 warnings** (upstream docs references) |
+| `node tools/build-python-wrapper.mjs --check` | up to date |
+| `ARS_REQUIRE_DSH_TOOLS=1 ARS_DSH_TOOLS_MODULE=… node --test test/e2e.test.mjs` | **17/17, 0 skipped** (real DSH validator, `@deepseek-ai/dsh-tools@0.2.1-rc.3`, the desktop runtime's own version) |
+
+The two skips in a bare local run are the real `@deepseek-ai/dsh-tools`
+validator cases (`test/e2e.test.mjs:281,454`). CI installs that package and sets
+`ARS_REQUIRE_DSH_TOOLS=1`, which turns a missing validator into a failure instead
+of a silent skip.
+
+What this run establishes beyond the historical record:
+
+- `config.pythonPath` now governs `ars_script` as well as venv creation: the
+  runtime-state table records `<pluginRoot>\t<envDir>\t<python>` per install, and
+  `bin/ars-python` reads this install's row (`test/env.test.mjs`, `test/tools.test.mjs`).
+- `ars_script` is inspected by the write-scope guard: a Bucket A agent may not run
+  payload scripts, and a declared output (`--out`/`--output`/`--out-dir`/`--dir`/`-o`)
+  that resolves into the plugin's enforcement files is denied for every caller
+  (`test/guard.test.mjs`).
+- A stale env-setup lock (dead owner or older than 10 minutes) is reclaimed
+  instead of blocking `ars_env_setup` forever (`test/env.test.mjs`).
+- `ars_status.webSearch.toolAvailable` awaits the host registry
+  (`test/tools.test.mjs`), and `payload.contract.countsMatch` is named for what it
+  checks (file count and byte count, not content integrity).
+
+**Known upstream baselines (not regressions).** The payload still has 80
+unresolved Markdown references (72 distinct targets), all in upstream `docs/`,
+`examples/`, and `shared/` prose — `check-payload` reports them as warnings by
+design. Upstream also ships a few very large single-file gates (for example
+`payload/scripts/check_audit_artifact_consistency.py`, 2,313 lines); they are
+vendored byte-for-byte and intentionally not refactored here. Finally, the
+payload contains real HTTP clients (`arxiv_client.py`, `openalex_client.py`,
+`crossref_client.py`, `semantic_scholar_client.py`,
+`chinese_literature_client.py`), so `ars_script` can reach the network; the
+write-scope guard checks declared output paths and does not restrict egress.
 
 - Date: 2026-10-26
 - DSH profile: `desktop`; `dsh` CLI `0.2.1-rc.3`

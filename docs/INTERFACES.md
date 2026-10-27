@@ -18,7 +18,6 @@ createPaths(pluginRoot?) -> {
   phaseManifestPath, guardScriptPath, wrapperPath,
   skillFile(skill), skillDirectory(skill), commandFile(file)
 }
-skillDir(paths, skill) -> string
 ```
 
 ## `lib/config.js` (Lead — done)
@@ -150,7 +149,13 @@ PHASE_FENCE_STATUS -> { mode: 'unavailable', reason: string }
 - Faithful port of upstream `scripts/ars_write_scope_guard.py::evaluate_decision`:
   inspected tools, Bash-denied for Bucket A, schema-drift deny, infra protection anchored on
   the plugin root, escape check, phase-glob fence, advisory flags.
-- DSH tool mapping: `write`→Write, `edit`→Edit, `bash`→Bash. `write`/`edit` use `file_path`.
+- DSH tool mapping: `write`→Write, `edit`→Edit, `bash`→Bash, `ars_script`→ArsScript.
+  `write`/`edit` use `file_path`; `ars_script` uses its declared output flags.
+- `ars_script` is inspected as a *declared-output* tool: a Bucket A agent may not run
+  payload scripts at all (same rationale as Bash), and every caller is denied when an
+  `--out`/`--output`/`--out-dir`/`--dir`/`-o` target resolves into the plugin's
+  enforcement files. Positional arguments are not interpreted — this is an
+  infrastructure guard, not a sandbox.
 - `ctx.tools.guard` is synchronous and never supplies an agent type (DSH tool
   executions have no `agent_type`). `evaluateDecision` keeps the phase logic for
   upstream parity; `registerGuard` reports `PHASE_FENCE_STATUS` instead of
@@ -162,7 +167,7 @@ PHASE_FENCE_STATUS -> { mode: 'unavailable', reason: string }
 ## `lib/tools.js` + `lib/status.js` (runtime-tools owns)
 
 ```js
-registerTools(ctx, { paths, config, env, adapter, inventory?, policy?, report? }) -> void
+registerTools(ctx, { paths, config, env, adapter, inventory?, report?, warnings? }) -> void
 buildStatus({ paths, config, env, ctx, agent, adapter, inventory?, report? }) -> Promise<object>
 ```
 
@@ -252,9 +257,10 @@ createIntake({ paths, adapter, inventory }) -> { skill(entry), agentRole(entry),
 
 // lib/registration.js
 createRegistrationReport() -> { warnings, failures, warn(), fail(), snapshot() }
-hostCapabilities(ctx) -> { skills, commands, tools, systemPrompt, missing }
+hostCapabilities(ctx) -> { skills, commands, tools, toolGuard, systemPrompt, missing }
 own(ctx, factory, label?) -> disposer
-collectLint(adapter, report, text, label) -> findings
+registerSurface({ ctx, report, logger?, warnings?, entries, failLabel, effectLabel,
+  prepare, register }) -> { registered, report }
 
 // lib/model-profile.js
 DEEPSEEK_FLASH, MODEL_PROFILE_LABEL

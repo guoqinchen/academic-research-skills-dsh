@@ -28,6 +28,21 @@ if (!token) {
 const root = process.cwd()
 const source = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
 const temp = mkdtempSync(join(tmpdir(), 'ars-github-package-'))
+/** The temp dir holds a token-bearing .npmrc; never leave it behind. */
+const cleanup = () => {
+  try {
+    if (existsSync(temp)) rmSync(temp, { recursive: true, force: true })
+  } catch {
+    /* best effort */
+  }
+}
+process.on('exit', cleanup)
+for (const signal of ['SIGINT', 'SIGTERM', 'SIGHUP']) {
+  process.on(signal, () => {
+    cleanup()
+    process.exit(130)
+  })
+}
 
 try {
   execFileSync('npm', ['pack', '--pack-destination', temp], { cwd: root, stdio: 'inherit' })
@@ -44,7 +59,8 @@ try {
   writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`)
 
   const npmrc = join(temp, '.npmrc')
-  writeFileSync(npmrc, `//npm.pkg.github.com/:_authToken=${token}\nregistry=${REGISTRY}\n`)
+  // 0600: the file carries a write-scoped token and lives in a shared temp dir.
+  writeFileSync(npmrc, `//npm.pkg.github.com/:_authToken=${token}\nregistry=${REGISTRY}\n`, { mode: 0o600 })
   console.log(`publishing ${MIRROR_NAME}@${source.version} to ${REGISTRY}`)
   execFileSync(
     'npm',
@@ -53,5 +69,5 @@ try {
   )
   console.log(`published ${MIRROR_NAME}@${source.version}`)
 } finally {
-  if (existsSync(temp)) rmSync(temp, { recursive: true, force: true })
+  cleanup()
 }

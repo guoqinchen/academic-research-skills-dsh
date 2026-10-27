@@ -23,8 +23,8 @@
  * Node 24 ESM, built-in modules only. Works from any current directory.
  */
 
-import { createHash } from 'node:crypto'
-import { existsSync, lstatSync, readFileSync, readlinkSync, readdirSync, realpathSync, statSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync, realpathSync, statSync } from 'node:fs'
+import { homedir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -49,13 +49,17 @@ import {
   formatBytes,
   parseRequirementLines,
 } from '../lib/payload-contract.js'
-import { PAYLOAD_ROOT, PLUGIN_ROOT, buildInventory, buildReferenceIndex } from './build-payload.mjs'
+import { PAYLOAD_ROOT, PLUGIN_ROOT, buildInventory, buildReferenceIndex, collectPayloadInventory } from './build-payload.mjs'
 
 /** Sibling upstream checkout used for the forbidden build-path scan. */
 const UPSTREAM_ROOT = resolve(PLUGIN_ROOT, '..', 'repo')
 
-/** Absolute build-machine markers that must never appear in payload content. */
-const DEFAULT_FORBIDDEN_MARKERS = Object.freeze([PLUGIN_ROOT, UPSTREAM_ROOT, '/Users/max'])
+/**
+ * Absolute build-machine markers that must never appear in payload content.
+ * The home directory is derived at run time; a hard-coded author path would
+ * make the check vacuous on every other machine.
+ */
+const DEFAULT_FORBIDDEN_MARKERS = Object.freeze([PLUGIN_ROOT, UPSTREAM_ROOT, homedir()])
 
 const REQUIRED_REFERENCE_AREAS = Object.freeze([...SKILL_NAMES, 'commands', 'agents'])
 
@@ -103,15 +107,6 @@ function compareObjects(label, actual, expected, errors, keys = undefined) {
   }
 }
 
-/** Bytewise string comparison (locale-independent). */
-function compareBytes(left, right) {
-  return Buffer.compare(Buffer.from(String(left), 'utf8'), Buffer.from(String(right), 'utf8'))
-}
-
-function sha256Buffer(buffer) {
-  return createHash('sha256').update(buffer).digest('hex')
-}
-
 /**
  * Walk the payload once and derive the deep inventory consumed by
  * `checkPayload`, `verifyPayload`, and `tools/verify-install.mjs`.
@@ -136,67 +131,32 @@ function sha256Buffer(buffer) {
  * }}
  */
 export function payloadInventory({ payloadRoot = PAYLOAD_ROOT, forbiddenMarkers = DEFAULT_FORBIDDEN_MARKERS } = {}) {
-  const files = []
-  const symlinks = []
-  const special = []
-  const unsupported = []
-  const forbiddenHits = []
   const markers = [...forbiddenMarkers]
-  const excluded = new Set(GENERATED_FILES)
-
-  const walk = (absolute, relativePath) => {
-    const entries = readdirSync(absolute, { withFileTypes: true }).sort((left, right) =>
-      compareBytes(left.name, right.name),
-    )
-    for (const entry of entries) {
-      const childAbsolute = join(absolute, entry.name)
-      const childRelative = relativePath === '' ? entry.name : `${relativePath}/${entry.name}`
-      if (relativePath === '' && excluded.has(entry.name)) continue
-      const stats = lstatSync(childAbsolute)
-      if (stats.isSymbolicLink()) {
-        symlinks.push({ path: childRelative, target: readlinkSync(childAbsolute) })
-        continue
+  const forbiddenHits = []
+  // One traversal with the builder's walker: verification adds a content scan,
+  // not a second tree walk.
+  const inventory = collectPayloadInventory(payloadRoot, GENERATED_FILES, {
+    onFile(relativePath, buffer) {
+      if (buffer.length > 2 * 1024 * 1024 || buffer.includes(0)) return
+      const text = buffer.toString('utf8')
+      for (const marker of markers) {
+        if (text.includes(marker)) forbiddenHits.push({ path: relativePath, marker })
       }
-      if (stats.isDirectory()) {
-        walk(childAbsolute, childRelative)
-        continue
-      }
-      if (!stats.isFile()) {
-        special.push(childRelative)
-        unsupported.push({ path: childRelative, reason: 'not a regular file' })
-        continue
-      }
-      const buffer = readFileSync(childAbsolute)
-      if (buffer.length <= 2 * 1024 * 1024 && !buffer.includes(0)) {
-        const text = buffer.toString('utf8')
-        for (const marker of markers) {
-          if (text.includes(marker)) forbiddenHits.push({ path: childRelative, marker })
-        }
-      }
-      files.push({
-        path: childRelative,
-        bytes: buffer.length,
-        mode: stats.mode & 0o777,
-        sha256: sha256Buffer(buffer),
-      })
-    }
-  }
-  if (existsSync(payloadRoot)) walk(payloadRoot, '')
-  files.sort((left, right) => compareBytes(left.path, right.path))
-
-  const inventory = buildInventory(files)
+    },
+  })
+  const built = buildInventory(inventory.files)
   return {
-    files,
-    symlinks,
-    special,
-    unsupported,
+    files: inventory.files,
+    symlinks: inventory.symlinks,
+    special: inventory.unsupported.map((entry) => entry.path),
+    unsupported: inventory.unsupported,
     forbiddenHits,
-    directories: inventory.totals.directories,
-    totals: inventory.totals,
-    pathListSha256: inventory.pathListSha256,
-    contentSha256: inventory.contentSha256,
-    executableFiles: inventory.executableFiles,
-    byTopLevel: inventory.byTopLevel,
+    directories: built.totals.directories,
+    totals: built.totals,
+    pathListSha256: built.pathListSha256,
+    contentSha256: built.contentSha256,
+    executableFiles: built.executableFiles,
+    byTopLevel: built.byTopLevel,
   }
 }
 
@@ -815,7 +775,7 @@ export function verifyPayload({ payloadRoot = PAYLOAD_ROOT, corpus = null } = {}
 
   run('no build-machine absolute paths', () => {
     deepEqualStrict(payload.forbiddenHits, [], 'absolute build paths in payload content')
-    return 'payload content is free of this checkout, the upstream clone, and /Users/max paths'
+    return 'payload content is free of this checkout, the upstream clone, and the current home directory'
   })
 
   run('REFERENCE-INDEX consistency', () => {

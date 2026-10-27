@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: "Upstream ref (tag, branch, or commit); empty = latest release"
+        description: "Upstream ref (tag, branch, or commit); empty = upstream main"
         required: false
         type: string
 
@@ -21,32 +21,43 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Node.js 24
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: "24"
 
+      # The ref is untrusted workflow input: pass it through the environment
+      # (never interpolate `${{ }}` into a script) and validate its shape.
       - name: Resolve upstream ref
         id: ref
         env:
-          GH_TOKEN: ${{ github.token }}
+          INPUT_REF: ${{ inputs.ref }}
         run: |
           set -euo pipefail
-          REF="${{ inputs.ref }}"
-          if [ -z "$REF" ]; then
-            REF="main"
+          REF="${INPUT_REF:-main}"
+          case "$REF" in
+            *[!A-Za-z0-9._/-]*)
+              echo "invalid upstream ref: $REF" >&2
+              exit 2
+              ;;
+          esac
+          if [ "${#REF}" -gt 200 ]; then
+            echo "invalid upstream ref: too long" >&2
+            exit 2
           fi
           echo "ref=$REF" >> "$GITHUB_OUTPUT"
 
       - name: Checkout upstream
+        env:
+          REF: ${{ steps.ref.outputs.ref }}
         run: |
           set -euo pipefail
           UP="$RUNNER_TEMP/upstream"
           git init -q "$UP"
           git -C "$UP" remote add origin https://github.com/Imbad0202/academic-research-skills.git
-          git -C "$UP" fetch --depth 1 origin "${{ steps.ref.outputs.ref }}"
+          git -C "$UP" fetch --depth 1 origin "$REF"
           git -C "$UP" checkout -q FETCH_HEAD
           git -C "$UP" rev-parse HEAD
 

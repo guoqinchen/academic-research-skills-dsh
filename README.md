@@ -69,7 +69,10 @@ because the interpreter wrapper is POSIX `sh`.
 
 The bundle patch inserts one Host row (`academic-research-skills`) that
 registers everything. The row is enabled by default; disable it to switch the
-whole feature off.
+whole feature off. The row requires the profile's `skills`, `commands`, `tools`,
+and `systemPrompt` services: Cordis treats a missing injected service as a hard
+prerequisite, so a profile without one leaves the row inactive rather than
+partially registered.
 
 The bundle is published as `academic-research-skills-dsh` on npm. From a terminal:
 
@@ -143,9 +146,11 @@ base system. The plugin never installs them silently:
    use.
 
 The model is told to run ARS scripts through the plugin's `bin/ars-python`
-wrapper, which resolves `ARS_DSH_VENV` → the runtime-state file (so a custom
-`envDir` works from a model-issued shell too) → the default managed venv →
-`python3`. `ars_script` uses that same wrapper, so tool and shell can never
+wrapper, which resolves `ARS_DSH_VENV` → this install's entry in the
+runtime-state table (so a custom `envDir` **and** `pythonPath` work from a
+model-issued shell too) → the default managed venv → `python3`. The table is
+keyed by plugin root, so two profiles with different settings cannot overwrite
+each other. `ars_script` uses that same wrapper, so tool and shell cannot
 disagree about the interpreter.
 
 ## Configuration
@@ -159,12 +164,12 @@ The plugin row accepts these fields in `cordis.patch.yml` (all optional):
 | `tools` | `true` | Register `ars_status`, `ars_script`, `ars_env_setup`. |
 | `guard` | `true` | Register the write-scope guard. |
 | `guardInfra` | `true` | Protect plugin enforcement files from writes. |
-| `pythonPath` | `null` | Base interpreter used to create the virtualenv or run scripts. |
+| `pythonPath` | `null` | Base interpreter used to create the virtualenv, and the interpreter scripts use when no managed venv exists. Recorded per plugin install, so `ars_script`, `ars_status`, and a model-issued `bash bin/ars-python` agree. |
 | `cacheRoot` | `~/.cache/ars-dsh` | Parent directory for the virtualenv. |
 | `envDir` | `<cacheRoot>/venv` | Managed virtualenv path. |
-| `scriptTimeoutMs` | `120000` | Default timeout for `ars_script`. |
-| `maxScriptOutputBytes` | `200000` | Per-stream output cap for `ars_script`. |
-| `modelProfile` | `deepseek-flash` | Runtime profile label and prelude guidance target. |
+| `scriptTimeoutMs` | `120000` | Default timeout for `ars_script`; clamped to `1..2147483647`. |
+| `maxScriptOutputBytes` | `200000` | Per-stream output cap for `ars_script`; clamped to `4096..8388608`. |
+| `modelProfile` | `deepseek-flash` | Label reported by `ars_status` for the runtime profile. The prelude guidance itself always targets DeepSeek Flash. |
 | `webSearch` | `true` | Include the DeepSeek native `web_search` default in the prelude/announce text. |
 
 ## DeepSeek Harness compatibility layer
@@ -192,6 +197,16 @@ Upstream's `PreToolUse` hook is ported to a DSH `ctx.tools.guard`:
 - **Infrastructure protection** applies to every caller and denies writes to the
   plugin's enforcement files (guard script, phase-scope manifest, agent
   definitions, hook/config files) anchored on the plugin root.
+- **Script output protection**: `ars_script` accepts output flags
+  (`--out`, `--out-dir`, `--output`, `--dir`, `-o`, ...). A declared output that
+  resolves into the plugin's enforcement files is denied for every caller, and a
+  single-phase agent may not run payload scripts at all. Positional arguments are
+  not interpreted, so this is an infrastructure guard, **not a sandbox**: a
+  script can still write wherever its own arguments point. Several payload
+  scripts also make outbound HTTP requests (the arXiv, OpenAlex, Crossref,
+  Semantic Scholar, and Chinese-literature clients), so `ars_script` is a
+  network egress path as well — treat skill text as untrusted input when
+  choosing which script to run.
 - **Phase fencing** keeps upstream `evaluate_decision`'s Bucket A logic for
   parity, but the registered guard never supplies an agent type: DSH tool
   executions have no `agent_type` field and the plugin keeps no role registry.
@@ -204,37 +219,33 @@ Upstream's `PreToolUse` hook is ported to a DSH `ctx.tools.guard`:
 ## Verification
 
 ```sh
-node --test test/*.test.mjs          # 214 tests, all pass
-node tools/verify-install.mjs        # 46 PASS, 0 FAIL, 3 WARN, 1 SKIP*
-node tools/check-payload.mjs         # 0 errors, 4 upstream-doc warnings
+node --test test/*.test.mjs          # unit, integration, and end-to-end suites
+node tools/verify-install.mjs        # package, registration, guard parity, payload, schemas
+node tools/check-payload.mjs         # payload integrity against the pinned digests
 ```
 
-\* The SKIP is upstream-clone parity. Check out the pinned upstream commit as a
-sibling `../repo` to run that check too (51 PASS / 0 SKIP); a bare clone still
-reports 0 FAIL.
+[`docs/verification.md`](docs/verification.md) is the dated record: it holds the
+exact pass/fail/skip counts, the host and toolchain each run used, and the known
+limitations. Those numbers are deliberately **not** repeated here, so this
+README cannot drift from a run. CI runs the same three commands plus the real
+`@deepseek-ai/dsh-tools` schema validator on every push.
 
-Verification (see [`docs/verification.md`](docs/verification.md) for the dated record):
+What the suites establish:
 
-- **214/214** tests pass across frontmatter, adaptation, inventory/reference policy,
-  model profile, environment, guard, tools, registration, payload, and end-to-end suites.
-- **`verify-install`**: 46 PASS / 0 FAIL / 3 WARN / 1 SKIP — package manifest,
-  locales, icon, registration surfaces, raw JSON Schemas validated by the
-  installed DSH validator, command dispatch message shape, guard parity **29/29**
-  decisions and advisory flags against the upstream Python guard, payload
-  provenance and digests, byte- and mode-identical included payload (1,199 files),
-  and import hygiene. Four third-party page mirrors are excluded from the
-  distribution (see [`NOTICE.md`](NOTICE.md)).
-- **Live installed plugin**: all 5 skills, 4 agent-role skills, and 16 `/ars-*`
-  commands report `registered: true` through `ars_status`; the skill catalog
-  shows the same names; a subagent loaded `ars-agent-synthesis` and read both
-  skill-relative and payload-root-relative references; real deterministic gates
-  (`check_acronyms.py`, `check_pipeline_integrity.py`) ran through `ars_script`
-  with the managed Python 3.12 venv; the write-scope guard denied a live write
-  to `cordis.patch.yml`; and the plain `agent.followup` message shape used by
-  command dispatch was delivered as real user turns.
-- **Payload immutability**: `PYTHONDONTWRITEBYTECODE=1` is set in both
-  `lib/env.js` and `bin/ars-python`, so running the Python gates cannot create
-  `__pycache__` inside the read-only payload. If the payload is ever mutated,
+- every upstream document parses, adapts, and lints clean, and the 5 skills, 4
+  agent-role skills, and 16 commands register with the live-host contract;
+- the JS write-scope guard matches the upstream Python `evaluate_decision` on the
+  captured fixtures and a generated decision matrix (decisions and advisory
+  flags);
+- the payload is byte- and mode-identical to the pinned snapshot (1,199 files),
+  with `PROVENANCE.json`, `REFERENCE-INDEX.json`, and the requirements pins
+  re-derived rather than trusted;
+- `ars_status`, `ars_script`, and `ars_env_setup` conform to the DSH raw JSON
+  Schema subset — enforced by a local subset test in CI and, additionally, by the
+  real validator when the package is installed;
+- payload immutability: `PYTHONDONTWRITEBYTECODE=1` is set in both `lib/env.js`
+  and `bin/ars-python`, so running the Python gates cannot create `__pycache__`
+  inside the read-only payload. If the payload is ever mutated,
   `node tools/check-payload.mjs` fails against the pinned digests and
   `node tools/build-payload.mjs` restores the committed snapshot.
 

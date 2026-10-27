@@ -147,6 +147,12 @@ function assertRawSchema(node, path = 'schema') {
 }
 
 async function loadDshTools() {
+  // A local `npm install --no-save @deepseek-ai/dsh-tools` (CI) resolves here.
+  try {
+    return await import('@deepseek-ai/dsh-tools')
+  } catch {
+    /* not installed in this workspace */
+  }
   const candidates = [
     process.env.ARS_DSH_TOOLS_MODULE,
     join(homedir(), '.dsh', 'profiles', 'node_modules', '@deepseek-ai', 'dsh-tools', 'lib', 'index.js'),
@@ -160,6 +166,18 @@ async function loadDshTools() {
     }
   }
   return null
+}
+
+/**
+ * Skip when the real validator is absent — unless the caller demanded it
+ * (`ARS_REQUIRE_DSH_TOOLS=1`, used by CI so a schema regression cannot pass
+ * as a silent skip).
+ */
+function skipWithoutDshTools(t, message) {
+  if (process.env.ARS_REQUIRE_DSH_TOOLS === '1') {
+    assert.fail(`${message} (ARS_REQUIRE_DSH_TOOLS=1 forbids skipping)`)
+  }
+  t.skip(message)
 }
 
 /* -------------------------------------------------------------------------- */
@@ -281,7 +299,7 @@ test('the three tools declare object-rooted schemas with top-level required arra
 test('tool schemas pass the real installed DSH JSON-Schema validator', async (t) => {
   const dshTools = await loadDshTools()
   if (dshTools === null || typeof dshTools.assertSupportedJsonSchema !== 'function') {
-    t.skip('@deepseek-ai/dsh-tools is not reachable from this host')
+    skipWithoutDshTools(t, '@deepseek-ai/dsh-tools is not reachable from this host')
     return
   }
   const { state } = mount(undefined)
@@ -403,7 +421,9 @@ test('ars_status reports the live registration state, payload counts, and Python
   const status = await tool.execute({}, { agent, signal: new AbortController().signal })
 
   assert.equal(status.plugin.name, 'academic-research-skills-dsh')
-  assert.equal(status.plugin.version, '1.0.5')
+  // The manifest is the single source; a release bump must not require a test edit.
+  const packageVersion = JSON.parse(readFileSync(join(PLUGIN_ROOT, 'package.json'), 'utf8')).version
+  assert.equal(status.plugin.version, packageVersion)
   assert.equal(status.plugin.pluginRoot, PLUGIN_ROOT)
   assert.equal(status.plugin.payloadRoot, paths.payloadRoot)
 
@@ -454,7 +474,7 @@ test('ars_status reports the live registration state, payload counts, and Python
 test('ars_status output validates against the real DSH schema validator', async (t) => {
   const dshTools = await loadDshTools()
   if (dshTools === null || typeof dshTools.validateJsonSchemaValue !== 'function') {
-    t.skip('@deepseek-ai/dsh-tools is not reachable from this host')
+    skipWithoutDshTools(t, '@deepseek-ai/dsh-tools is not reachable from this host')
     return
   }
   const { state } = mount(undefined)

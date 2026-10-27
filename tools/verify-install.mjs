@@ -372,7 +372,11 @@ async function verifyEnvironment() {
 function verifyPackage() {
   const manifest = readJson(join(PLUGIN_ROOT, 'package.json'), 'package.json')
   equal(manifest.name, 'academic-research-skills-dsh', 'package name')
-  equal(manifest.version, '1.0.5', 'package version')
+  // Cross-check against the citation metadata instead of a release-time literal:
+  // a bump then edits two files for one fact, and drift is caught here.
+  const citation = readFileSync(join(PLUGIN_ROOT, 'CITATION.cff'), 'utf8')
+  const citationVersion = /^version:\s*(\S+)\s*$/mu.exec(citation)?.[1]
+  equal(manifest.version, citationVersion, 'package version matches CITATION.cff')
   equal(manifest.private, false, 'package private')
   equal(manifest.type, 'module', 'package type')
   equal(manifest.engines?.dsh, '>=0.2.1-rc.3', 'engines.dsh')
