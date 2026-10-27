@@ -21,6 +21,7 @@ import {
   DEFAULT_TOOL_MAP,
   PHASE_FENCE_STATUS,
   evaluateDecision,
+  extractScriptOutputTargets,
   fnmatch,
   manifestKey,
   matchesAny,
@@ -737,4 +738,87 @@ test('registerGuard with guardInfra=false leaves plugin files writable', () => {
     agent: { id: 'main', session: { header: { cwd: ROOTS.ws } } },
   })
   assert.equal(reason, undefined)
+})
+
+/* -------------------------------------------------------------------------- */
+/* ars_script: declared-output inspection                                     */
+/* -------------------------------------------------------------------------- */
+
+test('extractScriptOutputTargets reads flag forms and ignores positional arguments', () => {
+  const args = [
+    'scripts/gate.py',
+    '--out', '/tmp/a.json',
+    '--output=/tmp/b.json',
+    '-o', '/tmp/c.json',
+    '--out-dir', '/tmp/out',
+    '--dry-run',
+    '/tmp/positional.json',
+  ]
+  assert.deepEqual(extractScriptOutputTargets({ args }), [
+    '/tmp/a.json',
+    '/tmp/b.json',
+    '/tmp/c.json',
+    '/tmp/out',
+  ])
+  assert.deepEqual(extractScriptOutputTargets({ args: null }), [])
+  assert.deepEqual(extractScriptOutputTargets(null), [])
+  // A flag with no following value contributes nothing.
+  assert.deepEqual(extractScriptOutputTargets({ args: ['--out'] }), [])
+  assert.deepEqual(extractScriptOutputTargets({ args: ['--out', '--verbose'] }), [])
+})
+
+test('ars_script output targets cannot reach plugin enforcement files', () => {
+  const base = {
+    toolName: 'ars_script',
+    cwd: ROOTS.ws,
+    workspaceRoot: ROOTS.ws,
+    pluginRoot: ROOTS.plugin,
+    manifest: MANIFEST,
+  }
+  const denyInfra = (toolInput) => {
+    const decision = evaluateDecision({ ...base, toolInput })
+    assert.equal(decision.decision, 'deny', JSON.stringify(toolInput))
+    assert.match(decision.reason, /enforcement infrastructure/u)
+  }
+
+  denyInfra({ script: 'scripts/gate.py', args: ['--out', join(ROOTS.plugin, 'lib', 'guard.js')] })
+  denyInfra({ script: 'scripts/gate.py', args: [`--out=${join(ROOTS.plugin, 'package.json')}`] })
+  denyInfra({ script: 'scripts/gate.py', args: ['-o', join(ROOTS.plugin, 'cordis.patch.yml')] })
+
+  // A workspace output and a script with no declared output pass through.
+  const allowed = [
+    { script: 'scripts/gate.py', args: ['--out', join(ROOTS.ws, 'phase3_analysis', 'gate.json')] },
+    { script: 'scripts/gate.py', args: ['--dry-run'] },
+    { script: 'scripts/gate.py' },
+  ]
+  for (const toolInput of allowed) {
+    assert.equal(evaluateDecision({ ...base, toolInput }).decision, 'allow', JSON.stringify(toolInput))
+  }
+
+  // Every caller, including the unconstrained main session, is protected.
+  assert.equal(evaluateDecision({ ...base, toolInput: { script: 's.py', args: ['--out', join(ROOTS.plugin, 'lib', 'x.js')] } }).decision, 'deny')
+  // guardInfra=false is the documented escape hatch.
+  assert.equal(
+    evaluateDecision({
+      ...base,
+      guardInfra: false,
+      toolInput: { script: 's.py', args: ['--out', join(ROOTS.plugin, 'lib', 'x.js')] },
+    }).decision,
+    'allow',
+  )
+})
+
+test('a Bucket A agent may not run payload scripts at all', () => {
+  const decision = evaluateDecision({
+    toolName: 'ars_script',
+    toolInput: { script: 'scripts/gate.py', args: ['--out', join(ROOTS.ws, 'phase2_data', 'x.json')] },
+    agentType: 'synthesis_agent',
+    cwd: ROOTS.ws,
+    workspaceRoot: ROOTS.ws,
+    pluginRoot: ROOTS.plugin,
+    manifest: MANIFEST,
+  })
+  assert.equal(decision.decision, 'deny')
+  assert.equal(decision.script_denied, true)
+  assert.match(decision.reason, /may not run payload scripts/u)
 })
