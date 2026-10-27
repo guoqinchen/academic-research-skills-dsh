@@ -3,3 +3,9 @@ node_modules/
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Local npm credentials and pack output. Publishing writes its token into a
+# temporary .npmrc and `npm pack` leaves a tarball in the working directory;
+# neither may ever be committed.
+.npmrc
+*.tgz
