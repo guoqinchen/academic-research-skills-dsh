@@ -93,6 +93,10 @@ export function createHost({ skills = [], commands = [] } = {}) {
           if (index >= 0) state.guards.splice(index, 1)
         }
       },
+      // DSH exposes `tools.get`; model it as async so callers must await it.
+      async get(name) {
+        return state.tools.get(name)
+      },
     },
     systemPrompt: {
       section(section) {

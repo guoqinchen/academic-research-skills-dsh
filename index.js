@@ -36,7 +36,16 @@ import { registerAnnounce } from './lib/announce.js'
 /** Cordis plugin name (also the plugin row's `name` identity). */
 export const name = 'academic-research-skills'
 
-/** Services this plugin reads; a profile without them leaves the row inactive. */
+/**
+ * Services this plugin reads.
+ *
+ * Cordis treats a missing injected service as "do not activate", so this list
+ * is the row's hard requirement: all four must exist for the row to mount. The
+ * capability checks in `apply` cover the finer-grained cases a service object
+ * can still differ in (for example `tools.register` without `tools.guard`);
+ * they cannot recover from a wholly missing service. See README
+ * "Install" for the profile prerequisite.
+ */
 export const inject = ['skills', 'commands', 'tools', 'systemPrompt']
 
 /**
@@ -100,7 +109,7 @@ export function apply(ctx, rawConfig) {
 
   const host = hostCapabilities(ctx)
   if (config.guard) {
-    if (host.tools) registerGuard(ctx, { paths, config, logger, policy })
+    if (host.toolGuard) registerGuard(ctx, { paths, config })
     else report.fail('guard', 'ctx.tools.guard is unavailable')
   }
   if (config.announce) {
@@ -119,14 +128,13 @@ export function apply(ctx, rawConfig) {
     else report.fail('commands', 'ctx.commands.register is unavailable')
   }
   if (config.tools) {
-    if (!host.tools) report.fail('tools', 'ctx.tools.register/guard is unavailable')
+    if (!host.tools) report.fail('tools', 'ctx.tools.register is unavailable')
     else registerTools(ctx, {
       paths,
       config,
       env,
       adapter,
       inventory,
-      policy,
       report,
       logger,
     })

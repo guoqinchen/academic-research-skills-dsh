@@ -25,6 +25,7 @@ import {
   buildStatus,
 } from '../lib/status.js'
 import { registerTools } from '../lib/tools.js'
+import { createPythonEnv } from '../lib/env.js'
 import { createHost } from './support/host.mjs'
 
 const HERE = fileURLToPath(new URL('.', import.meta.url))
@@ -350,6 +351,23 @@ test('ars_status reports counts, provenance, python readiness, registrations, an
   assertSupportedRawSchema(statusTool.output.schema, 'ars_status.output.schema')
 })
 
+test('ars_status resolves web_search availability from the live tool registry', async () => {
+  const fixture = makeFixture()
+  const { ctx, registered } = makeCtx()
+  registerTools(ctx, { paths: fixture.paths, config: fixture.config, env: makeFakeEnv(fixture.paths) })
+  const statusTool = registered.find((tool) => tool.name === 'ars_status')
+  const agent = { id: 'agent-1', session: { header: { cwd: fixture.root } } }
+
+  // `ctx.tools.get` is async in DSH; an unawaited Promise would be truthy, so
+  // this asserts the await is real (P2-1).
+  const before = await statusTool.execute({}, { agent })
+  assert.equal(before.webSearch.toolAvailable, false)
+
+  ctx.tools.register({ name: 'web_search' })
+  const after = await statusTool.execute({}, { agent })
+  assert.equal(after.webSearch.toolAvailable, true)
+})
+
 test('ars_status degrades without a payload or registries', async () => {
   const root = tempDir('ars-status-empty-')
   const paths = createPaths(root)
@@ -405,6 +423,36 @@ test('ars_script passes literal argv, cwd, and the payload environment', { skip:
   assert.equal(parsed.payload, realpathSync(fixture.paths.payloadRoot))
   assert.equal(parsed.pythonpath.split(':')[0], realpathSync(fixture.paths.payloadRoot))
 })
+
+test('ars_script honors config.pythonPath through the managed wrapper', {
+  skip: process.platform === 'win32' && 'POSIX wrapper only',
+}, async () => {
+  const fixture = makeFixture()
+  const home = tempDir('ars-tools-python-home-')
+  const config = normalizeConfig(
+    { pythonPath: '/usr/bin/false', envDir: join(home, 'missing-venv') },
+    { home },
+  )
+  const realEnv = createPythonEnv({ paths: fixture.paths, config, home })
+  assert.equal(realEnv.pythonExecutable(), '/usr/bin/false', 'status reports the configured interpreter')
+  assert.equal(realEnv.writeRuntimeState(), true)
+
+  const { ctx, registered } = makeCtx()
+  const env = { ...realEnv, scriptEnv: () => ({ ...realEnv.scriptEnv(), HOME: home }) }
+  registerTools(ctx, { paths: fixture.paths, config, env })
+  const scriptTool = registered.find((tool) => tool.name === 'ars_script')
+  const result = await scriptTool.execute({ script: 'scripts/hello.py' }, {})
+
+  // `/usr/bin/false` exits 1 and prints nothing: the wrapper must have selected
+  // the configured pythonPath instead of falling back to python3.
+  assert.equal(result.exitCode, 1)
+  assert.equal(result.stdout, '')
+  assert.equal(result.python, realEnv.wrapperPath())
+
+  const status = await buildStatus({ paths: fixture.paths, config, env: realEnv })
+  assert.equal(status.python.executable, '/usr/bin/false', 'status and ars_script agree on the interpreter')
+})
+
 
 test('ars_script runs shell scripts through bash', { skip: !BASH_AVAILABLE && 'bash not available' }, async () => {
   const fixture = makeFixture()

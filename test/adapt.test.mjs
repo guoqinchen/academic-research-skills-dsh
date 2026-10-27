@@ -57,6 +57,14 @@ function createTestPaths(root) {
     requirementsPath: join(pluginRoot, 'requirements-runtime.txt'),
     provenancePath: join(root, 'PROVENANCE.json'),
     referenceIndexPath: join(root, 'REFERENCE-INDEX.json'),
+    // Same accessor contract as lib/paths.js: consumers must not re-join the
+    // layout, so the fixture supplies the accessors too.
+    phaseManifestPath: join(root, 'scripts', 'ars_phase_scope_manifest.json'),
+    guardScriptPath: join(root, 'scripts', 'ars_write_scope_guard.py'),
+    wrapperPath: join(pluginRoot, 'bin', 'ars-python'),
+    skillFile: (skill) => join(root, skill, 'SKILL.md'),
+    skillDirectory: (skill) => join(root, skill),
+    commandFile: (file) => join(root, 'commands', file),
   }
 }
 
@@ -396,6 +404,22 @@ test('upstream Claude Code tool names are rewritten in prose', () => {
   assert.ok(adapted.includes('`job_kill`'))
   assert.ok(adapted.includes('`subagent` call'))
   assert.ok(adapted.includes('(`read` and `grep` tools only)'))
+})
+
+test('a person named Claude survives adaptation; only product names are rewritten', () => {
+  const synthetic = [
+    'Claude Shannon introduced information theory.',
+    'Use Claude Code for the session and call the Claude API when needed.',
+  ].join('\n')
+  const adapted = adapter.adaptSkillBody(synthetic, { skill: 'deep-research' })
+  assert.ok(
+    adapted.includes('Claude Shannon introduced information theory.'),
+    'a blanket \\bClaude\\b rewrite would corrupt a person\'s name',
+  )
+  assert.ok(adapted.includes('Use DeepSeek Harness for the session'))
+  assert.ok(adapted.includes('call the model API'))
+  // The remaining occurrence is reported for review, never rewritten.
+  assert.ok(adapter.lint('Claude Shannon').some((finding) => finding.startsWith('Claude runtime reference')))
 })
 
 test('upstream documents map the tools they actually mention', () => {
