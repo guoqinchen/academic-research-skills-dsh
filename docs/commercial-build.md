@@ -1,4 +1,10 @@
-# Commercial build
+# Commercial build (archived / optional)
+
+> **Archived / optional (2026-10-28).** The project is source-public and
+> non-commercial. This is **not an offered commercial path**; it is retained only
+> as a technical utility for downstream users who independently obtain the
+> necessary permissions. It does not grant a licence. CC-BY-NC-4.0 is not OSI
+> open source.
 
 The default checkout is a faithful, byte-identical port of the upstream payload
 and is distributed under **CC BY-NC 4.0** (non-commercial). A commercial release

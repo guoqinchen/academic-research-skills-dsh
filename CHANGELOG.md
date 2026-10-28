@@ -4,6 +4,29 @@ All notable changes to the DeepSeek Harness adapter. The bundled upstream
 payload has its own version (`payload/PROVENANCE.json`, upstream `3.24.0`) and
 is not re-versioned by these entries.
 
+## 2.1.1 — 2026-10-28
+
+Project policy: the project is **source-public, non-commercial**. CC-BY-NC-4.0
+is not OSI open source. The adapter author no longer offers or pursues a
+commercial licence; commercial use requires independent permission from the
+upstream author. This is a documentation and policy release; the runtime is
+unchanged from 2.1.0.
+
+### Changed
+
+- README and NOTICE state the non-commercial project policy and stop inviting
+  commercial-licence requests to the adapter author.
+- The licence assessment closes the commercial-licensing, commercial-cleanup,
+  and FTO tracks as historical analysis.
+- The optional commercial-build helper is marked archived/unsupported; it does
+  not grant permission and is not an offered commercial path.
+- Package and citation versions bumped to 2.1.1.
+
+### Verification
+
+Documentation-only change: 235 tests / 233 pass / 2 skipped, check-payload
+0 errors / 4 warnings, verify-install 44 PASS / 0 FAIL / 4 WARN / 2 SKIP.
+
 ## 2.1.0 — 2026-10-28
 
 Upstream payload upgrade to **3.24.0** plus optional Jev tools and release

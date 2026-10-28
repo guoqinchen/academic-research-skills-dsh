@@ -27,11 +27,12 @@ granted; the upstream name is used descriptively to identify the source.
 
 ### Commercial use
 
-The package is licensed under CC-BY-NC-4.0. Commercial use is not permitted
-without a separate written license. For the upstream content, request a license
-from Cheng-I Wu through the upstream repository
-(https://github.com/Imbad0202/academic-research-skills). For the adapter,
-contact Guoqin Chen (https://github.com/guoqinchen).
+The package is licensed under CC-BY-NC-4.0. Project policy (2026-10-28):
+non-commercial only. The adapter author does not offer or pursue a commercial
+license, and this project does not grant one. Commercial use requires permission
+from the upstream author; contact the upstream repository independently
+(https://github.com/Imbad0202/academic-research-skills). CC-BY-NC-4.0 is not
+OSI open source.
 
 The package is provided **as-is**, without warranty of any kind; see Section 5
 of `LICENSE`.
@@ -46,10 +47,7 @@ and STROBE checklists have no documented licence permitting redistribution
 without permission, and the Semantic Scholar API used by the default citation
 gate is licensed for non-commercial research/education only.
 
-A commercial build helper (`tools/build-commercial.mjs`) produces a separate
-copy that skips Semantic Scholar, replaces the COREQ/STROBE derivatives with
-pointers, and paraphrases the IEEE quotations; see `docs/commercial-build.md`.
-It does not grant any permission.
+The optional commercial-build helper is retained as an archived technical utility for downstream users with independent permissions. It is not an offered commercial path and does not grant any permission.
 
 ### Withheld third-party page mirrors
 

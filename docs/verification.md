@@ -7,8 +7,9 @@ Independent verifier record for the DSH port of
 > **Status: historical record (v1.0.0 baseline, 2026-10-26).** The output below
 > records the 1.0.0 snapshot (196 tests, 1,203 payload files, 51 PASS / 0 SKIP).
 > For the current state see **§0 (2026-10-27)**, **§0.1 (2026-10-27,
-> license-compliance update)**, **§0.2 (2026-10-28, 2.0.1)**, and **§0.3
-> (2026-10-28, 2.1.0)**, which supersede every count in this document:
+> license-compliance update)**, **§0.2 (2026-10-28, 2.0.1)**, **§0.3
+> (2026-10-28, 2.1.0)**, and **§0.4 (2026-10-28, 2.1.1)**, which supersede every
+> count in this document:
 > 235 tests (233 pass / 2 skipped locally), `verify-install` 44 PASS / 0 FAIL /
 > 4 WARN / 2 SKIP, `check-payload` 0 errors / 4 warnings, payload **1,199 files /
 > 24,118,582 bytes** after four third-party page mirrors were withheld (see
@@ -150,6 +151,20 @@ change is 10 modified files, 0 added, 0 removed; the payload remains 1,199 files
 The Jev tools are covered by `test/jev-tools.test.mjs` with an injected client;
 CI does not make a live TypeSafe request. `TYPESAFE_API_KEY` is required only
 when running the optional CLI tools.
+
+### 0.4 2026-10-28 non-commercial policy (2.1.1)
+
+This is a documentation-only release. The runtime and payload are unchanged
+from 2.1.0. The project policy is **source-public, non-commercial**; CC-BY-NC-4.0
+is not OSI open source. The commercial-licensing and commercial-cleanup tracks
+are closed; the optional commercial-build helper is archived.
+
+| Command | Result |
+|---|---|
+| `node --test test/*.test.mjs` | **235 tests, 233 pass, 0 fail, 2 skipped** |
+| `node tools/verify-install.mjs` | **44 PASS, 0 FAIL, 4 WARN, 2 SKIP** |
+| `node tools/check-payload.mjs` | **0 errors, 4 warnings** |
+| `node tools/build-python-wrapper.mjs --check` | up to date |
 
 ## 1. Verdict
 

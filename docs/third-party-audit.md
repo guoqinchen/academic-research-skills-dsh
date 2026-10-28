@@ -6,6 +6,7 @@
 references, and the reporting-guideline checklists.
 **Date**: 2026-10-27
 **Update 2026-10-28**: the 3.24.0 delta modified 10 files and added no assets; this audit's 3.23.2 scope remains the baseline.
+**Project policy (2026-10-28)**: source-public, non-commercial; commercial licensing is not pursued. The Commercial column below is historical/out of scope; non-commercial exposure remains the active concern.
 **Method**: file inventory; `pdffonts` / `pdfimages`; `pypdf` 6.21.2 inspection of
 `/FontDescriptor` and the embedded TrueType `OS/2.fsType`; Markdown table quote
 extraction; endpoint scan; the rights-holder terms pages cited below.
@@ -257,14 +258,14 @@ replacement, and the legal review remain external.
   least annually.
 - Re-check the reporting-guideline licences when their versions change.
 
-### Automated build result (2026-10-27)
+### Archived automated build result (2026-10-27)
 
-`node tools/build-commercial.mjs --out /tmp/ars-commercial-test --force --strict`
-produced a copy with 6 patches. The copy passed `check-payload` with 0 errors,
-`verify-install` with 44 PASS / 0 FAIL / 4 WARN / 2 SKIP, and 228 tests (226
-pass, 0 fail, 2 skip); the IEEE quote budget fell from 100 to 42 words. The
-upstream licence, COREQ/STROBE permissions, font replacement, and legal review
-remain external. See [`commercial-build.md`](commercial-build.md).
+The commercial track is closed. The historical helper produced a copy with 6
+patches; it passed `check-payload` with 0 errors, `verify-install` with 44 PASS /
+0 FAIL / 4 WARN / 2 SKIP, and 228 tests (226 pass, 0 fail, 2 skip); the IEEE
+quote budget fell from 100 to 42 words. The helper is retained only as an
+archived technical utility and does not grant permission. See
+[`commercial-build.md`](commercial-build.md).
 
 ## 6. Evidence
 

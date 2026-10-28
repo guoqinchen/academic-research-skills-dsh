@@ -25,12 +25,12 @@ This is an **unofficial** DeepSeek Harness port. It is not affiliated with,
 sponsored by, or endorsed by Cheng-I Wu or the upstream project.
 
 The package is distributed under **CC BY-NC 4.0** (SPDX `CC-BY-NC-4.0`), the
-same license as the upstream content. **Non-commercial use only.** Commercial
-use — including paid distribution, hosted or SaaS offerings, paid consulting or
-editing, and bundling into a commercial product — requires a separate written
-license from the upstream author (Cheng-I Wu); for the adapter, contact its
-author (Guoqin Chen). Open a discussion at the upstream repository or contact
-the author through GitHub to request a commercial license.
+same license as the upstream content. **Non-commercial use only.** This is
+source-public, non-commercial software; it is not OSI open source. Project
+policy (2026-10-28): the maintainer does not offer or pursue a commercial
+license. Commercial use requires permission from the upstream author
+(Cheng-I Wu); this project does not grant it. Do not contact the adapter author
+for a commercial license.
 
 Attribution, as requested upstream:
 
@@ -48,7 +48,7 @@ survive the upstream licence: the default citation gate calls Semantic Scholar,
 whose API licence is non-commercial; and the payload's condensed COREQ/STROBE
 checklists require permission for commercial redistribution.
 
-A commercial build helper is available:
+An optional technical helper remains for downstream users who independently obtain the necessary permissions; it is not an offered commercial path and does not grant a licence:
 [`tools/build-commercial.mjs`](tools/build-commercial.mjs) produces a separate
 copy with Semantic Scholar skipped, COREQ/STROBE replaced by pointers, and IEEE
 quotations paraphrased; see [`docs/commercial-build.md`](docs/commercial-build.md).
