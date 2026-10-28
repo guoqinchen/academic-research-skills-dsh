@@ -28,7 +28,8 @@ normalizeConfig(raw?, {home?}?) -> {
   guard: boolean, guardInfra: boolean,
   pythonPath: string|null, cacheRoot: string, envDir: string,
   scriptTimeoutMs: number, maxScriptOutputBytes: number,
-  modelProfile: 'deepseek-flash', webSearch: boolean
+  modelProfile: 'deepseek-flash', webSearch: boolean,
+  commercialMode: boolean
 }
 ```
 

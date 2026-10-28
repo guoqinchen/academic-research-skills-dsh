@@ -588,6 +588,9 @@ test('registerAnnounce registers one effect-owned section with the ARS inventory
   assert.ok(section.text.includes(corpusRoot))
   assert.ok(section.text.includes('academic research requests'))
   assert.ok(section.text.includes('Commands (16)'))
+  assert.ok(section.text.includes('Cheng-I Wu'), 'announce carries upstream attribution')
+  assert.ok(section.text.includes('not affiliated'), 'announce carries the non-affiliation notice')
+  assert.ok(section.text.includes('Non-commercial use only'), 'announce carries the commercial boundary')
   assert.deepEqual(adapter.lint(section.text), [])
   assert.ok(!section.text.includes('{{'), 'no interpolation markers')
 })
@@ -613,6 +616,46 @@ test('announceText accepts plain command names and objects', () => {
   assert.ok(text.includes('/ars-3w'))
   assert.ok(text.includes('/ars-full'))
   assert.equal((text.match(/\/ars-3w/gu) ?? []).length, 1, 'deduplicated')
+})
+
+test('runtime text carries the upstream attribution and the commercial boundary', () => {
+  const announce = adapter.announceText({ commands: [], agentSkills: [] })
+  for (const needle of [
+    'Cheng-I Wu',
+    'https://github.com/Imbad0202/academic-research-skills',
+    'CC BY-NC 4.0',
+    'not affiliated',
+    'Non-commercial use only',
+  ]) {
+    assert.ok(announce.includes(needle), `announce: ${needle}`)
+  }
+  assert.deepEqual(adapter.lint(announce), [])
+
+  for (const skill of SKILL_NAMES) {
+    const prelude = adapter.prelude({ skill })
+    assert.ok(prelude.includes('Cheng-I Wu'), `${skill}: attribution author`)
+    assert.ok(prelude.includes('https://github.com/Imbad0202/academic-research-skills'), `${skill}: attribution URL`)
+    assert.ok(prelude.includes('CC BY-NC 4.0'), `${skill}: attribution license`)
+    assert.deepEqual(adapter.lint(prelude), [], `${skill}: attribution text lints clean`)
+  }
+})
+
+test('commercialMode adds the commercial boundary to announce and preludes', () => {
+  const commercial = createAdapter({ paths, commercialMode: true })
+  const announce = commercial.announceText({ commands: [], agentSkills: [] })
+  assert.ok(announce.includes('Commercial mode'))
+  assert.ok(announce.includes('does not disable Semantic Scholar'))
+  assert.ok(announce.includes('separate commercial build'))
+  assert.ok(announce.includes('COREQ and STROBE'))
+  assert.deepEqual(commercial.lint(announce), [])
+
+  const prelude = commercial.prelude({ skill: 'deep-research' })
+  assert.ok(prelude.includes('Commercial mode'))
+  assert.ok(prelude.includes('does not disable Semantic Scholar'))
+  assert.ok(prelude.includes('separate commercial build'))
+  assert.deepEqual(commercial.lint(prelude), [])
+
+  assert.ok(!adapter.announceText({ commands: [], agentSkills: [] }).includes('Commercial mode'))
 })
 
 /* -------------------------------------------------------------------------- */

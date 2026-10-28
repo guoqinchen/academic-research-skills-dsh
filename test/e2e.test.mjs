@@ -329,6 +329,8 @@ test('the announce section names the complete ARS inventory and the routing rule
   assert.ok(section.text.includes(paths.payloadRoot))
   assert.ok(section.text.includes('academic research requests'))
   assert.ok(section.text.includes('Route unrelated coding, office, or general requests outside ARS.'))
+  assert.ok(section.text.includes('Cheng-I Wu'), 'announce carries upstream attribution')
+  assert.ok(section.text.includes('Non-commercial use only'), 'announce carries the commercial boundary')
   assert.ok(!section.text.includes('{{'), 'interpolate:false with no template markers')
   assert.deepEqual(adapter.lint(section.text), [])
 })

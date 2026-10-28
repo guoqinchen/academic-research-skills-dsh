@@ -4,6 +4,62 @@ All notable changes to the DeepSeek Harness adapter. The bundled upstream
 payload has its own version (`payload/PROVENANCE.json`, upstream `3.23.2`) and
 is not re-versioned by these entries.
 
+## 2.0.1 — 2026-10-28
+
+License-compliance and documentation update. The upstream payload is unchanged
+(commit `1ec249d`, plugin `3.23.2`). This is the first published release that
+contains the license/commercialization work described below; 2.0.0 did not.
+
+### Added
+
+- Runtime attribution and the non-affiliation/non-commercial notice in the
+  system-prompt announcement and in every adapted document prelude
+  (`lib/adapt.js`). CC BY-NC 4.0 Section 3(a) requires attribution when the
+  material is shared; the text the model reads is now covered, not only
+  `NOTICE.md`.
+- `README.md` "License and commercial use" section with the upstream attribution
+  format, the non-affiliation statement, and the commercial-license path.
+- `NOTICE.md` non-affiliation, commercial-use, and warranty sections.
+- Tests asserting the runtime attribution and commercial boundary
+  (`test/adapt.test.mjs`, `test/e2e.test.mjs`).
+- `docs/third-party-audit.md`: per-item audit of embedded fonts, policy
+  quotations, reporting-guideline checklists, and API terms. It identifies
+  Semantic Scholar, COREQ, STROBE, and the IEEE quotations as commercial
+  blockers, and records the font `fsType` evidence.
+- `commercialMode` config: adds the commercial boundary to the announce section
+  and every prelude, and exports `ARS_COMMERCIAL_MODE=1` to payload scripts.
+- `tools/build-commercial.mjs` and `docs/commercial-build.md`: build a separate
+  commercial-clearance copy that skips Semantic Scholar, replaces the
+  COREQ/STROBE derivatives with pointers, paraphrases IEEE quotations to a
+  configurable budget, adds the missing licence notes, and recomputes the
+  payload hashes. The copy is `private: true`; the script does not grant a
+  licence.
+- `test/config.test.mjs`, plus commercial-mode assertions in
+  `test/adapt.test.mjs` and `test/env.test.mjs`.
+
+### Changed
+
+- `package.json` description marks the package unofficial and non-commercial.
+- Corrected the agent-role count description: 43 unique roles (4 exposed,
+  39 inline), 47 role files including the 4 byte-identical root mirrors.
+- `README.md`, `NOTICE.md`, and `ASSET-LICENSES.md` cross-reference the
+  third-party audit; the npm `files` list now ships the audit, the license
+  assessment, and the commercial-build guide.
+- `README.md` config table documents `commercialMode`.
+
+### Fixed
+
+- Removed a duplicated `- Skill directory:` line from every adapted prelude:
+  `buildPrelude` and `conventionsText` both emitted it; `conventionsText` is now
+  the single owner.
+- Corrected the `commercialMode` notice: the base package does **not** disable
+  Semantic Scholar; only the separate commercial build patches the gate and
+  skips it. The previous wording claimed an exclusion the base package did not
+  perform.
+- Aligned the `tools/build-commercial.mjs` header with its default behavior:
+  IEEE quotations are shortened/paraphrased by default; `--keep-ieee-quotes`
+  preserves the verbatim text, and `--strict` enforces the budget.
+
 ## 2.0.0 — 2026-10-27
 
 Breaking release from the 2026-10-27 code review (`docs/code-review-2026-10-27.md`).

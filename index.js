@@ -87,7 +87,13 @@ export function apply(ctx, rawConfig) {
   const logger = ctx.logger
   const inventory = loadInventory({ paths, logger, report })
   const policy = createReferencePolicy({ paths, inventory })
-  const adapter = createAdapter({ paths, inventory, policy, webSearch: config.webSearch })
+  const adapter = createAdapter({
+    paths,
+    inventory,
+    policy,
+    webSearch: config.webSearch,
+    commercialMode: config.commercialMode,
+  })
   const intake = createIntake({ paths, adapter, inventory })
   const env = createPythonEnv({ paths, config })
   if (process.platform === 'win32') {

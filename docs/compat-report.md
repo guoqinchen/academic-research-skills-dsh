@@ -215,6 +215,7 @@ Ordinary prose is intentionally untouched: `read`, `write`, `skill`, `Grep retry
 The prelude is a compact Markdown block placed before the adapted body. It states:
 
 - the immutable payload root and, when applicable, the skill (or mirror skill) directory;
+- the upstream attribution and CC BY-NC 4.0 notice (Section 3(a) of the license);
 - command identity (`/ars-x`) or agent role name and dispatch semantics;
 - which prefixes are skill-relative and which are payload-root-relative;
 - the `sr-screener` exception for its own `scripts/`;
@@ -229,7 +230,8 @@ The prelude is a compact Markdown block placed before the adapted body. It state
   `ctx.effect(() => ctx.systemPrompt.section({...}))` so uninstall/reinstall disposes it cleanly.
 - `interpolate: false` (static text; no `{{variable}}` interpolation).
 - Content: payload root; the 5 research skills; the 4 agent-role skills; all 16 `/ars-*`
-  commands (`Commands (16): …`); and the routing sentence
+  commands (`Commands (16): …`); the upstream attribution and CC BY-NC 4.0 notice;
+  the non-affiliation/non-commercial notice; and the routing sentence
   “Use these skills only for academic research requests: … Route unrelated coding, office, or
   general requests outside ARS.”
 - Disabled entirely when `config.announce === false` (returns `false`, no effect, no section).

@@ -13,3 +13,4 @@
         guardInfra: true
         modelProfile: deepseek-flash
         webSearch: true
+        commercialMode: false

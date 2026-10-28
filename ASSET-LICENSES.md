@@ -61,3 +61,15 @@ shipped separately.
 
 This inventory is a map, not a legal opinion. If you redistribute the package or
 extract an embedded font, verify the relevant font and page licenses yourself.
+
+## 2026-10-27 audit result
+
+- All 12 showcase PDFs embed font subsets. No standalone font files and no image
+  files ship in `payload/`; `pdfimages -list` reports no images.
+- TrueType `OS/2.fsType`: Times New Roman, Courier New, and STSong = `8`
+  (editable embedding); Source Han Serif TC = `0` (installable). PingFang HK and
+  Latin Modern Mono are CFF fonts with no `fsType`; their font licences govern.
+- Complete PDF redistribution is the intended case. Do not extract font subsets.
+  PingFang HK should be replaced with an OFL font before a commercial release.
+- The per-item audit, including quotation and API findings, is in
+  [`docs/third-party-audit.md`](docs/third-party-audit.md).

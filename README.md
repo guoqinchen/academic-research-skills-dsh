@@ -19,6 +19,41 @@ Everything outside `payload/` is the DSH adapter: skill/command registration,
 DeepSeek Harness tool and path adaptation, deterministic Python tooling, and the
 write-scope guard.
 
+## License and commercial use
+
+This is an **unofficial** DeepSeek Harness port. It is not affiliated with,
+sponsored by, or endorsed by Cheng-I Wu or the upstream project.
+
+The package is distributed under **CC BY-NC 4.0** (SPDX `CC-BY-NC-4.0`), the
+same license as the upstream content. **Non-commercial use only.** Commercial
+use — including paid distribution, hosted or SaaS offerings, paid consulting or
+editing, and bundling into a commercial product — requires a separate written
+license from the upstream author (Cheng-I Wu); for the adapter, contact its
+author (Guoqin Chen). Open a discussion at the upstream repository or contact
+the author through GitHub to request a commercial license.
+
+Attribution, as requested upstream:
+
+> Based on Academic Research Skills by Cheng-I Wu
+> https://github.com/Imbad0202/academic-research-skills
+> Licensed under CC BY-NC 4.0.
+
+The runtime announcement and every adapted prelude repeat this attribution, so
+the credit travels with the text the model reads. See [`NOTICE.md`](NOTICE.md),
+[`LICENSE`](LICENSE), and [`ASSET-LICENSES.md`](ASSET-LICENSES.md).
+
+Third-party content and API terms are audited separately in
+[`docs/third-party-audit.md`](docs/third-party-audit.md). Two constraints
+survive the upstream licence: the default citation gate calls Semantic Scholar,
+whose API licence is non-commercial; and the payload's condensed COREQ/STROBE
+checklists require permission for commercial redistribution.
+
+A commercial build helper is available:
+[`tools/build-commercial.mjs`](tools/build-commercial.mjs) produces a separate
+copy with Semantic Scholar skipped, COREQ/STROBE replaced by pointers, and IEEE
+quotations paraphrased; see [`docs/commercial-build.md`](docs/commercial-build.md).
+It does not grant a licence.
+
 ## Runtime and search defaults
 
 - **Model:** DeepSeek Flash through DeepSeek Harness. No Claude model, Claude
@@ -46,7 +81,7 @@ write-scope guard.
 | Tools | 3 | `ars_status`, `ars_script`, `ars_env_setup` |
 | Hook layers | 2 | Session-start announce section; write-scope guard (infrastructure protection; the upstream phase fence is reported `unavailable` because DSH exposes no agent type) |
 | Modes | 35 | Defined by the upstream skills; see `payload/MODE_REGISTRY.md` |
-| Agent role files | 47 | 4 plugin-exposed agent-role skills + 43 inline role prompts read from the skill directories |
+| Agent role files | 47 | 43 unique roles: 4 plugin-exposed agent-role skills + 39 inline role prompts; the 4 root files are byte-identical mirrors |
 
 The port is faithful: the upstream instructions, mode protocols, templates,
 references, quality gates, Material Passport, citation verification scripts, and
@@ -171,6 +206,7 @@ The plugin row accepts these fields in `cordis.patch.yml` (all optional):
 | `maxScriptOutputBytes` | `200000` | Per-stream output cap for `ars_script`; clamped to `4096..8388608`. |
 | `modelProfile` | `deepseek-flash` | Label reported by `ars_status` for the runtime profile. The prelude guidance itself always targets DeepSeek Flash. |
 | `webSearch` | `true` | Include the DeepSeek native `web_search` default in the prelude/announce text. |
+| `commercialMode` | `false` | Add the commercial boundary to the announce/prelude, export `ARS_COMMERCIAL_MODE=1` to scripts, and let a commercial build skip Semantic Scholar. |
 
 ## DeepSeek Harness compatibility layer
 
@@ -285,7 +321,8 @@ distribution exclusions, rebuild, gates, release).
 - **Claude Code hooks file**: `payload/hooks/hooks.json` is kept for provenance
   but not executed; its two behaviors are replaced by the announce section and
   the tool guard.
-- **Non-commercial license**: CC-BY-NC-4.0 applies to the whole package.
+- **Non-commercial license**: CC-BY-NC-4.0 applies to the whole package; see
+  [License and commercial use](#license-and-commercial-use).
 
 ## Layout
 
@@ -318,6 +355,7 @@ tools/build-payload.mjs  deterministic payload builder
 tools/check-payload.mjs  payload integrity checker
 tools/build-python-wrapper.mjs  wrapper generator/checker
 tools/check-upstream.mjs upstream payload diff checker
+tools/build-commercial.mjs commercial-clearance build (see docs/commercial-build.md)
 test/                    node:test suites
 
 UPGRADING.md             upgrade procedure
@@ -329,7 +367,8 @@ CITATION.cff             citation metadata
 
 Upstream: https://github.com/Imbad0202/academic-research-skills
 (commit `1ec249df98728682dfbbdfb940a658338bfd6f80`, version `3.23.2`),
-by Cheng-I Wu, CC-BY-NC-4.0. The DSH adapter is copyright (c) 2026 Guoqin Chen.
+by Cheng-I Wu, CC-BY-NC-4.0. This is an unofficial port, not affiliated with or
+endorsed by the upstream author. The DSH adapter is copyright (c) 2026 Guoqin Chen.
 See [`NOTICE.md`](NOTICE.md), [`LICENSE`](LICENSE), and [`CITATION.cff`](CITATION.cff),
 plus `payload/PROVENANCE.json`.
 

@@ -19,6 +19,38 @@ mirror: 1,663 upstream files are excluded (the top-level entries and the four
 withheld mirrors are recorded in `payload/PROVENANCE.json`). Attribution,
 license terms, and the upstream notices apply to the included files.
 
+### Non-affiliation
+
+This is an unofficial port. It is not affiliated with, sponsored by, or endorsed
+by Cheng-I Wu or the upstream project. No patent or trademark license is
+granted; the upstream name is used descriptively to identify the source.
+
+### Commercial use
+
+The package is licensed under CC-BY-NC-4.0. Commercial use is not permitted
+without a separate written license. For the upstream content, request a license
+from Cheng-I Wu through the upstream repository
+(https://github.com/Imbad0202/academic-research-skills). For the adapter,
+contact Guoqin Chen (https://github.com/guoqinchen).
+
+The package is provided **as-is**, without warranty of any kind; see Section 5
+of `LICENSE`.
+
+### Third-party content in the payload
+
+The payload also contains condensed reporting-guideline checklists and short
+attributed policy quotations whose rights are separate from the upstream
+CC-BY-NC-4.0 grant. `docs/third-party-audit.md` records each item, its licence,
+and the action required for commercial distribution. In particular, the COREQ
+and STROBE checklists have no documented licence permitting redistribution
+without permission, and the Semantic Scholar API used by the default citation
+gate is licensed for non-commercial research/education only.
+
+A commercial build helper (`tools/build-commercial.mjs`) produces a separate
+copy that skips Semantic Scholar, replaces the COREQ/STROBE derivatives with
+pointers, and paraphrases the IEEE quotations; see `docs/commercial-build.md`.
+It does not grant any permission.
+
 ### Withheld third-party page mirrors
 
 Four full-page HTML mirrors captured for design research are **not distributed**:

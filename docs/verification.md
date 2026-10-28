@@ -6,11 +6,13 @@ Independent verifier record for the DSH port of
 
 > **Status: historical record (v1.0.0 baseline, 2026-10-26).** The output below
 > records the 1.0.0 snapshot (196 tests, 1,203 payload files, 51 PASS / 0 SKIP).
-> For the current state see **§0 (2026-10-27)**, which supersedes every count in
-> this document: 224 tests (222 pass / 2 skipped locally), `verify-install`
-> 44 PASS / 0 FAIL / 4 WARN / 2 SKIP, `check-payload` 0 errors / 4 warnings,
-> payload **1,199 files / 24,118,122 bytes** after four third-party page mirrors
-> were withheld (see `NOTICE.md`).
+> For the current state see **§0 (2026-10-27)**, **§0.1 (2026-10-27,
+> license-compliance update)**, and **§0.2 (2026-10-28, 2.0.1)**, which supersede
+> every count in this document:
+> 228 tests (226 pass / 2 skipped locally), `verify-install` 44 PASS / 0 FAIL /
+> 4 WARN / 2 SKIP, `check-payload` 0 errors / 4 warnings, payload **1,199 files /
+> 24,118,122 bytes** after four third-party page mirrors were withheld (see
+> `NOTICE.md`).
 
 ## 0. 2026-10-27 re-verification (v2.0.0 + code-review fixes)
 
@@ -74,6 +76,62 @@ The verification is read-only with respect to the plugin: it writes only to fres
 OS temp directories (removed before exit), never mutates the payload, installs
 nothing, and performs no network access. Python is always invoked with `-B` and
 `PYTHONDONTWRITEBYTECODE=1`.
+
+### 0.1 2026-10-27 license-compliance update (post-2.0.0)
+
+This run re-verifies the repository after the license-compliance fixes in
+[`license-assessment.md`](license-assessment.md) §8.1 were applied. The upstream
+payload is unchanged.
+
+| Command | Result |
+|---|---|
+| `node --test test/*.test.mjs` | **228 tests, 226 pass, 0 fail, 2 skipped** |
+| `node tools/verify-install.mjs` | **44 PASS, 0 FAIL, 4 WARN, 2 SKIP** |
+| `node tools/check-payload.mjs` | **0 errors, 4 warnings** |
+| `node tools/build-python-wrapper.mjs --check` | up to date |
+
+What changed:
+
+- `lib/adapt.js` exports `UPSTREAM_ATTRIBUTION` and `NON_AFFILIATION_NOTICE`;
+  the announce section and every adapted prelude now carry the upstream
+  attribution, the CC BY-NC 4.0 notice, and the non-commercial boundary.
+- `README.md`, `NOTICE.md`, and `package.json` state the unofficial status, the
+  non-commercial restriction, and the commercial-license path.
+- `test/adapt.test.mjs` and `test/e2e.test.mjs` assert the runtime attribution
+  and commercial boundary. The two skips remain the real
+  `@deepseek-ai/dsh-tools` validator cases.
+- Removed a duplicated `- Skill directory:` line from every prelude; the line is
+  now owned by `conventionsText` alone.
+- Added `commercialMode` (announce/prelude boundary, `ARS_COMMERCIAL_MODE=1`
+  for scripts) with `test/config.test.mjs`, `test/adapt.test.mjs`, and
+  `test/env.test.mjs` coverage.
+- Added `tools/build-commercial.mjs` and `docs/commercial-build.md`. A strict
+  dry run on `/tmp/ars-commercial-test` produced 228 tests (226 pass, 0 fail,
+  2 skip), `check-payload` 0 errors, and an IEEE quote budget of 42 words.
+- Audit and commercial-build tooling: `docs/third-party-audit.md` added;
+  `README.md`, `NOTICE.md`, and `ASSET-LICENSES.md` cross-reference it.
+
+### 0.2 2026-10-28 release fix (2.0.1)
+
+This release publishes the license/commercialization update from §0.1. The
+payload is unchanged.
+
+| Command | Result |
+|---|---|
+| `node --test test/*.test.mjs` | **228 tests, 226 pass, 0 fail, 2 skipped** |
+| `node tools/verify-install.mjs` | **44 PASS, 0 FAIL, 4 WARN, 2 SKIP** |
+| `node tools/check-payload.mjs` | **0 errors, 4 warnings** |
+| `node tools/build-python-wrapper.mjs --check` | up to date |
+| `node tools/build-commercial.mjs --out /tmp/ars-commercial-test --force --strict` | passed; 1,199 files / 24,114,375 bytes; IEEE 42 words; tests 228/226; `check-payload` 0 errors |
+
+Two release-blocking wording corrections are included:
+
+- The `commercialMode` runtime notice now states that the **base package does
+  not disable Semantic Scholar**; only the separate commercial build patches the
+  gate and skips it.
+- The `tools/build-commercial.mjs` header now matches its default behavior:
+  IEEE quotations are shortened/paraphrased by default; `--keep-ieee-quotes`
+  preserves them.
 
 ## 1. Verdict
 

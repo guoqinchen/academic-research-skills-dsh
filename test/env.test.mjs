@@ -189,6 +189,7 @@ test('scriptEnv prepends the payload root and exports the venv when present', ()
     assert.equal(scriptEnv.ARS_PAYLOAD_ROOT, paths.payloadRoot)
     assert.equal(scriptEnv.PYTHONPATH, `${paths.payloadRoot}:${'/existing/path'}`)
     assert.equal(scriptEnv.ARS_DSH_VENV, undefined)
+    assert.equal(scriptEnv.ARS_COMMERCIAL_MODE, undefined)
 
     createFakeVenvPython(config.envDir)
     scriptEnv = env.scriptEnv()
@@ -197,6 +198,14 @@ test('scriptEnv prepends the payload root and exports the venv when present', ()
     if (before === undefined) delete process.env.PYTHONPATH
     else process.env.PYTHONPATH = before
   }
+})
+
+test('scriptEnv exports ARS_COMMERCIAL_MODE=1 in commercial mode', () => {
+  const home = tempDir()
+  const paths = makePaths(home)
+  const config = makeConfig(home, { commercialMode: true })
+  const env = createPythonEnv({ paths, config, run: enoent })
+  assert.equal(env.scriptEnv().ARS_COMMERCIAL_MODE, '1')
 })
 
 test('ensure creates the venv with uv and installs the runtime requirements', async () => {
