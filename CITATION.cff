@@ -9,7 +9,7 @@ authors:
   - family-names: Wu
     given-names: Cheng-I
     website: "https://github.com/Imbad0202"
-version: 2.0.1
+version: 2.1.0
 date-released: 2026-10-28
 license: CC-BY-NC-4.0
 repository-code: "https://github.com/guoqinchen/academic-research-skills-dsh"
@@ -20,7 +20,7 @@ references:
     authors:
       - family-names: Wu
         given-names: Cheng-I
-    version: 3.23.2
+    version: 3.24.0
     repository-code: "https://github.com/Imbad0202/academic-research-skills"
     license: CC-BY-NC-4.0
     doi: 10.5281/zenodo.20696614

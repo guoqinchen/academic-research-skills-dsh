@@ -10,7 +10,7 @@
  * Usage: GITHUB_TOKEN=... node tools/publish-github-package.mjs
  * Requires a token with write:packages (gh auth token works).
  */
-import { execFileSync } from 'node:child_process'
+import { execFileSync, spawnSync } from 'node:child_process'
 import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
@@ -19,6 +19,19 @@ const SCOPE = '@guoqinchen'
 const MIRROR_NAME = `${SCOPE}/academic-research-skills-dsh`
 const REGISTRY = 'https://npm.pkg.github.com'
 const token = process.env.GITHUB_TOKEN || process.env.NODE_AUTH_TOKEN || ''
+
+/** @param {string} npmrc @param {string} version */
+function publishedVersionExists(npmrc, version) {
+  const result = spawnSync(
+    'npm',
+    ['view', `${MIRROR_NAME}@${version}`, 'version', '--registry', REGISTRY, '--userconfig', npmrc],
+    { encoding: 'utf8', env: { ...process.env, NODE_AUTH_TOKEN: token } },
+  )
+  if (result.status === 0) return result.stdout.trim() === version
+  const output = `${result.stdout ?? ''}\n${result.stderr ?? ''}`
+  if (/E404|not found|404/iu.test(output)) return false
+  throw new Error(`could not check whether ${MIRROR_NAME}@${version} exists: ${output.trim().slice(0, 300)}`)
+}
 
 if (!token) {
   console.error('publish-github-package: set GITHUB_TOKEN (or NODE_AUTH_TOKEN) with write:packages')
@@ -61,13 +74,17 @@ try {
   const npmrc = join(temp, '.npmrc')
   // 0600: the file carries a write-scoped token and lives in a shared temp dir.
   writeFileSync(npmrc, `//npm.pkg.github.com/:_authToken=${token}\nregistry=${REGISTRY}\n`, { mode: 0o600 })
-  console.log(`publishing ${MIRROR_NAME}@${source.version} to ${REGISTRY}`)
-  execFileSync(
-    'npm',
-    ['publish', packageDir, '--registry', REGISTRY, '--userconfig', npmrc, '--access', 'public'],
-    { cwd: root, stdio: 'inherit', env: { ...process.env, NODE_AUTH_TOKEN: token } },
-  )
-  console.log(`published ${MIRROR_NAME}@${source.version}`)
+  if (publishedVersionExists(npmrc, source.version)) {
+    console.log(`${MIRROR_NAME}@${source.version} is already published; skipping`)
+  } else {
+    console.log(`publishing ${MIRROR_NAME}@${source.version} to ${REGISTRY}`)
+    execFileSync(
+      'npm',
+      ['publish', packageDir, '--registry', REGISTRY, '--userconfig', npmrc, '--access', 'public'],
+      { cwd: root, stdio: 'inherit', env: { ...process.env, NODE_AUTH_TOKEN: token } },
+    )
+    console.log(`published ${MIRROR_NAME}@${source.version}`)
+  }
 } finally {
   cleanup()
 }

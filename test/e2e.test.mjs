@@ -439,8 +439,8 @@ test('ars_status reports the live registration state, payload counts, and Python
     hooks: 2,
   })
   assert.deepEqual(status.payload.missing, [])
-  assert.equal(status.payload.provenance.upstream.commit, '1ec249df98728682dfbbdfb940a658338bfd6f80')
-  assert.equal(status.payload.provenance.upstream.pluginVersion, '3.23.2')
+  assert.equal(status.payload.provenance.upstream.commit, 'b34c63f828b3535f403079a4f42bc7955da2f64b')
+  assert.equal(status.payload.provenance.upstream.pluginVersion, '3.24.0')
 
   assert.equal(status.registrations.available, true)
   assert.deepEqual(

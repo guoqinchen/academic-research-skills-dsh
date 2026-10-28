@@ -16,8 +16,8 @@ system-prompt announcement.
 | Item | Value |
 |---|---|
 | Upstream repository | `github.com/Imbad0202/academic-research-skills` |
-| Upstream commit | `1ec249df98728682dfbbdfb940a658338bfd6f80` |
-| Upstream plugin version | `3.23.2` (`.claude-plugin/plugin.json`) |
+| Upstream commit | `b34c63f828b3535f403079a4f42bc7955da2f64b` |
+| Upstream plugin version | `3.24.0` (`.claude-plugin/plugin.json`) |
 | Payload | `payload/` — byte-preserving snapshot with `PROVENANCE.json` and `REFERENCE-INDEX.json` |
 | Corpus size | 25 documents, 4,599 lines, 367,109 bytes |
 | Registration surfaces | 5 research skills, 4 agent-role skills, 16 `/ars-*` commands, 1 announcement section |

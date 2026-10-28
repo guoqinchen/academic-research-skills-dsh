@@ -5,7 +5,7 @@ The plugin ships a pinned, byte-preserving snapshot of
 Upgrades are deliberate: fetch one upstream ref, inspect the diff, update the
 pins, rebuild, and re-run the gates.
 
-Current pin: commit `1ec249df98728682dfbbdfb940a658338bfd6f80`, plugin `3.23.2`,
+Current pin: commit `b34c63f828b3535f403079a4f42bc7955da2f64b`, plugin `3.24.0`,
 CC-BY-NC-4.0 (see `lib/payload-contract.js`).
 
 ## 0. Prerequisites

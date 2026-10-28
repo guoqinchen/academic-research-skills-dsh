@@ -356,9 +356,13 @@ tools/check-payload.mjs  payload integrity checker
 tools/build-python-wrapper.mjs  wrapper generator/checker
 tools/check-upstream.mjs upstream payload diff checker
 tools/build-commercial.mjs commercial-clearance build (see docs/commercial-build.md)
+tools/jev-*.mjs          optional TypeSafe/Jev checks (see docs/jev-integrations.md)
+tools/check-release-parity.mjs  npmjs/GitHub Packages version parity
 test/                    node:test suites
 
 UPGRADING.md             upgrade procedure
+docs/jev-integrations.md optional Jev tools and data boundaries
+docs/release-checklist.md release and parity checklist
 ASSET-LICENSES.md        PDF/font asset inventory
 CITATION.cff             citation metadata
 ```
@@ -366,7 +370,7 @@ CITATION.cff             citation metadata
 ## Provenance and license
 
 Upstream: https://github.com/Imbad0202/academic-research-skills
-(commit `1ec249df98728682dfbbdfb940a658338bfd6f80`, version `3.23.2`),
+(commit `b34c63f828b3535f403079a4f42bc7955da2f64b`, version `3.24.0`),
 by Cheng-I Wu, CC-BY-NC-4.0. This is an unofficial port, not affiliated with or
 endorsed by the upstream author. The DSH adapter is copyright (c) 2026 Guoqin Chen.
 See [`NOTICE.md`](NOTICE.md), [`LICENSE`](LICENSE), and [`CITATION.cff`](CITATION.cff),

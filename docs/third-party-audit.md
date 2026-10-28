@@ -5,6 +5,7 @@
 16 PDFs, 4 HTML fixtures, 5 bibliographic API clients, the policy-quotation
 references, and the reporting-guideline checklists.
 **Date**: 2026-10-27
+**Update 2026-10-28**: the 3.24.0 delta modified 10 files and added no assets; this audit's 3.23.2 scope remains the baseline.
 **Method**: file inventory; `pdffonts` / `pdfimages`; `pypdf` 6.21.2 inspection of
 `/FontDescriptor` and the embedded TrueType `OS/2.fsType`; Markdown table quote
 extraction; endpoint scan; the rights-holder terms pages cited below.

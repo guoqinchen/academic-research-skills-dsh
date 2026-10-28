@@ -2,15 +2,15 @@
   "schemaVersion": 1,
   "generatedBy": "academic-research-skills-dsh/payload-builder",
   "toolVersion": "1.0.0",
-  "generatedAt": "2026-10-26T01:10:36.000Z",
+  "generatedAt": "2026-10-27T04:04:24.000Z",
   "generatedAtSource": "git-commit-date",
   "upstream": {
     "repository": "https://github.com/Imbad0202/academic-research-skills",
     "repositoryGit": "https://github.com/Imbad0202/academic-research-skills.git",
-    "commit": "1ec249df98728682dfbbdfb940a658338bfd6f80",
-    "commitDate": "2026-10-26T09:10:36+08:00",
+    "commit": "b34c63f828b3535f403079a4f42bc7955da2f64b",
+    "commitDate": "2026-10-27T12:04:24+08:00",
     "pluginName": "academic-research-skills",
-    "pluginVersion": "3.23.2",
+    "pluginVersion": "3.24.0",
     "license": "CC-BY-NC-4.0",
     "author": "Cheng-I Wu",
     "homepage": "https://github.com/Imbad0202/academic-research-skills",
@@ -59,7 +59,7 @@
       "fileCount": 1199
     },
     "pinned": {
-      "contentSha256": "a7ebfc03ee9f2e0c448a2aaf6101c85580595262c8af61023f132bb007ed2929",
+      "contentSha256": "cb5cdb325d499c39cae4bc857894fa49be99810fdc39b9ffc90ada9636150f1f",
       "pathListSha256": "aaa3cc71648b2b9db916f1c096c228afe94b4daad5a436fd241b6ac6da882e41"
     },
     "excluded": [
@@ -260,7 +260,7 @@
   },
   "totals": {
     "files": 1199,
-    "bytes": 24118122,
+    "bytes": 24118582,
     "directories": 151,
     "modes": {
       "644": 1171,
@@ -268,7 +268,7 @@
     }
   },
   "pathListSha256": "aaa3cc71648b2b9db916f1c096c228afe94b4daad5a436fd241b6ac6da882e41",
-  "contentSha256": "a7ebfc03ee9f2e0c448a2aaf6101c85580595262c8af61023f132bb007ed2929",
+  "contentSha256": "cb5cdb325d499c39cae4bc857894fa49be99810fdc39b9ffc90ada9636150f1f",
   "executableFiles": [
     "hooks/run_guard.sh",
     "scripts/adapters/folder_scan.py",
@@ -331,7 +331,7 @@
       "files": 30,
       "bytes": 671811,
       "pathListSha256": "2f8c8344fdbf776f5b3ec37f46c26451067f617e4bfb7d6cc8882f37607445d2",
-      "contentSha256": "608f4ca6b2aa8505f7a9f7c4c9e8a3603df813d403ae83586ec19ff0e348de68",
+      "contentSha256": "867fcf7d375cf6fab356e9da681ace37aa157b28dcd02e45d95ec90b802cd813",
       "modes": {
         "644": 30
       }
@@ -374,9 +374,9 @@
     },
     "scripts": {
       "files": 642,
-      "bytes": 11879784,
+      "bytes": 11880185,
       "pathListSha256": "2a27683aa52934d5cc1af62628d765cf9aa9a5a2cc14a58abf7918cd819859b6",
-      "contentSha256": "d6da5bc3a12eb05f22fff9e7b903f05b10b132dbea01220eee24efaf4c773615",
+      "contentSha256": "7a6f38efddce0a81a75399e57b59fe0457ffb49b5b0352d8b0ac4564870972b5",
       "modes": {
         "644": 616,
         "755": 26
@@ -396,7 +396,7 @@
       "files": 121,
       "bytes": 4068513,
       "pathListSha256": "e0add06d089b8b76cd594d3223fdbdfac91a2300d9e931c40951ead233adabfa",
-      "contentSha256": "e28c839c5ad36ec012ce159031b8f73d9ddd764897781bea00315be17fc74a29",
+      "contentSha256": "0402b87cb91ada4f99e355eb3ad181277ef7f37a020c319680f5b82f722a625f",
       "modes": {
         "644": 121
       }
@@ -422,9 +422,9 @@
     },
     ".": {
       "files": 9,
-      "bytes": 101115,
+      "bytes": 101174,
       "pathListSha256": "ee9cd83117e90f0107be0ae7b9ea4806bdeb849ba428fc4c9b98cf820006aeb8",
-      "contentSha256": "80c7932357c9d5214639e274bf2676dcb11102c7f49c61b7cf03a5fdd789b51b",
+      "contentSha256": "b3f7ea9503a15d01b9cb85cf6bc650f810ea9f80ee778416b30e6091bd270e85",
       "modes": {
         "644": 9
       }

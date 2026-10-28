@@ -611,7 +611,7 @@ async function verifyRegistration({ dshTools }) {
     deepEqual(violations, [], `ars_status output schema violations: ${JSON.stringify(violations)}`)
   }
   record('registration', 'ars_status live check', 'PASS',
-    '9 skills + 16 commands registered, payload complete, commit 1ec249df, lint clean, Python ' +
+    '9 skills + 16 commands registered, payload complete, commit b34c63f8, lint clean, Python ' +
       `${status.python.ready ? 'ready' : `not ready (${status.python.missing.join(',')})`}`)
 
   const guard = state.guards[0]

@@ -2,16 +2,16 @@
 
 Independent verifier record for the DSH port of
 [`academic-research-skills`](https://github.com/Imbad0202/academic-research-skills)
-(upstream commit `1ec249df98728682dfbbdfb940a658338bfd6f80`, plugin version `3.23.2`).
+(upstream commit `b34c63f828b3535f403079a4f42bc7955da2f64b`, plugin version `3.24.0`).
 
 > **Status: historical record (v1.0.0 baseline, 2026-10-26).** The output below
 > records the 1.0.0 snapshot (196 tests, 1,203 payload files, 51 PASS / 0 SKIP).
 > For the current state see **§0 (2026-10-27)**, **§0.1 (2026-10-27,
-> license-compliance update)**, and **§0.2 (2026-10-28, 2.0.1)**, which supersede
-> every count in this document:
-> 228 tests (226 pass / 2 skipped locally), `verify-install` 44 PASS / 0 FAIL /
+> license-compliance update)**, **§0.2 (2026-10-28, 2.0.1)**, and **§0.3
+> (2026-10-28, 2.1.0)**, which supersede every count in this document:
+> 235 tests (233 pass / 2 skipped locally), `verify-install` 44 PASS / 0 FAIL /
 > 4 WARN / 2 SKIP, `check-payload` 0 errors / 4 warnings, payload **1,199 files /
-> 24,118,122 bytes** after four third-party page mirrors were withheld (see
+> 24,118,582 bytes** after four third-party page mirrors were withheld (see
 > `NOTICE.md`).
 
 ## 0. 2026-10-27 re-verification (v2.0.0 + code-review fixes)
@@ -132,6 +132,24 @@ Two release-blocking wording corrections are included:
 - The `tools/build-commercial.mjs` header now matches its default behavior:
   IEEE quotations are shortened/paraphrased by default; `--keep-ieee-quotes`
   preserves them.
+
+### 0.3 2026-10-28 upstream 3.24.0 + optional Jev tools (2.1.0)
+
+This run is the release gate for **2.1.0**. It upgrades the payload to upstream
+`v3.24.0` (commit `b34c63f8`) and adds the optional Jev tools. The upstream
+change is 10 modified files, 0 added, 0 removed; the payload remains 1,199 files.
+
+| Command | Result |
+|---|---|
+| `node --test test/*.test.mjs` | **235 tests, 233 pass, 0 fail, 2 skipped** |
+| `node tools/verify-install.mjs` | **44 PASS, 0 FAIL, 4 WARN, 2 SKIP** |
+| `node tools/check-payload.mjs` | **0 errors, 4 warnings** |
+| `node tools/build-python-wrapper.mjs --check` | up to date |
+| `node tools/build-commercial.mjs --out /tmp/ars-commercial-324 --force --strict` | 1,199 files / 24,114,835 bytes; IEEE 42 words; strict pass |
+
+The Jev tools are covered by `test/jev-tools.test.mjs` with an injected client;
+CI does not make a live TypeSafe request. `TYPESAFE_API_KEY` is required only
+when running the optional CLI tools.
 
 ## 1. Verdict
 

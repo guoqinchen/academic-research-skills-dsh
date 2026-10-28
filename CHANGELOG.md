@@ -1,8 +1,44 @@
 # Changelog
 
 All notable changes to the DeepSeek Harness adapter. The bundled upstream
-payload has its own version (`payload/PROVENANCE.json`, upstream `3.23.2`) and
+payload has its own version (`payload/PROVENANCE.json`, upstream `3.24.0`) and
 is not re-versioned by these entries.
+
+## 2.1.0 — 2026-10-28
+
+Upstream payload upgrade to **3.24.0** plus optional Jev tools and release
+hardening. No new skill and no change to the host bundle's zero-dependency
+runtime.
+
+### Added
+
+- Payload rebuilt from upstream `v3.24.0` (commit `b34c63f8`), 1,199 files /
+  24,118,582 bytes. The upstream changes include advisory panel-reference and
+  panel-claim checks, a one-process guard launcher, and integrity-rule repairs.
+- Optional `tools/jev-citation-support.mjs`: per-claim/source Noul check with
+  code-owned `supported` / `unsupported` / `unresolved` thresholds.
+- Optional `tools/jev-screening-assist.mjs`: per-criterion Noul judgments with
+  an advisory-only summary; it never emits the final include/exclude decision.
+- Optional `tools/jev-upstream-triage.mjs`: classifies upstream changes as
+  `runtime_contract`, `documentation`, `test_only`, or `unknown`.
+- `tools/check-release-parity.mjs` and `docs/release-checklist.md`.
+- `docs/jev-integrations.md` documenting data sent, keys, thresholds, and the
+  advisory boundary.
+
+### Changed
+
+- `tools/publish-github-package.mjs` skips an already-published version instead
+  of failing a duplicate release run.
+- Upstream pins, `PAYLOAD_SNAPSHOT`, `BY_TOP_LEVEL`, and current-version
+  references updated for 3.24.0 / 2.1.0.
+
+### Verification
+
+- `npm test`: see `docs/verification.md` §0.3.
+- `check-payload`: 0 errors / 4 upstream-doc warnings.
+- `verify-install`: 44 PASS / 0 FAIL / 4 WARN / 2 SKIP.
+- Jev tools are covered by `test/jev-tools.test.mjs` with an injected client;
+  CI does not call the live API.
 
 ## 2.0.1 — 2026-10-28
 

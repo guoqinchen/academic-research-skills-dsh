@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "generatedBy": "academic-research-skills-dsh/payload-builder",
   "toolVersion": "1.0.0",
-  "generatedAt": "2026-10-26T01:10:36.000Z",
+  "generatedAt": "2026-10-27T04:04:24.000Z",
   "upstream": {
-    "commit": "1ec249df98728682dfbbdfb940a658338bfd6f80",
-    "pluginVersion": "3.23.2"
+    "commit": "b34c63f828b3535f403079a4f42bc7955da2f64b",
+    "pluginVersion": "3.24.0"
   },
   "conventions": {
     "own-skill-relative": "Inside a skill directory, references/, agents/, templates/ and examples/ resolve against that skill directory. scripts/ also resolves there when the skill ships its own scripts/ directory (sr-screener).",
