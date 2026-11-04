@@ -6,6 +6,7 @@
 references, and the reporting-guideline checklists.
 **Date**: 2026-10-27
 **Update 2026-10-28**: the 3.24.0 delta modified 10 files and added no assets; this audit's 3.23.2 scope remains the baseline.
+**Update 2026-11-04**: the 3.24.1 delta (tag `v3.24.1`, commit `bcbcac39`) added no third-party assets; the four withheld page mirrors and the asset inventory are unchanged.
 **Project policy (2026-10-28)**: source-public, non-commercial; commercial licensing is not pursued. The Commercial column below is historical/out of scope; non-commercial exposure remains the active concern.
 **Method**: file inventory; `pdffonts` / `pdfimages`; `pypdf` 6.21.2 inspection of
 `/FontDescriptor` and the embedded TrueType `OS/2.fsType`; Markdown table quote

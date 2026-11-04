@@ -55,7 +55,7 @@ const MANIFEST = REFERENCE_AVAILABLE
   : {
       version: 1,
       agents: {
-        synthesis_agent: { bucket: 'A', allowed_write_globs: ['phase3_*/**'] },
+        'synthesis-agent': { bucket: 'A', allowed_write_globs: ['phase3_*/**'] },
         research_question_agent: { bucket: 'A', allowed_write_globs: ['phase1_*/**'] },
         bibliography_agent: { bucket: 'A', allowed_write_globs: ['phase2_*/**'] },
         draft_writer_agent: { bucket: 'A', allowed_write_globs: ['phase4_*/**', 'phase6_*/**'] },
@@ -530,9 +530,11 @@ test('normalizeTarget canonicalizes before containment checks', () => {
   assert.equal(normalizeTarget(ws, ws, ws).escaped, true, 'workspace root itself is not writable')
 })
 
-test('manifestKey strips only this plugin namespace', () => {
-  assert.equal(manifestKey('academic-research-skills:synthesis_agent'), 'synthesis_agent')
-  assert.equal(manifestKey('synthesis_agent'), 'synthesis_agent')
+test('manifestKey strips this plugin namespace and maps legacy names', () => {
+  assert.equal(manifestKey('academic-research-skills:synthesis_agent'), 'synthesis-agent')
+  assert.equal(manifestKey('synthesis_agent'), 'synthesis-agent')
+  assert.equal(manifestKey('academic-research-skills:synthesis-agent'), 'synthesis-agent')
+  assert.equal(manifestKey('synthesis-agent'), 'synthesis-agent')
   assert.equal(manifestKey('other-plugin:synthesis_agent'), 'other-plugin:synthesis_agent')
   assert.equal(manifestKey(undefined), undefined)
 })

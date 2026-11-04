@@ -596,7 +596,7 @@ async function verifyRegistration({ dshTools }) {
     equal(entry.registered, true, `status reports ${entry.name} registered`)
   }
   deepEqual(status.payload.missing, [], 'status payload.missing')
-  deepEqual(status.payload.counts, { skills: 5, commands: 16, agentDefinitions: 4, agentFiles: 47, scripts: 642, hooks: 2 }, 'status payload counts')
+  deepEqual(status.payload.counts, { skills: 5, commands: 16, agentDefinitions: 4, agentFiles: 47, scripts: 644, hooks: 2 }, 'status payload counts')
   deepEqual(status.lint.warnings, [], 'status lint warnings')
   ensure(status.model !== null && typeof status.model === 'object', 'status.model object')
   ensure(status.webSearch !== null && typeof status.webSearch === 'object', 'status.webSearch object')
@@ -611,7 +611,7 @@ async function verifyRegistration({ dshTools }) {
     deepEqual(violations, [], `ars_status output schema violations: ${JSON.stringify(violations)}`)
   }
   record('registration', 'ars_status live check', 'PASS',
-    '9 skills + 16 commands registered, payload complete, commit b34c63f8, lint clean, Python ' +
+    '9 skills + 16 commands registered, payload complete, commit bcbcac39, lint clean, Python ' +
       `${status.python.ready ? 'ready' : `not ready (${status.python.missing.join(',')})`}`)
 
   const guard = state.guards[0]

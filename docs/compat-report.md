@@ -9,6 +9,13 @@
 > search path, and reports the guard phase fence honestly as `unavailable`
 > (DSH exposes no agent type; the hypothetical role registry was removed).
 
+> **2026-11-04 upstream 3.24.1 note.** The corpus measurements in §2 were taken
+> against 3.24.0. The 3.24.1 payload changes 44 files; the
+> `academic-research-skills:` count remains 15 (15), and the agent namespace now
+> accepts both `screening-reviewer-agent` and the legacy
+> `screening_reviewer_agent`. Re-run the §2 count before relying on the other
+> rows for 3.24.1.
+
 Scope: the 25 upstream Markdown documents that the DSH port registers or feeds to the model
 (5 × `<skill>/SKILL.md`, 16 × `commands/*.md`, 4 × top-level `agents/*.md`), plus the short
 system-prompt announcement.
@@ -16,8 +23,8 @@ system-prompt announcement.
 | Item | Value |
 |---|---|
 | Upstream repository | `github.com/Imbad0202/academic-research-skills` |
-| Upstream commit | `b34c63f828b3535f403079a4f42bc7955da2f64b` |
-| Upstream plugin version | `3.24.0` (`.claude-plugin/plugin.json`) |
+| Upstream commit | `bcbcac39e874744cda98d6ddaaf765cfd00b0e40` |
+| Upstream plugin version | `3.24.1` (`.claude-plugin/plugin.json`) |
 | Payload | `payload/` — byte-preserving snapshot with `PROVENANCE.json` and `REFERENCE-INDEX.json` |
 | Corpus size | 25 documents, 4,599 lines, 367,109 bytes |
 | Registration surfaces | 5 research skills, 4 agent-role skills, 16 `/ars-*` commands, 1 announcement section |
@@ -79,7 +86,7 @@ counts are after adaptation and are also covered by `lint`.
 | # | Upstream token / pattern | Occurrences (files) | Rule applied | Residual |
 |---|---|---:|---|---:|
 | 1 | `${CLAUDE_PLUGIN_ROOT}` | 41 (13) | absolute `paths.payloadRoot` (no trailing slash) | 0 |
-| 2 | `academic-research-skills:` | 15 (15) | strip plugin namespace; skill names stay plain; `screening_reviewer_agent` → `ars-agent-screening-reviewer` | 0 |
+| 2 | `academic-research-skills:` | 15 (15) | strip plugin namespace; skill names stay plain; both `screening-reviewer-agent` and legacy `screening_reviewer_agent` → `ars-agent-screening-reviewer` | 0 |
 | 3 | `Skill tool` | 13 (13) | `` `skill` tool `` | 0 |
 | 4 | ``skill: "academic-research-skills:x"`` lead-in | 13 (13) | `` `name: "x"` `` + “as its arguments” sentence rewritten (the DSH tool has no arguments parameter) | 0 |
 | 5 | `$ARGUMENTS` | 3 (3) | raw user input, verbatim (inline substitution) | 0 |
@@ -152,6 +159,7 @@ First invoke the `skill` tool with `name: "deep-research"`. After the skill load
 ```
 
 Agent namespace (`sr-screener/SKILL.md:146`, `agents/screening_reviewer_agent.md:86`):
+both `academic-research-skills:screening-reviewer-agent` and the legacy
 `academic-research-skills:screening_reviewer_agent` → `ars-agent-screening-reviewer` (the DSH
 agent-role skill registered from `payload/agents/screening_reviewer_agent.md`).
 

@@ -1,8 +1,36 @@
 # Changelog
 
 All notable changes to the DeepSeek Harness adapter. The bundled upstream
-payload has its own version (`payload/PROVENANCE.json`, upstream `3.24.0`) and
+payload has its own version (`payload/PROVENANCE.json`, upstream `3.24.1`) and
 is not re-versioned by these entries.
+
+## 2.1.2 — 2026-11-04
+
+Upstream payload upgrade to **3.24.1** plus the weekly-check policy change. No
+new skill, command, or agent; the registered surface is unchanged.
+
+### Changed
+
+- Payload rebuilt from upstream tag `v3.24.1` (commit `bcbcac39`), 1,201 files /
+  24,159,244 bytes. Upstream changes: reviewer card confirmation, claude.ai /
+  Claude Desktop install repairs, hyphenated plugin-agent names, and a Brazilian
+  Portuguese README (excluded from the payload).
+- The port accepts both the hyphenated plugin-agent names and the legacy
+  underscore names; the write-scope guard maps legacy names to the current
+  manifest keys.
+- Upstream 3.24.1 removed the `skills/` symlinks; the payload contract no longer
+  expects refused symlinks.
+- The scheduled upstream check now resolves the latest GitHub Release tag,
+  keeps the manual `ref` override, and fails loudly instead of falling back to
+  `main` (see `UPGRADING.md`).
+- `package.json` and `CITATION.cff` are versioned 2.1.2.
+
+### Verification
+
+239 tests / 239 pass / 0 fail / 0 skipped; `verify-install` 51 PASS / 0 FAIL /
+3 WARN / 0 SKIP; `check-payload` 0 errors / 4 warnings; `check-upstream` clean at
+`v3.24.1`; `build-python-wrapper --check` up to date. See
+`docs/verification.md` §0.5.
 
 ## 2.1.1 — 2026-10-28
 

@@ -86,7 +86,7 @@ function makeFixture() {
   }
   write(
     join(paths.scriptsRoot, 'ars_phase_scope_manifest.json'),
-    JSON.stringify({ version: 1, agents: { synthesis_agent: { allowed_write_globs: ['phase3_*/**'] }, bibliography_agent: { allowed_write_globs: ['phase2_*/**'] } } }),
+    JSON.stringify({ version: 1, agents: { 'synthesis-agent': { allowed_write_globs: ['phase3_*/**'] }, bibliography_agent: { allowed_write_globs: ['phase2_*/**'] } } }),
   )
   write(join(paths.scriptsRoot, 'ars_write_scope_guard.py'), '# guard\n')
 

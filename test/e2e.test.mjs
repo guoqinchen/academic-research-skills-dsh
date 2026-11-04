@@ -260,7 +260,7 @@ test('the three tools declare object-rooted schemas with top-level required arra
             plugin: { name: 'x', version: '1', pluginRoot: '/p', payloadRoot: '/p/payload' },
             payload: {
               present: true,
-              counts: { skills: 5, commands: 16, agentDefinitions: 4, agentFiles: 47, scripts: 642, hooks: 2 },
+              counts: { skills: 5, commands: 16, agentDefinitions: 4, agentFiles: 47, scripts: 644, hooks: 2 },
               provenance: null,
               missing: [],
             },
@@ -435,12 +435,12 @@ test('ars_status reports the live registration state, payload counts, and Python
     commands: 16,
     agentDefinitions: 4,
     agentFiles: 47,
-    scripts: 642,
+    scripts: 644,
     hooks: 2,
   })
   assert.deepEqual(status.payload.missing, [])
-  assert.equal(status.payload.provenance.upstream.commit, 'b34c63f828b3535f403079a4f42bc7955da2f64b')
-  assert.equal(status.payload.provenance.upstream.pluginVersion, '3.24.0')
+  assert.equal(status.payload.provenance.upstream.commit, 'bcbcac39e874744cda98d6ddaaf765cfd00b0e40')
+  assert.equal(status.payload.provenance.upstream.pluginVersion, '3.24.1')
 
   assert.equal(status.registrations.available, true)
   assert.deepEqual(

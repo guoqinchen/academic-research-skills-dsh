@@ -77,10 +77,10 @@ const adapter = createAdapter({ paths })
  * resolve inside that skill directory (Lead's reference audit).
  */
 const AGENT_MIRROR = Object.freeze({
-  synthesis_agent: 'deep-research',
-  research_architect_agent: 'deep-research',
-  report_compiler_agent: 'deep-research',
-  screening_reviewer_agent: 'sr-screener',
+  'synthesis-agent': 'deep-research',
+  'research-architect-agent': 'deep-research',
+  'report-compiler-agent': 'deep-research',
+  'screening-reviewer-agent': 'sr-screener',
 })
 
 function listDocuments(root) {
@@ -373,9 +373,17 @@ test('no adapted document keeps the plugin namespace', () => {
   for (const document of documents) {
     const { text, parsed } = adaptDocument(document)
     assert.ok(!text.includes('academic-research-skills:'), `${document.name}: namespace removed`)
-    if (parsed.body.includes('academic-research-skills:screening_reviewer_agent')) {
+    if (parsed.body.includes('academic-research-skills:screening-reviewer-agent')) {
       assert.ok(text.includes('`ars-agent-screening-reviewer`'), `${document.name}: agent namespace mapped to its DSH agent-role skill`)
     }
+  }
+})
+
+test('both the current hyphenated and legacy underscore agent names map to DSH agent skills', () => {
+  for (const name of ['screening-reviewer-agent', 'screening_reviewer_agent']) {
+    const text = adapter.adaptSkillBody(`academic-research-skills:${name}`, { skill: 'sr-screener' })
+    assert.ok(text.includes('ars-agent-screening-reviewer'), `${name}: mapped to the DSH agent-role skill`)
+    assert.ok(!text.includes('academic-research-skills:'), `${name}: namespace removed`)
   }
 })
 
@@ -582,7 +590,7 @@ test('registerAnnounce registers one effect-owned section with the ARS inventory
   assert.equal(section.order, 40)
   assert.equal(section.interpolate, false)
   for (const skill of SKILL_NAMES) assert.ok(section.text.includes(`\`${skill}\``), `announce names ${skill}`)
-  for (const skill of Object.values(AGENT_NAME_TO_SKILL)) assert.ok(section.text.includes(`\`${skill}\``), `announce names ${skill}`)
+  for (const skill of new Set(Object.values(AGENT_NAME_TO_SKILL))) assert.ok(section.text.includes(`\`${skill}\``), `announce names ${skill}`)
   assert.equal(listCommandNames(paths).length, 16)
   for (const command of listCommandNames(paths)) assert.ok(section.text.includes(`/${command}`), `announce names /${command}`)
   assert.ok(section.text.includes(corpusRoot))

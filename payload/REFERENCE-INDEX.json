@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "generatedBy": "academic-research-skills-dsh/payload-builder",
   "toolVersion": "1.0.0",
-  "generatedAt": "2026-10-27T04:04:24.000Z",
+  "generatedAt": "2026-11-02T02:34:13.000Z",
   "upstream": {
-    "commit": "b34c63f828b3535f403079a4f42bc7955da2f64b",
-    "pluginVersion": "3.24.0"
+    "commit": "bcbcac39e874744cda98d6ddaaf765cfd00b0e40",
+    "pluginVersion": "3.24.1"
   },
   "conventions": {
     "own-skill-relative": "Inside a skill directory, references/, agents/, templates/ and examples/ resolve against that skill directory. scripts/ also resolves there when the skill ships its own scripts/ directory (sr-screener).",
@@ -44,7 +44,7 @@
   },
   "summary": {
     "filesScanned": 412,
-    "matches": 4357,
+    "matches": 4360,
     "references": 2686,
     "skippedDirectoryOrEmpty": 217,
     "resolved": 2556,
@@ -1321,7 +1321,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 369,
+      "line": 371,
       "raw": "academic-paper-reviewer/references/top_journals_by_field.md",
       "reference": "academic-paper-reviewer/references/top_journals_by_field.md",
       "resolved": "academic-paper-reviewer/references/top_journals_by_field.md",
@@ -1334,7 +1334,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 29,
+      "line": 31,
       "raw": "academic-pipeline/references/ai_research_failure_modes.md",
       "reference": "academic-pipeline/references/ai_research_failure_modes.md",
       "resolved": "academic-pipeline/references/ai_research_failure_modes.md",
@@ -1347,7 +1347,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 49,
+      "line": 51,
       "raw": "docs/ARCHITECTURE.md",
       "reference": "docs/ARCHITECTURE.md",
       "resolved": "docs/ARCHITECTURE.md",
@@ -1360,7 +1360,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 62,
+      "line": 64,
       "raw": "docs/CONTROL_AVAILABILITY.md",
       "reference": "docs/CONTROL_AVAILABILITY.md",
       "resolved": "docs/CONTROL_AVAILABILITY.md",
@@ -1373,7 +1373,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 75,
+      "line": 77,
       "raw": "docs/DATA_FLOWS.md",
       "reference": "docs/DATA_FLOWS.md",
       "resolved": "docs/DATA_FLOWS.md",
@@ -1386,7 +1386,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 91,
+      "line": 93,
       "raw": "docs/PERFORMANCE.md",
       "reference": "docs/PERFORMANCE.md",
       "resolved": "docs/PERFORMANCE.md",
@@ -1399,7 +1399,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 77,
+      "line": 79,
       "raw": "docs/RISK_REGISTER.md",
       "reference": "docs/RISK_REGISTER.md",
       "resolved": "docs/RISK_REGISTER.md",
@@ -1412,7 +1412,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 60,
+      "line": 21,
       "raw": "docs/SETUP.md",
       "reference": "docs/SETUP.md",
       "resolved": "docs/SETUP.md",
@@ -1420,12 +1420,12 @@
       "convention": "payload-root-relative",
       "classification": "file",
       "inCode": false,
-      "count": 6
+      "count": 7
     },
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 129,
+      "line": 131,
       "raw": "examples/showcase/full_paper_apa7.pdf",
       "reference": "examples/showcase/full_paper_apa7.pdf",
       "resolved": "examples/showcase/full_paper_apa7.pdf",
@@ -1438,7 +1438,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 130,
+      "line": 132,
       "raw": "examples/showcase/full_paper_zh_apa7.pdf",
       "reference": "examples/showcase/full_paper_zh_apa7.pdf",
       "resolved": "examples/showcase/full_paper_zh_apa7.pdf",
@@ -1451,7 +1451,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 131,
+      "line": 133,
       "raw": "examples/showcase/integrity_report_stage2.5.pdf",
       "reference": "examples/showcase/integrity_report_stage2.5.pdf",
       "resolved": "examples/showcase/integrity_report_stage2.5.pdf",
@@ -1464,7 +1464,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 132,
+      "line": 134,
       "raw": "examples/showcase/integrity_report_stage4.5.pdf",
       "reference": "examples/showcase/integrity_report_stage4.5.pdf",
       "resolved": "examples/showcase/integrity_report_stage4.5.pdf",
@@ -1477,7 +1477,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 137,
+      "line": 139,
       "raw": "examples/showcase/post_publication_audit_2026-03-09.pdf",
       "reference": "examples/showcase/post_publication_audit_2026-03-09.pdf",
       "resolved": "examples/showcase/post_publication_audit_2026-03-09.pdf",
@@ -1490,7 +1490,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 136,
+      "line": 138,
       "raw": "examples/showcase/response_to_reviewers_r2.pdf",
       "reference": "examples/showcase/response_to_reviewers_r2.pdf",
       "resolved": "examples/showcase/response_to_reviewers_r2.pdf",
@@ -1503,7 +1503,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 133,
+      "line": 135,
       "raw": "examples/showcase/stage3_review_report.pdf",
       "reference": "examples/showcase/stage3_review_report.pdf",
       "resolved": "examples/showcase/stage3_review_report.pdf",
@@ -1516,7 +1516,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 135,
+      "line": 137,
       "raw": "examples/showcase/stage3_review_report_r2.pdf",
       "reference": "examples/showcase/stage3_review_report_r2.pdf",
       "resolved": "examples/showcase/stage3_review_report_r2.pdf",
@@ -1529,7 +1529,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 134,
+      "line": 136,
       "raw": "examples/showcase/stage3prime_rereview_report.pdf",
       "reference": "examples/showcase/stage3prime_rereview_report.pdf",
       "resolved": "examples/showcase/stage3prime_rereview_report.pdf",
@@ -1542,7 +1542,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 107,
+      "line": 109,
       "raw": "scripts/check_data_access_level.py",
       "reference": "scripts/check_data_access_level.py",
       "resolved": "scripts/check_data_access_level.py",
@@ -1555,7 +1555,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 112,
+      "line": 114,
       "raw": "scripts/cross_model_handoff.py",
       "reference": "scripts/cross_model_handoff.py",
       "resolved": "scripts/cross_model_handoff.py",
@@ -1568,7 +1568,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 110,
+      "line": 112,
       "raw": "shared/artifact_reproducibility_pattern.md",
       "reference": "shared/artifact_reproducibility_pattern.md",
       "resolved": "shared/artifact_reproducibility_pattern.md",
@@ -1581,7 +1581,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 109,
+      "line": 111,
       "raw": "shared/benchmark_report_pattern.md",
       "reference": "shared/benchmark_report_pattern.md",
       "resolved": "shared/benchmark_report_pattern.md",
@@ -1594,7 +1594,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 112,
+      "line": 114,
       "raw": "shared/cross_model_verification.md",
       "reference": "shared/cross_model_verification.md",
       "resolved": "shared/cross_model_verification.md",
@@ -1607,7 +1607,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 107,
+      "line": 109,
       "raw": "shared/ground_truth_isolation_pattern.md",
       "reference": "shared/ground_truth_isolation_pattern.md",
       "resolved": "shared/ground_truth_isolation_pattern.md",
@@ -1620,7 +1620,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 113,
+      "line": 115,
       "raw": "shared/handoff_schemas.md",
       "reference": "shared/handoff_schemas.md",
       "resolved": "shared/handoff_schemas.md",
@@ -1633,7 +1633,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 111,
+      "line": 113,
       "raw": "shared/model_tiering.md",
       "reference": "shared/model_tiering.md",
       "resolved": "shared/model_tiering.md",
@@ -1646,7 +1646,7 @@
     {
       "file": "README.md",
       "area": "(root)",
-      "line": 300,
+      "line": 302,
       "raw": "sr-screener/SKILL.md",
       "reference": "sr-screener/SKILL.md",
       "resolved": "sr-screener/SKILL.md",
@@ -1672,7 +1672,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 421,
+      "line": 424,
       "raw": "agents/devils_advocate_reviewer_agent.md",
       "reference": "agents/devils_advocate_reviewer_agent.md",
       "resolved": "academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md",
@@ -1685,7 +1685,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 419,
+      "line": 422,
       "raw": "agents/domain_reviewer_agent.md",
       "reference": "agents/domain_reviewer_agent.md",
       "resolved": "academic-paper-reviewer/agents/domain_reviewer_agent.md",
@@ -1698,7 +1698,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 232,
+      "line": 235,
       "raw": "agents/editorial_synthesizer_agent.md",
       "reference": "agents/editorial_synthesizer_agent.md",
       "resolved": "academic-paper-reviewer/agents/editorial_synthesizer_agent.md",
@@ -1711,7 +1711,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 417,
+      "line": 420,
       "raw": "agents/eic_agent.md",
       "reference": "agents/eic_agent.md",
       "resolved": "academic-paper-reviewer/agents/eic_agent.md",
@@ -1724,7 +1724,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 416,
+      "line": 419,
       "raw": "agents/field_analyst_agent.md",
       "reference": "agents/field_analyst_agent.md",
       "resolved": "academic-paper-reviewer/agents/field_analyst_agent.md",
@@ -1737,7 +1737,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 418,
+      "line": 421,
       "raw": "agents/methodology_reviewer_agent.md",
       "reference": "agents/methodology_reviewer_agent.md",
       "resolved": "academic-paper-reviewer/agents/methodology_reviewer_agent.md",
@@ -1750,7 +1750,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 420,
+      "line": 423,
       "raw": "agents/perspective_reviewer_agent.md",
       "reference": "agents/perspective_reviewer_agent.md",
       "resolved": "academic-paper-reviewer/agents/perspective_reviewer_agent.md",
@@ -1776,7 +1776,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 238,
+      "line": 241,
       "raw": "docs/DATA_FLOWS.md",
       "reference": "docs/DATA_FLOWS.md",
       "resolved": "docs/DATA_FLOWS.md",
@@ -1789,7 +1789,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 289,
+      "line": 292,
       "raw": "docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md",
       "reference": "docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md",
       "resolved": "docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md",
@@ -1802,7 +1802,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 460,
+      "line": 463,
       "raw": "examples/hei_paper_review_example.md",
       "reference": "examples/hei_paper_review_example.md",
       "resolved": "academic-paper-reviewer/examples/hei_paper_review_example.md",
@@ -1815,7 +1815,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 461,
+      "line": 464,
       "raw": "examples/interdisciplinary_review_example.md",
       "reference": "examples/interdisciplinary_review_example.md",
       "resolved": "academic-paper-reviewer/examples/interdisciplinary_review_example.md",
@@ -1828,7 +1828,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 352,
+      "line": 355,
       "raw": "references/calibration_mode_protocol.md",
       "reference": "references/calibration_mode_protocol.md",
       "resolved": "academic-paper-reviewer/references/calibration_mode_protocol.md",
@@ -1841,7 +1841,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 442,
+      "line": 445,
       "raw": "references/changelog.md",
       "reference": "references/changelog.md",
       "resolved": "academic-paper-reviewer/references/changelog.md",
@@ -1854,7 +1854,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 374,
+      "line": 377,
       "raw": "references/editorial_decision_standards.md",
       "reference": "references/editorial_decision_standards.md",
       "resolved": "academic-paper-reviewer/references/editorial_decision_standards.md",
@@ -1867,7 +1867,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 344,
+      "line": 347,
       "raw": "references/guided_mode_protocol.md",
       "reference": "references/guided_mode_protocol.md",
       "resolved": "academic-paper-reviewer/references/guided_mode_protocol.md",
@@ -1880,7 +1880,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 408,
+      "line": 411,
       "raw": "references/integration_guide.md",
       "reference": "references/integration_guide.md",
       "resolved": "academic-paper-reviewer/references/integration_guide.md",
@@ -1893,7 +1893,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 434,
+      "line": 437,
       "raw": "references/quality_rubrics.md",
       "reference": "references/quality_rubrics.md",
       "resolved": "academic-paper-reviewer/references/quality_rubrics.md",
@@ -1906,7 +1906,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 234,
+      "line": 222,
       "raw": "references/re_review_mode_protocol.md",
       "reference": "references/re_review_mode_protocol.md",
       "resolved": "academic-paper-reviewer/references/re_review_mode_protocol.md",
@@ -1914,12 +1914,12 @@
       "convention": "own-skill-relative",
       "classification": "file",
       "inCode": false,
-      "count": 4
+      "count": 5
     },
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 430,
+      "line": 433,
       "raw": "references/review_criteria_framework.md",
       "reference": "references/review_criteria_framework.md",
       "resolved": "academic-paper-reviewer/references/review_criteria_framework.md",
@@ -1932,7 +1932,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 439,
+      "line": 442,
       "raw": "references/review_panel_provenance_protocol.md",
       "reference": "references/review_panel_provenance_protocol.md",
       "resolved": "academic-paper-reviewer/references/review_panel_provenance_protocol.md",
@@ -1945,7 +1945,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 435,
+      "line": 438,
       "raw": "references/review_quality_thinking.md",
       "reference": "references/review_quality_thinking.md",
       "resolved": "academic-paper-reviewer/references/review_quality_thinking.md",
@@ -1958,7 +1958,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 440,
+      "line": 443,
       "raw": "references/reviewer_sprint_prompt_source.md",
       "reference": "references/reviewer_sprint_prompt_source.md",
       "resolved": "academic-paper-reviewer/references/reviewer_sprint_prompt_source.md",
@@ -1971,7 +1971,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 232,
+      "line": 235,
       "raw": "references/sprint_contract_protocol.md",
       "reference": "references/sprint_contract_protocol.md",
       "resolved": "academic-paper-reviewer/references/sprint_contract_protocol.md",
@@ -1984,7 +1984,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 433,
+      "line": 436,
       "raw": "references/statistical_reporting_standards.md",
       "reference": "references/statistical_reporting_standards.md",
       "resolved": "academic-paper-reviewer/references/statistical_reporting_standards.md",
@@ -1997,7 +1997,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 431,
+      "line": 434,
       "raw": "references/top_journals_by_field.md",
       "reference": "references/top_journals_by_field.md",
       "resolved": "academic-paper-reviewer/references/top_journals_by_field.md",
@@ -2010,7 +2010,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 244,
+      "line": 247,
       "raw": "scripts/audit_panel_claims.py",
       "reference": "scripts/audit_panel_claims.py",
       "resolved": "scripts/audit_panel_claims.py",
@@ -2023,7 +2023,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 232,
+      "line": 235,
       "raw": "scripts/check_acronyms.py",
       "reference": "scripts/check_acronyms.py",
       "resolved": "scripts/check_acronyms.py",
@@ -2036,7 +2036,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 232,
+      "line": 235,
       "raw": "scripts/check_panel_synthesis.py",
       "reference": "scripts/check_panel_synthesis.py",
       "resolved": "scripts/check_panel_synthesis.py",
@@ -2049,7 +2049,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 518,
+      "line": 521,
       "raw": "scripts/check_phase_conformance.py",
       "reference": "scripts/check_phase_conformance.py",
       "resolved": "scripts/check_phase_conformance.py",
@@ -2062,7 +2062,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 297,
+      "line": 300,
       "raw": "scripts/check_pipeline_integrity.py",
       "reference": "scripts/check_pipeline_integrity.py",
       "resolved": "scripts/check_pipeline_integrity.py",
@@ -2075,7 +2075,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 517,
+      "line": 520,
       "raw": "scripts/check_sprint_contract.py",
       "reference": "scripts/check_sprint_contract.py",
       "resolved": "scripts/check_sprint_contract.py",
@@ -2088,7 +2088,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 380,
+      "line": 383,
       "raw": "scripts/review_panel_provenance.py",
       "reference": "scripts/review_panel_provenance.py",
       "resolved": "scripts/review_panel_provenance.py",
@@ -2101,7 +2101,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 238,
+      "line": 241,
       "raw": "scripts/verify_panel_recommendations.py",
       "reference": "scripts/verify_panel_recommendations.py",
       "resolved": "scripts/verify_panel_recommendations.py",
@@ -2114,7 +2114,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 521,
+      "line": 524,
       "raw": "shared/contracts/reviewer/full.json",
       "reference": "shared/contracts/reviewer/full.json",
       "resolved": "shared/contracts/reviewer/full.json",
@@ -2127,7 +2127,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 521,
+      "line": 524,
       "raw": "shared/contracts/reviewer/methodology_focus.json",
       "reference": "shared/contracts/reviewer/methodology_focus.json",
       "resolved": "shared/contracts/reviewer/methodology_focus.json",
@@ -2140,7 +2140,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 378,
+      "line": 381,
       "raw": "shared/cross_model_verification.md",
       "reference": "shared/cross_model_verification.md",
       "resolved": "shared/cross_model_verification.md",
@@ -2179,7 +2179,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 527,
+      "line": 530,
       "raw": "shared/model_tiering.md",
       "reference": "shared/model_tiering.md",
       "resolved": "shared/model_tiering.md",
@@ -2205,7 +2205,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 254,
+      "line": 257,
       "raw": "shared/references/review_criteria_consumer_protocol.md",
       "reference": "shared/references/review_criteria_consumer_protocol.md",
       "resolved": "shared/references/review_criteria_consumer_protocol.md",
@@ -2231,7 +2231,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 517,
+      "line": 520,
       "raw": "shared/sprint_contract.schema.json",
       "reference": "shared/sprint_contract.schema.json",
       "resolved": "shared/sprint_contract.schema.json",
@@ -2244,7 +2244,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 373,
+      "line": 376,
       "raw": "templates/editorial_decision_template.md",
       "reference": "templates/editorial_decision_template.md",
       "resolved": "academic-paper-reviewer/templates/editorial_decision_template.md",
@@ -2257,7 +2257,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 358,
+      "line": 361,
       "raw": "templates/peer_review_report_template.md",
       "reference": "templates/peer_review_report_template.md",
       "resolved": "academic-paper-reviewer/templates/peer_review_report_template.md",
@@ -2270,7 +2270,7 @@
     {
       "file": "academic-paper-reviewer/SKILL.md",
       "area": "academic-paper-reviewer",
-      "line": 452,
+      "line": 455,
       "raw": "templates/revision_response_template.md",
       "reference": "templates/revision_response_template.md",
       "resolved": "academic-paper-reviewer/templates/revision_response_template.md",
@@ -6638,15 +6638,15 @@
     {
       "file": "academic-pipeline/agents/pipeline_orchestrator_agent.md",
       "area": "academic-pipeline",
-      "line": 866,
+      "line": 136,
       "raw": "academic-paper-reviewer/SKILL.md",
       "reference": "academic-paper-reviewer/SKILL.md",
       "resolved": "academic-paper-reviewer/SKILL.md",
       "exists": true,
       "convention": "payload-root-relative",
       "classification": "file",
-      "inCode": true,
-      "count": 1
+      "inCode": false,
+      "count": 2
     },
     {
       "file": "academic-pipeline/agents/pipeline_orchestrator_agent.md",
@@ -12449,7 +12449,7 @@
     {
       "file": "docs/CONTROL_AVAILABILITY.md",
       "area": "docs",
-      "line": 134,
+      "line": 135,
       "raw": "scripts/check_routing_core_sync.py",
       "reference": "scripts/check_routing_core_sync.py",
       "resolved": "scripts/check_routing_core_sync.py",
@@ -12462,7 +12462,7 @@
     {
       "file": "docs/CONTROL_AVAILABILITY.md",
       "area": "docs",
-      "line": 80,
+      "line": 81,
       "raw": "scripts/check_tools_allowlist.py",
       "reference": "scripts/check_tools_allowlist.py",
       "resolved": "scripts/check_tools_allowlist.py",
@@ -12475,7 +12475,7 @@
     {
       "file": "docs/CONTROL_AVAILABILITY.md",
       "area": "docs",
-      "line": 90,
+      "line": 91,
       "raw": "scripts/run_ledger.py",
       "reference": "scripts/run_ledger.py",
       "resolved": "scripts/run_ledger.py",
@@ -12488,7 +12488,7 @@
     {
       "file": "docs/CONTROL_AVAILABILITY.md",
       "area": "docs",
-      "line": 58,
+      "line": 59,
       "raw": "shared/contracts/degradation_registry.json",
       "reference": "shared/contracts/degradation_registry.json",
       "resolved": "shared/contracts/degradation_registry.json",
@@ -12501,7 +12501,7 @@
     {
       "file": "docs/CONTROL_AVAILABILITY.md",
       "area": "docs",
-      "line": 96,
+      "line": 97,
       "raw": "shared/cross_model_verification.md",
       "reference": "shared/cross_model_verification.md",
       "resolved": "shared/cross_model_verification.md",
@@ -12514,7 +12514,7 @@
     {
       "file": "docs/CONTROL_AVAILABILITY.md",
       "area": "docs",
-      "line": 115,
+      "line": 116,
       "raw": "shared/references/routing_core.md",
       "reference": "shared/references/routing_core.md",
       "resolved": "shared/references/routing_core.md",
@@ -12527,7 +12527,7 @@
     {
       "file": "docs/CONTROL_AVAILABILITY.md",
       "area": "docs",
-      "line": 139,
+      "line": 140,
       "raw": "sr-screener/agents/screening_reviewer_agent.md",
       "reference": "sr-screener/agents/screening_reviewer_agent.md",
       "resolved": "sr-screener/agents/screening_reviewer_agent.md",
@@ -13567,7 +13567,7 @@
     {
       "file": "docs/SETUP.md",
       "area": "docs",
-      "line": 457,
+      "line": 494,
       "raw": "MODE_REGISTRY.md",
       "reference": "MODE_REGISTRY.md",
       "resolved": "MODE_REGISTRY.md",
@@ -13840,7 +13840,7 @@
     {
       "file": "docs/SETUP.md",
       "area": "docs",
-      "line": 332,
+      "line": 356,
       "raw": "sr-screener/agents/screening_reviewer_agent.md",
       "reference": "sr-screener/agents/screening_reviewer_agent.md",
       "resolved": "sr-screener/agents/screening_reviewer_agent.md",
@@ -13853,7 +13853,7 @@
     {
       "file": "docs/SETUP.md",
       "area": "docs",
-      "line": 332,
+      "line": 356,
       "raw": "sr-screener/references/orchestration.md",
       "reference": "sr-screener/references/orchestration.md",
       "resolved": "sr-screener/references/orchestration.md",
@@ -13866,7 +13866,7 @@
     {
       "file": "docs/SETUP.zh-TW.md",
       "area": "docs",
-      "line": 453,
+      "line": 490,
       "raw": "MODE_REGISTRY.md",
       "reference": "MODE_REGISTRY.md",
       "resolved": "MODE_REGISTRY.md",
@@ -14139,7 +14139,7 @@
     {
       "file": "docs/SETUP.zh-TW.md",
       "area": "docs",
-      "line": 328,
+      "line": 352,
       "raw": "sr-screener/agents/screening_reviewer_agent.md",
       "reference": "sr-screener/agents/screening_reviewer_agent.md",
       "resolved": "sr-screener/agents/screening_reviewer_agent.md",
@@ -14152,7 +14152,7 @@
     {
       "file": "docs/SETUP.zh-TW.md",
       "area": "docs",
-      "line": 328,
+      "line": 352,
       "raw": "sr-screener/references/orchestration.md",
       "reference": "sr-screener/references/orchestration.md",
       "resolved": "sr-screener/references/orchestration.md",
@@ -35979,7 +35979,7 @@
     {
       "file": "sr-screener/references/orchestration.md",
       "area": "sr-screener",
-      "line": 93,
+      "line": 99,
       "raw": "agents/protocol_architect_agent.md",
       "reference": "agents/protocol_architect_agent.md",
       "resolved": "sr-screener/agents/protocol_architect_agent.md",
@@ -35992,7 +35992,7 @@
     {
       "file": "sr-screener/references/orchestration.md",
       "area": "sr-screener",
-      "line": 57,
+      "line": 63,
       "raw": "references/reviewer_roles.md",
       "reference": "references/reviewer_roles.md",
       "resolved": "sr-screener/references/reviewer_roles.md",
@@ -36018,7 +36018,7 @@
     {
       "file": "sr-screener/references/orchestration.md",
       "area": "sr-screener",
-      "line": 39,
+      "line": 45,
       "raw": "templates/prompts.md",
       "reference": "templates/prompts.md",
       "resolved": "sr-screener/templates/prompts.md",

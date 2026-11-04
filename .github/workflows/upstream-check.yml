@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: "Upstream ref (tag, branch, or commit); empty = upstream main"
+        description: "Upstream ref (tag, branch, or commit); empty = latest GitHub Release tag"
         required: false
         type: string
 
@@ -34,9 +34,17 @@ jobs:
         id: ref
         env:
           INPUT_REF: ${{ inputs.ref }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          REF="${INPUT_REF:-main}"
+          REF="${INPUT_REF:-}"
+          if [ -z "$REF" ]; then
+            REF="$(gh api repos/Imbad0202/academic-research-skills/releases/latest --jq .tag_name)"
+          fi
+          if [ -z "$REF" ]; then
+            echo "no latest release resolved and no ref input" >&2
+            exit 2
+          fi
           case "$REF" in
             *[!A-Za-z0-9._/-]*)
               echo "invalid upstream ref: $REF" >&2
@@ -47,6 +55,7 @@ jobs:
             echo "invalid upstream ref: too long" >&2
             exit 2
           fi
+          echo "resolved upstream ref: $REF" >&2
           echo "ref=$REF" >> "$GITHUB_OUTPUT"
 
       - name: Checkout upstream

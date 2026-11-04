@@ -212,13 +212,13 @@ test('the four agent-role skills resolve bare references against their mirror sk
   registerSurface(host)
 
   const expected = [
-    ['ars-agent-synthesis', 'synthesis_agent', 'deep-research'],
-    ['ars-agent-research-architect', 'research_architect_agent', 'deep-research'],
-    ['ars-agent-report-compiler', 'report_compiler_agent', 'deep-research'],
-    ['ars-agent-screening-reviewer', 'screening_reviewer_agent', 'sr-screener'],
+    ['ars-agent-synthesis', 'synthesis-agent', 'synthesis_agent', 'deep-research'],
+    ['ars-agent-research-architect', 'research-architect-agent', 'research_architect_agent', 'deep-research'],
+    ['ars-agent-report-compiler', 'report-compiler-agent', 'report_compiler_agent', 'deep-research'],
+    ['ars-agent-screening-reviewer', 'screening-reviewer-agent', 'screening_reviewer_agent', 'sr-screener'],
   ]
 
-  for (const [name, agentType, mirror] of expected) {
+  for (const [name, agentType, fileStem, mirror] of expected) {
     const definition = host.state.skills.get(name)
     assert.ok(definition, `${name} was not registered`)
     assert.equal(definition.name, name)
@@ -228,7 +228,7 @@ test('the four agent-role skills resolve bare references against their mirror sk
     assert.deepEqual(definition.invocation, { modelInvocable: true, userInvocable: false })
     assert.equal(definition.metadata.arsAgentType, agentType)
     assert.equal(definition.metadata.arsMirrorSkill, mirror)
-    assert.equal(definition.metadata.arsUpstreamFile, `agents/${agentType}.md`)
+    assert.equal(definition.metadata.arsUpstreamFile, `agents/${fileStem}.md`)
     assert.equal(typeof definition.metadata.arsTools, 'string')
     assert.ok(definition.metadata.arsTools.length > 0, `${name}: upstream tools allowlist preserved`)
 

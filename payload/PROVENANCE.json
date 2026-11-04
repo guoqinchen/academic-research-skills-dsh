@@ -2,15 +2,15 @@
   "schemaVersion": 1,
   "generatedBy": "academic-research-skills-dsh/payload-builder",
   "toolVersion": "1.0.0",
-  "generatedAt": "2026-10-27T04:04:24.000Z",
+  "generatedAt": "2026-11-02T02:34:13.000Z",
   "generatedAtSource": "git-commit-date",
   "upstream": {
     "repository": "https://github.com/Imbad0202/academic-research-skills",
     "repositoryGit": "https://github.com/Imbad0202/academic-research-skills.git",
-    "commit": "b34c63f828b3535f403079a4f42bc7955da2f64b",
-    "commitDate": "2026-10-27T12:04:24+08:00",
+    "commit": "bcbcac39e874744cda98d6ddaaf765cfd00b0e40",
+    "commitDate": "2026-11-02T10:34:13+08:00",
     "pluginName": "academic-research-skills",
-    "pluginVersion": "3.24.0",
+    "pluginVersion": "3.24.1",
     "license": "CC-BY-NC-4.0",
     "author": "Cheng-I Wu",
     "homepage": "https://github.com/Imbad0202/academic-research-skills",
@@ -56,11 +56,11 @@
         "THIRD_PARTY.md",
         ".command-invariants.toml"
       ],
-      "fileCount": 1199
+      "fileCount": 1201
     },
     "pinned": {
-      "contentSha256": "cb5cdb325d499c39cae4bc857894fa49be99810fdc39b9ffc90ada9636150f1f",
-      "pathListSha256": "aaa3cc71648b2b9db916f1c096c228afe94b4daad5a436fd241b6ac6da882e41"
+      "contentSha256": "78a5900e677f2a273ec4d50f86d14fa2fee0dda205373bcf29399944d5ce0a4b",
+      "pathListSha256": "982b05aa1fb14bb51f280cccd08d68c9ecfafb4050e04cdc9bb4681d661ef8e1"
     },
     "excluded": [
       {
@@ -130,6 +130,11 @@
       },
       {
         "path": "README.ko-KR.md",
+        "kind": "file",
+        "reason": "localized README excluded; only the English README.md is bundled"
+      },
+      {
+        "path": "README.pt-BR.md",
         "kind": "file",
         "reason": "localized README excluded; only the English README.md is bundled"
       },
@@ -219,56 +224,25 @@
         "reason": "upstream optional opt-in dependency for a non-runtime classifier worker"
       },
       {
-        "path": "skills",
-        "kind": "directory",
-        "reason": "symlink-only aliases for the five top-level skill directories; symlinks are refused"
-      },
-      {
         "path": "tests",
         "kind": "directory",
         "reason": "test suite, not runtime content"
       }
     ],
-    "symlinksRefused": [
-      {
-        "path": "skills/academic-paper",
-        "target": "../academic-paper",
-        "reason": "symlink refused; the target top-level skill directory is copied directly"
-      },
-      {
-        "path": "skills/academic-paper-reviewer",
-        "target": "../academic-paper-reviewer",
-        "reason": "symlink refused; the target top-level skill directory is copied directly"
-      },
-      {
-        "path": "skills/academic-pipeline",
-        "target": "../academic-pipeline",
-        "reason": "symlink refused; the target top-level skill directory is copied directly"
-      },
-      {
-        "path": "skills/deep-research",
-        "target": "../deep-research",
-        "reason": "symlink refused; the target top-level skill directory is copied directly"
-      },
-      {
-        "path": "skills/sr-screener",
-        "target": "../sr-screener",
-        "reason": "symlink refused; the target top-level skill directory is copied directly"
-      }
-    ],
+    "symlinksRefused": [],
     "generatedArtifactsSkipped": []
   },
   "totals": {
-    "files": 1199,
-    "bytes": 24118582,
+    "files": 1201,
+    "bytes": 24159244,
     "directories": 151,
     "modes": {
-      "644": 1171,
+      "644": 1173,
       "755": 28
     }
   },
-  "pathListSha256": "aaa3cc71648b2b9db916f1c096c228afe94b4daad5a436fd241b6ac6da882e41",
-  "contentSha256": "cb5cdb325d499c39cae4bc857894fa49be99810fdc39b9ffc90ada9636150f1f",
+  "pathListSha256": "982b05aa1fb14bb51f280cccd08d68c9ecfafb4050e04cdc9bb4681d661ef8e1",
+  "contentSha256": "78a5900e677f2a273ec4d50f86d14fa2fee0dda205373bcf29399944d5ce0a4b",
   "executableFiles": [
     "hooks/run_guard.sh",
     "scripts/adapters/folder_scan.py",
@@ -304,7 +278,7 @@
       "files": 53,
       "bytes": 786607,
       "pathListSha256": "7775247329b969c8c46d60f31b0d8b9897851369e4352f6e22ef7766093e538d",
-      "contentSha256": "292ada213ea4e3473fe488c360a262ccdb1f7dde30e4de89a1cda4b410ca82f5",
+      "contentSha256": "23928f293b916a1590b51f39dc7486f058c775255c642725a541cde92cab60c3",
       "modes": {
         "644": 53
       }
@@ -320,27 +294,27 @@
     },
     "academic-paper-reviewer": {
       "files": 28,
-      "bytes": 631601,
+      "bytes": 633085,
       "pathListSha256": "520aaf80a41e08147c1cf13904f0bc0376ec41f4f1fd1ba0cfabce93895c5c31",
-      "contentSha256": "0b79a08f747c623aa2632d4c0eaf1f9b0ffdec95f2f12a037bbe89635b90ab82",
+      "contentSha256": "9bf130141ccd5442423d36ed0a37117b426480b8b546e6e9d6697631e62b6064",
       "modes": {
         "644": 28
       }
     },
     "academic-pipeline": {
       "files": 30,
-      "bytes": 671811,
+      "bytes": 672071,
       "pathListSha256": "2f8c8344fdbf776f5b3ec37f46c26451067f617e4bfb7d6cc8882f37607445d2",
-      "contentSha256": "867fcf7d375cf6fab356e9da681ace37aa157b28dcd02e45d95ec90b802cd813",
+      "contentSha256": "b94f2d2bade8b8ccba960727af6fedbe3e6b93e02ffb9145163f751d7069864b",
       "modes": {
         "644": 30
       }
     },
     "sr-screener": {
       "files": 25,
-      "bytes": 262200,
+      "bytes": 264506,
       "pathListSha256": "5eee4e68a37744f92ae10a8bfb948b620288f9d3c3371cbab62d8bfc49c93052",
-      "contentSha256": "d9c2668b79eb6cb456c9f9e61ea9058cb7fe61700406c6bfd7fda893f55159fd",
+      "contentSha256": "7c2264a5363db7f941c2a48757b4f8ea80d62f9ceba09eebfe8ae38dff9643e9",
       "modes": {
         "644": 25
       }
@@ -358,7 +332,7 @@
       "files": 4,
       "bytes": 86358,
       "pathListSha256": "76422002dcffc62863eff110c197a5c2de761294decec0de228b5e48015346c9",
-      "contentSha256": "32d48e75badfcc7700a6ae818e83d0ec2236ef4a4c7f3f3bccb418df95c75e95",
+      "contentSha256": "bd6f956b865c67c2d84a6d6fe9471ba92567afc111fbdbb493d80f0fba45521f",
       "modes": {
         "644": 4
       }
@@ -373,12 +347,12 @@
       }
     },
     "scripts": {
-      "files": 642,
-      "bytes": 11880185,
-      "pathListSha256": "2a27683aa52934d5cc1af62628d765cf9aa9a5a2cc14a58abf7918cd819859b6",
-      "contentSha256": "7a6f38efddce0a81a75399e57b59fe0457ffb49b5b0352d8b0ac4564870972b5",
+      "files": 644,
+      "bytes": 11902139,
+      "pathListSha256": "adb2003c5c1e4b90d17b6c0e051cfd330bd4080556bcb8d5b5a125373cef28ba",
+      "contentSha256": "c8678eb8088dc3d4ef4e05939be0960bd0464dafb2d0c6a917acfeba9476767f",
       "modes": {
-        "644": 616,
+        "644": 618,
         "755": 26
       }
     },
@@ -394,9 +368,9 @@
     },
     "docs": {
       "files": 121,
-      "bytes": 4068513,
+      "bytes": 4082760,
       "pathListSha256": "e0add06d089b8b76cd594d3223fdbdfac91a2300d9e931c40951ead233adabfa",
-      "contentSha256": "0402b87cb91ada4f99e355eb3ad181277ef7f37a020c319680f5b82f722a625f",
+      "contentSha256": "c4580c91a8e529678702d55f6307a91dbdef62d791bd60c8dd258713fe19fcf5",
       "modes": {
         "644": 121
       }
@@ -422,9 +396,9 @@
     },
     ".": {
       "files": 9,
-      "bytes": 101174,
+      "bytes": 101585,
       "pathListSha256": "ee9cd83117e90f0107be0ae7b9ea4806bdeb849ba428fc4c9b98cf820006aeb8",
-      "contentSha256": "b3f7ea9503a15d01b9cb85cf6bc650f810ea9f80ee778416b30e6091bd270e85",
+      "contentSha256": "8250a1b3656e3636b3d328c664da53dc4c606b17d708baa02891413f3e9cbee6",
       "modes": {
         "644": 9
       }

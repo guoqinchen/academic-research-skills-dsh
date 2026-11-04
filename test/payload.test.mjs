@@ -324,8 +324,9 @@ test('PROVENANCE exclusions, includes, and generated files are consistent', () =
   assert.deepEqual(provenance.payload.included.files, [...INCLUDED_FILES])
   assert.equal(provenance.payload.included.fileCount, PAYLOAD_SNAPSHOT.files)
   assert.deepEqual(
-    provenance.payload.symlinksRefused.map((entry) => entry.path).sort(),
-    SKILL_NAMES.map((skill) => `skills/${skill}`).sort(),
+    provenance.payload.symlinksRefused,
+    [],
+    '3.24.1 removed the skills/ symlinks; the refusal list is empty',
   )
 
   for (const directory of INCLUDED_DIRECTORIES) {

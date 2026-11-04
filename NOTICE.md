@@ -7,15 +7,15 @@ This package is a port of **Academic Research Skills** (`academic-research-skill
 by Cheng-I Wu:
 
 - Upstream: https://github.com/Imbad0202/academic-research-skills
-- Upstream commit ported: `1ec249df98728682dfbbdfb940a658338bfd6f80`
-- Upstream plugin version: `3.23.2`
+- Upstream commit ported: `bcbcac39e874744cda98d6ddaaf765cfd00b0e40`
+- Upstream plugin version: `3.24.1`
 - Upstream license: Creative Commons Attribution-NonCommercial 4.0 International
   (CC-BY-NC-4.0). The upstream text is reproduced in `payload/LICENSE`; the
   root `LICENSE` contains the same terms with both copyright holders.
 
-The `payload/` directory contains 1,199 upstream files copied byte-for-byte
+The `payload/` directory contains 1,201 upstream files copied byte-for-byte
 from the pinned commit; they are not modified. It is not a complete repository
-mirror: 1,663 upstream files are excluded (the top-level entries and the four
+mirror: 1,659 upstream files are excluded (the top-level entries and the four
 withheld mirrors are recorded in `payload/PROVENANCE.json`). Attribution,
 license terms, and the upstream notices apply to the included files.
 

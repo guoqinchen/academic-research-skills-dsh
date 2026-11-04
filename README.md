@@ -9,7 +9,7 @@ contract-audited academic research, paper writing, simulated peer review,
 systematic-review screening, and an end-to-end research → write → review →
 revise → finalize pipeline.
 
-The upstream repository content is shipped in [`payload/`](payload/): 1,199 included
+The upstream repository content is shipped in [`payload/`](payload/): 1,201 included
 files copied byte-for-byte from the pinned commit. Four full-page third-party
 web-page mirrors (IEEE, Springer Nature, ICMJE, and one CC BY article) are
 deliberately **not** distributed because their rights holders' terms are not
@@ -273,7 +273,7 @@ What the suites establish:
 - the JS write-scope guard matches the upstream Python `evaluate_decision` on the
   captured fixtures and a generated decision matrix (decisions and advisory
   flags);
-- the payload is byte- and mode-identical to the pinned snapshot (1,199 files),
+- the payload is byte- and mode-identical to the pinned snapshot (1,201 files),
   with `PROVENANCE.json`, `REFERENCE-INDEX.json`, and the requirements pins
   re-derived rather than trusted;
 - `ars_status`, `ars_script`, and `ars_env_setup` conform to the DSH raw JSON
@@ -349,7 +349,7 @@ lib/tools.js             ars_status / ars_script / ars_env_setup
 lib/status.js            status assembly
 lib/guard.js             write-scope guard port
 bin/ars-python           interpreter wrapper
-payload/                 1,199 included upstream files, byte-for-byte
+payload/                 1,201 included upstream files, byte-for-byte
                          (4 third-party page mirrors withheld; see NOTICE.md)
 tools/build-payload.mjs  deterministic payload builder
 tools/check-payload.mjs  payload integrity checker
@@ -370,7 +370,7 @@ CITATION.cff             citation metadata
 ## Provenance and license
 
 Upstream: https://github.com/Imbad0202/academic-research-skills
-(commit `b34c63f828b3535f403079a4f42bc7955da2f64b`, version `3.24.0`),
+(commit `bcbcac39e874744cda98d6ddaaf765cfd00b0e40`, version `3.24.1`),
 by Cheng-I Wu, CC-BY-NC-4.0. This is an unofficial port, not affiliated with or
 endorsed by the upstream author. The DSH adapter is copyright (c) 2026 Guoqin Chen.
 See [`NOTICE.md`](NOTICE.md), [`LICENSE`](LICENSE), and [`CITATION.cff`](CITATION.cff),

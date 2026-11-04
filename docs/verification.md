@@ -2,18 +2,36 @@
 
 Independent verifier record for the DSH port of
 [`academic-research-skills`](https://github.com/Imbad0202/academic-research-skills)
-(upstream commit `b34c63f828b3535f403079a4f42bc7955da2f64b`, plugin version `3.24.0`).
+(upstream commit `bcbcac39e874744cda98d6ddaaf765cfd00b0e40`, plugin version `3.24.1`).
 
 > **Status: historical record (v1.0.0 baseline, 2026-10-26).** The output below
 > records the 1.0.0 snapshot (196 tests, 1,203 payload files, 51 PASS / 0 SKIP).
-> For the current state see **§0 (2026-10-27)**, **§0.1 (2026-10-27,
-> license-compliance update)**, **§0.2 (2026-10-28, 2.0.1)**, **§0.3
-> (2026-10-28, 2.1.0)**, and **§0.4 (2026-10-28, 2.1.1)**, which supersede every
-> count in this document:
-> 235 tests (233 pass / 2 skipped locally), `verify-install` 44 PASS / 0 FAIL /
-> 4 WARN / 2 SKIP, `check-payload` 0 errors / 4 warnings, payload **1,199 files /
-> 24,118,582 bytes** after four third-party page mirrors were withheld (see
-> `NOTICE.md`).
+> For the current state see **§0.5 (2026-11-04, 2.1.2)**, which supersedes every
+> count in this document: 239 tests (239 pass / 0 skipped locally),
+> `verify-install` 51 PASS / 0 FAIL / 3 WARN / 0 SKIP, `check-payload`
+> 0 errors / 4 warnings, payload **1,201 files / 24,159,244 bytes** after four
+> third-party page mirrors were withheld (see `NOTICE.md`). The §0–§0.4 records
+> are historical.
+
+## 0.5 2026-11-04 upstream 3.24.1 + weekly-check policy (2.1.2)
+
+This run is the release gate for **2.1.2**. It upgrades the payload to upstream
+tag `v3.24.1` (commit `bcbcac39`) and changes the scheduled upstream check to
+track the latest GitHub Release tag. Upstream diff: 3 added / 5 deleted /
+53 modified paths; payload diff: 2 added / 0 removed / 42 changed.
+
+| Command | Result |
+|---|---|
+| `node --test test/*.test.mjs` | **239 tests, 239 pass, 0 fail, 0 skipped** |
+| `node tools/check-payload.mjs` | **0 errors, 4 warnings** |
+| `node tools/check-upstream.mjs --upstream <v3.24.1 checkout>` | **CLEAN** |
+| `node tools/build-python-wrapper.mjs --check` | up to date |
+| `ARS_UPSTREAM_ROOT=<v3.24.1 checkout> node tools/verify-install.mjs` | **51 PASS, 0 FAIL, 3 WARN, 0 SKIP** |
+
+The three warnings are the documented limitations (phase fence needs a known
+role; upstream repo-only version gate; sr-screener generated workflow format).
+`REFERENCE_INDEX` was recomputed from the tag tree and is unchanged:
+2,686 references, 2,556 resolved, 80 unresolved.
 
 ## 0. 2026-10-27 re-verification (v2.0.0 + code-review fixes)
 

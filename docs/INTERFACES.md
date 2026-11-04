@@ -1,7 +1,7 @@
 # Internal interfaces (Lead-owned, change only by agreement)
 
 Plugin root: `<plugin-root>`
-Upstream clone: `<upstream-checkout>` (commit b34c63f828b3535f403079a4f42bc7955da2f64b, plugin version 3.24.0)
+Upstream clone: `<upstream-checkout>` (commit bcbcac39e874744cda98d6ddaaf765cfd00b0e40, plugin version 3.24.1)
 
 All modules are plain ESM JavaScript with **no external npm dependencies**. Node built-ins only
 (`node:fs`, `node:path`, `node:process`, `node:os`, `node:crypto`, `node:child_process`, `node:url`, `node:test`).

@@ -16,6 +16,7 @@ import { createPaths } from '../lib/paths.js'
 import { loadInventory } from '../index.js'
 import { createRegistrationReport } from '../lib/registration.js'
 import {
+  AGENT_NAME_TO_SKILL,
   AGENT_ROLE_SPECS,
   SKILL_NAMES,
   createInventory,
@@ -44,7 +45,16 @@ test('inventory derives exactly 5 skills, 16 commands, and 4 mirrored agent role
   for (const role of inventory.agentRoles) {
     assert.equal(typeof role.mirror, 'string')
     assert.ok(role.mirror.length > 0, `${role.agentType} has a derived mirror`)
-    assert.ok(role.file.endsWith(`/${role.agentType}.md`))
+    assert.ok(role.file.endsWith(`/${role.fileStem}.md`), `${role.agentType}: file stem`)
+    assert.ok(role.agentType.includes('-'), `${role.agentType}: canonical hyphenated name`)
+  }
+})
+
+test('agent name aliases cover both the canonical and legacy forms', () => {
+  for (const spec of AGENT_ROLE_SPECS) {
+    const legacy = spec.file.replace(/\.md$/u, '')
+    assert.equal(AGENT_NAME_TO_SKILL[legacy], spec.skill)
+    assert.equal(AGENT_NAME_TO_SKILL[spec.agentType], spec.skill)
   }
 })
 

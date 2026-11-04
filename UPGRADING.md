@@ -5,8 +5,15 @@ The plugin ships a pinned, byte-preserving snapshot of
 Upgrades are deliberate: fetch one upstream ref, inspect the diff, update the
 pins, rebuild, and re-run the gates.
 
-Current pin: commit `b34c63f828b3535f403079a4f42bc7955da2f64b`, plugin `3.24.0`,
-CC-BY-NC-4.0 (see `lib/payload-contract.js`).
+Current pin: tag `v3.24.1`, commit
+`bcbcac39e874744cda98d6ddaaf765cfd00b0e40`, plugin `3.24.1`, CC-BY-NC-4.0 (see
+`lib/payload-contract.js`).
+
+The pin unit is a **release tag**, not `main`. The scheduled workflow tracks the
+latest upstream GitHub Release tag by default and fails rather than falling back
+to `main`; a manual `ref` input still checks one specific tag, branch, or
+commit. A clean run closes the open `upstream-drift` issue only when the payload
+matches that release tag.
 
 ## 0. Prerequisites
 
@@ -37,10 +44,12 @@ adapter review.
 
 A scheduled workflow
 ([`.github/workflows/upstream-check.yml`](https://github.com/guoqinchen/academic-research-skills-dsh/blob/main/.github/workflows/upstream-check.yml))
-runs every Monday: it tracks upstream `main` by default (override with a `ref`
-input), runs this check, and files or updates an `upstream-drift` issue when
-the payload differs, and closes that issue when it is clean again. Run it manually with a specific ref from the
-Actions tab (or `gh workflow run upstream-check.yml -f ref=<ref>`).
+runs every Monday: it resolves the latest upstream GitHub Release tag by default
+(override with a `ref` input), runs this check, and files or updates an
+`upstream-drift` issue when the payload differs. It closes that issue when the
+payload matches the latest release again. It fails loudly when no release can
+be resolved; it never silently checks `main`. Run it manually with a specific
+ref from the Actions tab (or `gh workflow run upstream-check.yml -f ref=<ref>`).
 
 For a real bump, print the pins the new upstream requires:
 
